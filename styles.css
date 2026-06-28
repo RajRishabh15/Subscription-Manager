@@ -498,32 +498,3 @@ input:focus, select:focus, textarea:focus {
     opacity: 1 !important;
     transform: translateY(0);
 }
-
-/* OTP digits form styling and hover states */
-.otp-digit-input {
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.otp-digit-input:focus {
-    box-shadow: 
-        0 0 15px rgba(var(--brand-rgb), 0.15),
-        inset 0 1px 1px rgba(255,255,255,0.05);
-    transform: scale(1.04);
-}
-
-/* Shake Animation for bad OTP attempts */
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-6px); }
-    40%, 80% { transform: translateX(6px); }
-}
-
-.shake-warning {
-    animation: shake 0.4s ease-in-out;
-    border-color: #ef4444 !important;
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.25) !important;
-}
-
-/* Text utility for smaller tab labels */
-.text-xxs {
-    font-size: 0.65rem;
-}
