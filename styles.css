@@ -28,15 +28,6 @@
     --cosmic-rgb: 34, 211, 238;     /* #22d3ee */
 }
 
-/* Global Typography Overrides */
-body, button, input, select, textarea, .font-sans {
-    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-}
-
-h1, h2, h3, h4, h5, h6, .serif-title, .font-serif {
-    font-family: 'Cormorant Garamond', Georgia, Cambria, "Times New Roman", Times, serif !important;
-}
-
 /* Deep space root adjustments */
 body {
     background-color: #04020a;
@@ -282,7 +273,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Editorial serif titles */
 .serif-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Cormorant Garamond', Georgia, Cambria, serif !important;
     font-weight: 500;
 }
 

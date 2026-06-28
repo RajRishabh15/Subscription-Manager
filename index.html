@@ -18,7 +18,7 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
                         space: ['Space Grotesk', 'sans-serif'],
                         serif: ['Cormorant Garamond', 'serif'],
                     },
@@ -45,6 +45,8 @@
             }
         }
     </script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
     
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="styles.css">
@@ -129,10 +131,12 @@
                         
                         <!-- Logo & Heading -->
                         <div class="text-center mb-8">
-                            <div class="inline-flex items-center justify-center p-3.5 bg-brand-500/10 border border-brand-500/20 rounded-2xl mb-4 text-brand-400 shadow-[0_0_25px_rgba(236,72,153,0.15)]">
-                                <i data-lucide="shield-check" class="w-8 h-8"></i>
+                            <div class="w-16 h-16 mx-auto rounded-[20px] overflow-hidden border border-brand-500/20 shadow-[0_0_20px_rgba(236,72,153,0.2)] flex items-center justify-center p-1 bg-slate-950/60 mb-4">
+                                <img src="favicon.png" class="w-full h-full object-cover rounded-[14px]" alt="AIOManager Logo">
                             </div>
-                            <h1 class="text-2xl font-bold font-space text-white tracking-tight mb-2">AIOManager Access</h1>
+                            <h1 class="text-3xl sm:text-4xl font-normal serif-title italic text-white tracking-tight mb-2">
+                                AIOMANAGER <span class="text-neon-glow font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cosmicBlue-400">ACCESS</span>
+                            </h1>
                             <p class="text-slate-400 text-xs font-sans">Authenticate directory credentials to search for active bills.</p>
                         </div>
 
@@ -313,8 +317,8 @@
                     
                     <!-- Left: Logo & Icon -->
                     <div class="flex items-center space-x-2.5 cursor-pointer" id="logo-refresh">
-                        <div class="p-1.5 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.15)]">
-                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        <div class="w-8 h-8 rounded-full overflow-hidden border border-brand-500/20 shadow-[0_0_12px_rgba(236,72,153,0.25)] flex items-center justify-center p-0.5 bg-slate-950/60">
+                            <img src="favicon.png" class="w-full h-full object-cover rounded-full" alt="AIOManager Logo">
                         </div>
                         <span class="text-lg font-bold font-space text-white tracking-tight hidden sm:inline-block">AIOManager</span>
                     </div>
