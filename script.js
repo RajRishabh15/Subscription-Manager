@@ -343,7 +343,7 @@ function initAppView() {
         // Reset digit boxes
         document.querySelectorAll('.otp-box').forEach(box => {
             box.value = '';
-            box.className = "otp-box w-12 h-14 text-center text-xl font-bold bg-slate-950/60 border border-white/10 rounded-2xl focus:border-brand-500 text-white focus:outline-none transition-all font-space";
+            box.className = "otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space";
         });
 
         // Reset error message
@@ -482,10 +482,10 @@ function switchTab(tabName) {
         const isSelected = btn.getAttribute('data-tab') === tabName;
         if (isSelected) {
             btn.classList.add('active-pill');
-            btn.classList.remove('text-slate-400');
+            btn.classList.remove('text-textMuted');
         } else {
             btn.classList.remove('active-pill');
-            btn.classList.add('text-slate-400');
+            btn.classList.add('text-textMuted');
         }
     });
 
@@ -494,10 +494,10 @@ function switchTab(tabName) {
         const isSelected = btn.getAttribute('data-tab') === tabName;
         if (isSelected) {
             btn.classList.add('active-pill-mobile');
-            btn.classList.remove('text-slate-400');
+            btn.classList.remove('text-textMuted');
         } else {
             btn.classList.remove('active-pill-mobile');
-            btn.classList.add('text-slate-400');
+            btn.classList.add('text-textMuted');
         }
     });
 
@@ -757,23 +757,23 @@ function renderHomeTab() {
                     <i data-lucide="wifi" class="w-24 h-24"></i>
                 </div>
                 <div class="flex justify-between items-center mb-4">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-space">Sync Directory Vitals</span>
+                    <span class="text-[10px] font-bold text-textMuted uppercase tracking-widest font-space">Sync Directory Vitals</span>
                     <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-bold tracking-widest font-space flex items-center space-x-1.5 shadow-[0_0_10px_rgba(16,185,129,0.15)]">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span>SECURE SYNC</span>
                     </span>
                 </div>
                 <div class="space-y-3 mt-2.5">
-                    <div class="flex justify-between items-center border-b border-white/5 pb-2">
-                        <span class="text-[11px] text-slate-500 font-sans">Active Channels:</span>
-                        <span class="text-[11px] font-bold text-white font-space">${state.currentUser.linkedCredentials.length} Scanners</span>
+                    <div class="flex justify-between items-center border-b border-glassBorder pb-2">
+                        <span class="text-[11px] text-textMuted font-sans">Active Channels:</span>
+                        <span class="text-[11px] font-bold text-cardTitle font-space">${state.currentUser.linkedCredentials.length} Scanners</span>
                     </div>
-                    <div class="flex justify-between items-center border-b border-white/5 pb-2">
-                        <span class="text-[11px] text-slate-500 font-sans">Sync Frequency:</span>
-                        <span class="text-[11px] font-bold text-white font-space">Automated (12h)</span>
+                    <div class="flex justify-between items-center border-b border-glassBorder pb-2">
+                        <span class="text-[11px] text-textMuted font-sans">Sync Frequency:</span>
+                        <span class="text-[11px] font-bold text-cardTitle font-space">Automated (12h)</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-[11px] text-slate-500 font-sans">Last Scan:</span>
+                        <span class="text-[11px] text-textMuted font-sans">Last Scan:</span>
                         <span class="text-[11px] font-bold text-emerald-400 font-space">${state.diagnostics.lastScanTime ? state.diagnostics.lastScanTime.split(',')[1] || state.diagnostics.lastScanTime : 'Just now'}</span>
                     </div>
                 </div>
@@ -785,7 +785,7 @@ function renderHomeTab() {
                     <i data-lucide="cpu" class="w-24 h-24"></i>
                 </div>
                 <div class="flex justify-between items-center mb-4">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-space">Subscription Health Index</span>
+                    <span class="text-[10px] font-bold text-textMuted uppercase tracking-widest font-space">Subscription Health Index</span>
                     <span class="p-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.15)]">
                         <i data-lucide="cpu" class="w-4 h-4"></i>
                     </span>
@@ -793,14 +793,14 @@ function renderHomeTab() {
                 <div class="flex items-center space-x-4 mt-2">
                     <div class="relative w-14 h-14 flex items-center justify-center flex-shrink-0">
                         <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                            <path class="text-slate-900" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="text-cardTitle" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                             <path class="text-brand-500" stroke-dasharray="${healthScore}, 100" stroke-width="3.2" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                         </svg>
-                        <span class="absolute text-xs font-extrabold text-white font-space">${healthScore}</span>
+                        <span class="absolute text-xs font-extrabold text-cardTitle font-space">${healthScore}</span>
                     </div>
                     <div class="text-left space-y-0.5">
-                        <div class="text-[9px] font-bold text-slate-400 tracking-wide font-space uppercase">Vitals score</div>
-                        <p class="text-[10px] text-slate-500 leading-normal font-sans font-medium">${optimizationTips}</p>
+                        <div class="text-[9px] font-bold text-textMuted tracking-wide font-space uppercase">Vitals score</div>
+                        <p class="text-[10px] text-textMuted leading-normal font-sans font-medium">${optimizationTips}</p>
                     </div>
                 </div>
             </div>
@@ -811,29 +811,29 @@ function renderHomeTab() {
                     <i data-lucide="clock" class="w-24 h-24"></i>
                 </div>
                 <div class="flex justify-between items-center mb-4">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-space">impending charge sentinel</span>
+                    <span class="text-[10px] font-bold text-textMuted uppercase tracking-widest font-space">impending charge sentinel</span>
                     <span class="p-2 bg-cosmicBlue-500/10 border border-cosmicBlue-500/20 text-cosmicBlue-400 rounded-full">
                         <i data-lucide="clock" class="w-4 h-4"></i>
                     </span>
                 </div>
                 ${nextBill ? `
                 <div class="space-y-3 mt-2.5">
-                    <div class="flex justify-between items-center border-b border-white/5 pb-2">
-                        <span class="text-[11px] text-slate-500 font-sans">Impending:</span>
-                        <span class="text-[11px] font-bold text-white font-space">${nextBill.name} (${nextBill.cycle === 'monthly' ? 'Monthly' : 'Annual'})</span>
+                    <div class="flex justify-between items-center border-b border-glassBorder pb-2">
+                        <span class="text-[11px] text-textMuted font-sans">Impending:</span>
+                        <span class="text-[11px] font-bold text-cardTitle font-space">${nextBill.name} (${nextBill.cycle === 'monthly' ? 'Monthly' : 'Annual'})</span>
                     </div>
-                    <div class="flex justify-between items-center border-b border-white/5 pb-2">
-                        <span class="text-[11px] text-slate-500 font-sans">Payment Amount:</span>
+                    <div class="flex justify-between items-center border-b border-glassBorder pb-2">
+                        <span class="text-[11px] text-textMuted font-sans">Payment Amount:</span>
                         <span class="text-[11px] font-bold text-brand-400 font-space">₹${nextBill.cost}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-[11px] text-slate-500 font-sans">Due In:</span>
+                        <span class="text-[11px] text-textMuted font-sans">Due In:</span>
                         <span class="text-[11px] font-bold ${nextBill.daysRemaining <= 5 ? 'text-red-400 animate-pulse' : 'text-cosmicBlue-400'} font-space">${nextBill.daysRemaining === 0 ? 'Today' : nextBill.daysRemaining === 1 ? 'Tomorrow' : `${nextBill.daysRemaining} days`}</span>
                     </div>
                 </div>
                 ` : `
                 <div class="py-4 text-center">
-                    <p class="text-xs text-slate-500 font-sans">No impending billing intervals active.</p>
+                    <p class="text-xs text-textMuted font-sans">No impending billing intervals active.</p>
                 </div>
                 `}
             </div>
@@ -850,13 +850,13 @@ function renderHomeTab() {
                     <i data-lucide="bell-ring" class="w-5.5 h-5.5 animate-bounce"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-white font-space text-base">Critical Subscription Renewals Pending</h4>
-                    <p class="text-xs text-slate-400 mt-1 font-sans">
+                    <h4 class="font-bold text-cardTitle font-space text-base">Critical Subscription Renewals Pending</h4>
+                    <p class="text-xs text-textMuted mt-1 font-sans">
                         You have ${criticalBills.length} billing renewals coming up in the next 5 days. Ensure funding is available to prevent interruptions.
                     </p>
                 </div>
             </div>
-            <button onclick="switchTab('manage')" class="bg-brand-600/20 border border-brand-500/35 hover:bg-brand-500 hover:text-white text-brand-400 font-semibold text-xs px-5 py-3 rounded-xl transition-all self-start sm:self-center font-space">
+            <button onclick="switchTab('manage')" class="bg-brand-600/20 border border-brand-500/35 hover:bg-brand-500 hover:text-cardTitle text-brand-400 font-semibold text-xs px-5 py-3 rounded-xl transition-all self-start sm:self-center font-space">
                 Review Renewals
             </button>
         </div>
@@ -869,22 +869,22 @@ function renderHomeTab() {
             <!-- Left Side: Interactive SVG Spend Category Chart -->
             <div class="lg:col-span-5 galactic-card rounded-[28px] p-6 flex flex-col justify-between">
                 <div>
-                    <h3 class="text-base font-bold text-white font-space mb-1">Spend Category Share</h3>
-                    <p class="text-xs text-slate-500 mb-6 font-sans font-medium">Monthly: <span class="text-brand-400 font-bold font-space">₹${monthlySpend.toLocaleString('en-IN')}</span> • Annual: <span class="text-cosmicBlue-400 font-bold font-space">₹${yearlySpend.toLocaleString('en-IN')}</span></p>
+                    <h3 class="text-base font-bold text-cardTitle font-space mb-1">Spend Category Share</h3>
+                    <p class="text-xs text-textMuted mb-6 font-sans font-medium">Monthly: <span class="text-brand-400 font-bold font-space">₹${monthlySpend.toLocaleString('en-IN')}</span> • Annual: <span class="text-cosmicBlue-400 font-bold font-space">₹${yearlySpend.toLocaleString('en-IN')}</span></p>
                 </div>
 
                 <!-- SVG Donut Chart -->
                 <div class="flex flex-col items-center justify-center py-4">
                     ${totalCategorized > 0 ? generateSVGDonutChart(categoriesData, totalCategorized) : `
                         <div class="text-center py-12">
-                            <i data-lucide="pie-chart" class="w-12 h-12 text-slate-750 mx-auto mb-2"></i>
-                            <p class="text-xs text-slate-500 font-sans">No data to display. Add subscriptions.</p>
+                            <i data-lucide="pie-chart" class="w-12 h-12 text-textMuted mx-auto mb-2"></i>
+                            <p class="text-xs text-textMuted font-sans">No data to display. Add subscriptions.</p>
                         </div>
                     `}
                 </div>
                 
                 <!-- Category Legend List -->
-                <div class="space-y-2 mt-4 border-t border-white/5 pt-4">
+                <div class="space-y-2 mt-4 border-t border-glassBorder pt-4">
                     ${Object.keys(categoriesData).map(cat => {
                         const amt = Math.round(categoriesData[cat]);
                         const pct = Math.round((amt / totalCategorized) * 100);
@@ -893,11 +893,11 @@ function renderHomeTab() {
                             <div class="flex justify-between items-center text-xs">
                                 <div class="flex items-center space-x-2">
                                     <span class="w-2 h-2 rounded-full inline-block ${labelBg.split(' ')[0]} bg-current"></span>
-                                    <span class="text-slate-400 font-medium font-sans">${cat}</span>
+                                    <span class="text-textMuted font-medium font-sans">${cat}</span>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-white font-semibold font-space">₹${amt}</span>
-                                    <span class="text-slate-500 ml-1 font-sans">(${pct}%)</span>
+                                    <span class="text-cardTitle font-semibold font-space">₹${amt}</span>
+                                    <span class="text-textMuted ml-1 font-sans">(${pct}%)</span>
                                 </div>
                             </div>
                         `;
@@ -909,16 +909,16 @@ function renderHomeTab() {
             <div class="lg:col-span-7 galactic-card rounded-[28px] p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-center mb-1">
-                        <h3 class="text-base font-bold text-white font-space">Upcoming Billing Renewal Schedule</h3>
+                        <h3 class="text-base font-bold text-cardTitle font-space">Upcoming Billing Renewal Schedule</h3>
                         <button onclick="switchTab('manage')" class="text-xs text-brand-400 hover:text-brand-300 font-semibold font-space">See All</button>
                     </div>
-                    <p class="text-xs text-slate-500 mb-6 font-sans">Upcoming payments sorted chronologically.</p>
+                    <p class="text-xs text-textMuted mb-6 font-sans">Upcoming payments sorted chronologically.</p>
                 </div>
 
                 <div class="space-y-4 max-h-[360px] overflow-y-auto scrollbar-thin pr-1 flex-grow">
                     ${upcomingBills.length > 0 ? upcomingBills.map(bill => {
                         const template = MOCK_PROVIDER_DATA[bill.providerKey] || {
-                            iconBg: 'bg-slate-950 text-slate-400 border-white/5',
+                            iconBg: 'bg-cardSubBg text-textMuted border-glassBorder',
                             lucideIcon: 'credit-card'
                         };
                         
@@ -928,20 +928,20 @@ function renderHomeTab() {
                         } else if (bill.daysRemaining === 1) {
                             remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-amber-500/20 border border-amber-500/30 text-amber-400 font-space tracking-wide">TOMORROW</span>`;
                         } else if (bill.daysRemaining < 0) {
-                            remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-950 border border-white/5 text-slate-500 font-space tracking-wide">PAST DUE</span>`;
+                            remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-cardSubBg border border-glassBorder text-textMuted font-space tracking-wide">PAST DUE</span>`;
                         } else {
-                            remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-semibold bg-slate-950 border border-white/5 text-slate-450 font-sans">${bill.daysRemaining} days left</span>`;
+                            remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-semibold bg-cardSubBg border border-glassBorder text-textMuted font-sans">${bill.daysRemaining} days left</span>`;
                         }
 
                         return `
-                            <div class="flex items-center justify-between p-3.5 bg-slate-950/30 border border-white/5 hover:border-brand-500/20 rounded-2xl transition-all">
+                            <div class="flex items-center justify-between p-3.5 bg-glassBg border border-glassBorder hover:border-brand-500/20 rounded-2xl transition-all">
                                 <div class="flex items-center space-x-3.5">
                                     <div class="p-2.5 rounded-xl border ${template.iconBg} flex-shrink-0">
                                         <i data-lucide="${template.lucideIcon}" class="w-5 h-5"></i>
                                     </div>
                                     <div>
-                                        <h4 class="text-sm font-semibold text-white font-space">${bill.name}</h4>
-                                        <div class="text-[10px] text-slate-500 mt-0.5 flex items-center space-x-2 font-sans">
+                                        <h4 class="text-sm font-semibold text-cardTitle font-space">${bill.name}</h4>
+                                        <div class="text-[10px] text-textMuted mt-0.5 flex items-center space-x-2 font-sans">
                                             <span>${bill.payment}</span>
                                             <span>•</span>
                                             <span>Next: ${new Date(bill.nextRenewal).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
@@ -949,15 +949,15 @@ function renderHomeTab() {
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-sm font-bold text-white font-space">₹${bill.cost} <span class="text-[10px] text-slate-500 font-normal">/${bill.cycle === 'monthly' ? 'mo' : 'yr'}</span></div>
+                                    <div class="text-sm font-bold text-cardTitle font-space">₹${bill.cost} <span class="text-[10px] text-textMuted font-normal">/${bill.cycle === 'monthly' ? 'mo' : 'yr'}</span></div>
                                     <div class="mt-1.5">${remainingBadge}</div>
                                 </div>
                             </div>
                         `;
                     }).join('') : `
                         <div class="text-center py-16">
-                            <i data-lucide="check-circle" class="w-12 h-12 text-slate-700 mx-auto mb-2"></i>
-                            <p class="text-xs text-slate-500 font-sans">All set! No upcoming subscription bills active.</p>
+                            <i data-lucide="check-circle" class="w-12 h-12 text-textMuted mx-auto mb-2"></i>
+                            <p class="text-xs text-textMuted font-sans">All set! No upcoming subscription bills active.</p>
                         </div>
                     `}
                 </div>
@@ -1024,8 +1024,8 @@ function generateSVGDonutChart(categoriesData, total) {
                 ${svgPaths.join('')}
             </svg>
             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span class="text-slate-500 text-[9px] font-bold uppercase tracking-widest font-space">Monthly Spend</span>
-                <span class="text-xl font-extrabold text-white font-space mt-1">₹${Math.round(total).toLocaleString('en-IN')}</span>
+                <span class="text-textMuted text-[9px] font-bold uppercase tracking-widest font-space">Monthly Spend</span>
+                <span class="text-xl font-extrabold text-cardTitle font-space mt-1">₹${Math.round(total).toLocaleString('en-IN')}</span>
             </div>
         </div>
     `;
@@ -1051,14 +1051,14 @@ function renderManageTab() {
 
     let html = `
         <!-- Filter Header Section -->
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-slate-950/40 border border-white/5 backdrop-blur-xl p-5 rounded-[24px] shadow-lg">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-glassBg border border-glassBorder backdrop-blur-xl p-5 rounded-[24px] shadow-lg">
             <!-- Search bar -->
             <div class="relative w-full md:max-w-xs">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-textMuted">
                     <i data-lucide="search" class="w-4 h-4"></i>
                 </span>
                 <input type="text" id="manage-search" placeholder="Search subscriptions..." value="${manageSearchQuery}"
-                    class="w-full bg-slate-950/60 border border-white/10 focus:border-brand-500 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white focus:outline-none focus:ring-1 focus:ring-brand-500/20 placeholder-slate-600">
+                    class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2.5 pl-10 pr-4 text-xs text-cardTitle focus:outline-none focus:ring-1 focus:ring-brand-500/20 placeholder-slate-600">
             </div>
 
             <!-- Category Pills Filter -->
@@ -1068,8 +1068,8 @@ function renderManageTab() {
                     return `
                         <button onclick="setManageCategory('${cat}')" class="px-4 py-2 rounded-full text-[10px] font-bold whitespace-nowrap transition-all border font-space ${
                             isSelected 
-                            ? 'bg-brand-500 border-brand-500 text-white shadow-md shadow-brand-500/10' 
-                            : 'bg-slate-950 border-white/5 text-slate-400 hover:text-white hover:bg-slate-900'
+                            ? 'bg-brand-500 border-brand-500 text-cardTitle shadow-md shadow-brand-500/10' 
+                            : 'bg-cardSubBg border-glassBorder text-textMuted hover:text-cardTitle hover:bg-inputBg'
                         }">
                             ${cat}
                         </button>
@@ -1078,7 +1078,7 @@ function renderManageTab() {
             </div>
 
             <!-- Add Sub Trigger -->
-            <button onclick="openAddSubModal()" class="w-full md:w-auto bg-gradient-to-r from-brand-500 to-cosmicBlue-500 text-white font-bold text-xs px-5 py-2.5 rounded-full transition-all shadow-[0_4px_15px_rgba(236,72,153,0.2)] flex items-center justify-center space-x-2 font-space">
+            <button onclick="openAddSubModal()" class="w-full md:w-auto bg-gradient-to-r from-brand-500 to-cosmicBlue-500 text-cardTitle font-bold text-xs px-5 py-2.5 rounded-full transition-all shadow-[0_4px_15px_rgba(236,72,153,0.2)] flex items-center justify-center space-x-2 font-space">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
                 <span>Add Subscription</span>
             </button>
@@ -1089,8 +1089,8 @@ function renderManageTab() {
             ${filteredSubs.length > 0 ? filteredSubs.map(sub => {
                 const template = MOCK_PROVIDER_DATA[sub.providerKey] || {
                     lucideIcon: 'credit-card',
-                    color: 'border-white/5 bg-slate-950/40 text-slate-300',
-                    iconBg: 'bg-slate-900 text-slate-400 border-white/5',
+                    color: 'border-glassBorder bg-glassBg text-cardTitle',
+                    iconBg: 'bg-inputBg text-textMuted border-glassBorder',
                     manualSteps: ['Open the dashboard/portal of provider.', 'Navigate to Account billing settings.', 'Submit cancellation membership request.']
                 };
 
@@ -1106,7 +1106,7 @@ function renderManageTab() {
                                     <i data-lucide="${template.lucideIcon}" class="w-6 h-6"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white text-base leading-tight font-space">${sub.name}</h4>
+                                    <h4 class="font-bold text-cardTitle text-base leading-tight font-space">${sub.name}</h4>
                                     <span class="inline-block px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border ${catBadge} mt-1.5 font-space">
                                         ${sub.category}
                                     </span>
@@ -1114,35 +1114,35 @@ function renderManageTab() {
                             </div>
                             
                             <!-- Toggle alert bell -->
-                            <button onclick="toggleSubscriptionAlert('${sub.id}')" class="p-2 rounded-full border ${sub.alertEnabled ? 'bg-brand-500/10 border-brand-500/25 text-brand-400' : 'bg-slate-950 border-white/5 text-slate-550 hover:text-slate-300'} transition-all" title="Toggle warnings">
+                            <button onclick="toggleSubscriptionAlert('${sub.id}')" class="p-2 rounded-full border ${sub.alertEnabled ? 'bg-brand-500/10 border-brand-500/25 text-brand-400' : 'bg-cardSubBg border-glassBorder text-textMuted hover:text-cardTitle'} transition-all" title="Toggle warnings">
                                 <i data-lucide="${sub.alertEnabled ? 'bell' : 'bell-off'}" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
 
                         <!-- Card Detail Table -->
-                        <div class="space-y-2.5 text-xxs border-b border-white/5 pb-5 mb-5 font-sans">
+                        <div class="space-y-2.5 text-xxs border-b border-glassBorder pb-5 mb-5 font-sans">
                             <div class="flex justify-between">
-                                <span class="text-slate-550">Monthly Cost</span>
-                                <span class="text-white font-semibold">₹${sub.cycle === 'monthly' ? sub.cost : Math.round(sub.cost / 12)}</span>
+                                <span class="text-textMuted">Monthly Cost</span>
+                                <span class="text-cardTitle font-semibold">₹${sub.cycle === 'monthly' ? sub.cost : Math.round(sub.cost / 12)}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-550">Billing Cycle</span>
-                                <span class="text-slate-300 capitalize">${sub.cycle}</span>
+                                <span class="text-textMuted">Billing Cycle</span>
+                                <span class="text-cardTitle capitalize">${sub.cycle}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-555">Next Renewal</span>
-                                <span class="text-slate-300">${new Date(sub.nextRenewal).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                <span class="text-textMuted">Next Renewal</span>
+                                <span class="text-cardTitle">${new Date(sub.nextRenewal).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-555">Payment Channel</span>
-                                <span class="text-slate-300 truncate max-w-[140px]">${sub.payment}</span>
+                                <span class="text-textMuted">Payment Channel</span>
+                                <span class="text-cardTitle truncate max-w-[140px]">${sub.payment}</span>
                             </div>
                         </div>
 
                         <!-- Card Footer actions -->
                         <div class="flex items-center justify-between gap-3">
-                            <div class="text-lg font-black text-white font-space">₹${sub.cost}<span class="text-[10px] text-slate-500 font-normal">/${sub.cycle === 'monthly' ? 'mo' : 'yr'}</span></div>
-                            <button onclick="openCancellationWizard('${sub.id}')" class="bg-red-500/10 border border-red-500/25 text-red-400 hover:bg-red-550 hover:text-white font-semibold text-xxs px-4 py-2.5 rounded-xl transition-all flex items-center space-x-1.5 font-space">
+                            <div class="text-lg font-black text-cardTitle font-space">₹${sub.cost}<span class="text-[10px] text-textMuted font-normal">/${sub.cycle === 'monthly' ? 'mo' : 'yr'}</span></div>
+                            <button onclick="openCancellationWizard('${sub.id}')" class="bg-red-500/10 border border-red-500/25 text-red-400 hover:bg-red-550 hover:text-cardTitle font-semibold text-xxs px-4 py-2.5 rounded-xl transition-all flex items-center space-x-1.5 font-space">
                                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                                 <span>Cancel Plan</span>
                             </button>
@@ -1150,12 +1150,12 @@ function renderManageTab() {
                     </div>
                 `;
             }).join('') : `
-                <div class="col-span-full bg-slate-950/20 border border-dashed border-white/10 rounded-3xl p-12 text-center">
-                    <div class="p-4 bg-slate-950 border border-white/5 text-slate-500 rounded-full w-14 h-14 mx-auto mb-4 flex items-center justify-center">
+                <div class="col-span-full bg-glassBg border border-dashed border-glassBorder rounded-3xl p-12 text-center">
+                    <div class="p-4 bg-cardSubBg border border-glassBorder text-textMuted rounded-full w-14 h-14 mx-auto mb-4 flex items-center justify-center">
                         <i data-lucide="credit-card" class="w-6 h-6"></i>
                     </div>
-                    <h4 class="text-white font-bold text-base font-space">No Active Subscriptions</h4>
-                    <p class="text-slate-500 text-xs mt-1 mb-6 font-sans">No integrations match your search parameters.</p>
+                    <h4 class="text-cardTitle font-bold text-base font-space">No Active Subscriptions</h4>
+                    <p class="text-textMuted text-xs mt-1 mb-6 font-sans">No integrations match your search parameters.</p>
                     <button onclick="openAddSubModal()" class="bg-brand-650 hover:bg-brand-500 text-slate-950 font-bold text-xs px-5 py-3 rounded-full transition-all shadow-[0_4px_15px_rgba(245,158,11,0.2)] font-space">
                         Add New Subscription
                     </button>
@@ -1368,14 +1368,14 @@ function renderAccountTab() {
     const now = new Date();
     for (let i = 0; i < 5; i++) {
         const timeStr = new Date(now.getTime() - (5 - i) * 60000).toLocaleTimeString();
-        logHtml += `<div class="text-slate-500 font-mono">[${timeStr}] ${DIAGNOSTIC_LOG_TEMPLATES[i]}</div>`;
+        logHtml += `<div class="text-textMuted font-mono">[${timeStr}] ${DIAGNOSTIC_LOG_TEMPLATES[i]}</div>`;
     }
 
     let html = `
         <!-- Account Vitals Header -->
         <div class="mb-2">
-            <h2 class="text-4xl font-normal text-white serif-title italic mb-2 tracking-tight">Account Control Deck</h2>
-            <p class="text-xs text-slate-400 font-sans max-w-xl">Configure directories, adjust billing cards, toggle notification rules, and customize cosmic accent presets from a unified control panel.</p>
+            <h2 class="text-4xl font-normal text-cardTitle serif-title italic mb-2 tracking-tight">Account Control Deck</h2>
+            <p class="text-xs text-textMuted font-sans max-w-xl">Configure directories, adjust billing cards, toggle notification rules, and customize cosmic accent presets from a unified control panel.</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -1388,49 +1388,49 @@ function renderAccountTab() {
                     <!-- Spot Light glow in background -->
                     <div class="liquid-glow-spot top-0 right-0 w-32 h-32" style="background: ${activeAvatarVibe.glow}"></div>
                     
-                    <div class="text-center pb-6 border-b border-white/5 relative z-10">
+                    <div class="text-center pb-6 border-b border-glassBorder relative z-10">
                         <div class="relative w-20 h-20 mx-auto mb-4">
-                            <div class="w-20 h-20 rounded-full bg-gradient-to-tr ${activeAvatarVibe.gradient} flex items-center justify-center text-white text-3xl font-black font-space shadow-2xl border-2 ${activeAvatarVibe.gradient.split(' ').pop()}">
+                            <div class="w-20 h-20 rounded-full bg-gradient-to-tr ${activeAvatarVibe.gradient} flex items-center justify-center text-cardTitle text-3xl font-black font-space shadow-2xl border-2 ${activeAvatarVibe.gradient.split(' ').pop()}">
                                 <span>${(state.currentUser.name || 'U')[0].toUpperCase()}</span>
                             </div>
-                            <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-slate-950 border border-white/10 flex items-center justify-center text-brand-400">
+                            <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-cardSubBg border border-glassBorder flex items-center justify-center text-brand-400">
                                 <i data-lucide="${activeAvatarVibe.icon}" class="w-3.5 h-3.5 animate-pulse"></i>
                             </div>
                         </div>
                         
-                        <h3 class="text-lg font-bold text-white font-space">${state.currentUser.name}</h3>
+                        <h3 class="text-lg font-bold text-cardTitle font-space">${state.currentUser.name}</h3>
                         <p class="text-[9px] text-brand-400 mt-1 uppercase tracking-widest font-space font-semibold">${activeAvatarVibe.name} Secured</p>
                         
                         <!-- Profile editable fields input -->
                         <div class="space-y-3 text-left mt-6">
                             <div>
-                                <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1 font-space">Display Name</label>
-                                <input type="text" id="profile-input-name" value="${state.currentUser.name}" class="w-full bg-slate-950/60 border border-white/5 focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-white placeholder-slate-650 focus:outline-none">
+                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1 font-space">Display Name</label>
+                                <input type="text" id="profile-input-name" value="${state.currentUser.name}" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle placeholder-slate-650 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1 font-space">Primary Mobile</label>
-                                <input type="text" id="profile-input-phone" value="${state.currentUser.phone}" placeholder="98765 43210" class="w-full bg-slate-950/60 border border-white/5 focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-white placeholder-slate-650 focus:outline-none">
+                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1 font-space">Primary Mobile</label>
+                                <input type="text" id="profile-input-phone" value="${state.currentUser.phone}" placeholder="98765 43210" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle placeholder-slate-650 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1 font-space">Primary Email</label>
-                                <input type="email" id="profile-input-email" value="${state.currentUser.email}" placeholder="name@domain.com" class="w-full bg-slate-950/60 border border-white/5 focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-white placeholder-slate-650 focus:outline-none">
+                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1 font-space">Primary Email</label>
+                                <input type="email" id="profile-input-email" value="${state.currentUser.email}" placeholder="name@domain.com" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle placeholder-slate-650 focus:outline-none">
                             </div>
                         </div>
                     </div>
 
                     <!-- Avatar Vibe selector -->
-                    <div class="py-4 border-b border-white/5 relative z-10">
-                        <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-3 font-space text-center">Select Profile Vibe</label>
+                    <div class="py-4 border-b border-glassBorder relative z-10">
+                        <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-3 font-space text-center">Select Profile Vibe</label>
                         <div class="grid grid-cols-4 gap-2">
                             ${Object.keys(AVATAR_VIBES).map(key => {
                                 const active = curAvatar === key;
                                 const v = AVATAR_VIBES[key];
                                 return `
-                                    <button class="avatar-opt-btn flex flex-col items-center p-1.5 rounded-xl border ${active ? 'border-brand-500 bg-brand-500/10' : 'border-white/5 bg-slate-950/40'} hover:border-brand-500/30 transition-all focus:outline-none" data-avatar="${key}">
-                                        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr ${v.gradient} flex items-center justify-center text-white">
+                                    <button class="avatar-opt-btn flex flex-col items-center p-1.5 rounded-xl border ${active ? 'border-brand-500 bg-brand-500/10' : 'border-glassBorder bg-glassBg'} hover:border-brand-500/30 transition-all focus:outline-none" data-avatar="${key}">
+                                        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr ${v.gradient} flex items-center justify-center text-cardTitle">
                                             <i data-lucide="${v.icon}" class="w-3.5 h-3.5"></i>
                                         </div>
-                                        <span class="text-[7px] text-slate-400 mt-1 font-space">${v.name}</span>
+                                        <span class="text-[7px] text-textMuted mt-1 font-space">${v.name}</span>
                                     </button>
                                 `;
                             }).join('')}
@@ -1438,11 +1438,11 @@ function renderAccountTab() {
                     </div>
 
                     <div class="pt-4 relative z-10 space-y-2">
-                        <button onclick="triggerAccountReset()" class="w-full bg-slate-900 border border-white/5 hover:border-white/25 text-slate-350 hover:text-white font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
-                            <i data-lucide="log-out" class="w-3.5 h-3.5 text-slate-450"></i>
+                        <button onclick="triggerAccountReset()" class="w-full bg-inputBg border border-glassBorder hover:border-glassBorder text-cardTitle hover:text-cardTitle font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
+                            <i data-lucide="log-out" class="w-3.5 h-3.5 text-textMuted"></i>
                             <span>Disconnect Session (Log Out)</span>
                         </button>
-                        <button onclick="triggerDeleteAccount()" class="w-full bg-red-500/10 border border-red-500/25 hover:bg-red-550 hover:text-white text-red-400 font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
+                        <button onclick="triggerDeleteAccount()" class="w-full bg-red-500/10 border border-red-500/25 hover:bg-red-550 hover:text-cardTitle text-red-400 font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
                             <i data-lucide="user-x" class="w-3.5 h-3.5"></i>
                             <span>Delete Account & Wipe Data</span>
                         </button>
@@ -1451,7 +1451,7 @@ function renderAccountTab() {
 
                 <!-- Sync stats diagnostics console -->
                 <div class="liquid-glass-card p-5 relative overflow-hidden">
-                    <h3 class="text-xs font-bold text-slate-350 font-space uppercase tracking-wider mb-2 flex items-center space-x-2">
+                    <h3 class="text-xs font-bold text-cardTitle font-space uppercase tracking-wider mb-2 flex items-center space-x-2">
                         <i data-lucide="terminal" class="w-4 h-4 text-brand-400"></i>
                         <span>System Sync Logs</span>
                     </h3>
@@ -1459,18 +1459,18 @@ function renderAccountTab() {
                         ${logHtml}
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-white/5 text-xxs font-sans text-slate-400">
+                    <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-glassBorder text-xxs font-sans text-textMuted">
                         <div>
-                            <span class="block text-slate-550 text-[8px] uppercase tracking-widest font-space mb-0.5">Scans Performed</span>
-                            <span class="text-white font-bold font-space text-sm">${state.diagnostics.scansRun}</span>
+                            <span class="block text-textMuted text-[8px] uppercase tracking-widest font-space mb-0.5">Scans Performed</span>
+                            <span class="text-cardTitle font-bold font-space text-sm">${state.diagnostics.scansRun}</span>
                         </div>
                         <div>
-                            <span class="block text-slate-550 text-[8px] uppercase tracking-widest font-space mb-0.5">Linked APIs</span>
-                            <span class="text-white font-bold font-space text-sm">${state.diagnostics.apiConnected} / 8</span>
+                            <span class="block text-textMuted text-[8px] uppercase tracking-widest font-space mb-0.5">Linked APIs</span>
+                            <span class="text-cardTitle font-bold font-space text-sm">${state.diagnostics.apiConnected} / 8</span>
                         </div>
                     </div>
 
-                    <button id="btn-export-backup" class="w-full mt-4 bg-slate-950 border border-white/5 hover:border-brand-500/30 text-white font-bold text-[10px] py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
+                    <button id="btn-export-backup" class="w-full mt-4 bg-cardSubBg border border-glassBorder hover:border-brand-500/30 text-cardTitle font-bold text-[10px] py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
                         <i data-lucide="download" class="w-3.5 h-3.5 text-cosmicBlue-400"></i>
                         <span>Download Settings Backup (JSON)</span>
                     </button>
@@ -1487,21 +1487,21 @@ function renderAccountTab() {
                             <i data-lucide="scan" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-white font-space">Linked Scanning Directories</h3>
-                            <p class="text-[10px] text-slate-500 font-sans">Active phone/email accounts AIOManager syncs to scrape billing notifications.</p>
+                            <h3 class="text-sm font-bold text-cardTitle font-space">Linked Scanning Directories</h3>
+                            <p class="text-[10px] text-textMuted font-sans">Active phone/email accounts AIOManager syncs to scrape billing notifications.</p>
                         </div>
                     </div>
 
                     <!-- Input form -->
-                    <form id="connect-scan-directory-form" class="flex gap-3 pb-5 border-b border-white/5 mb-5">
+                    <form id="connect-scan-directory-form" class="flex gap-3 pb-5 border-b border-glassBorder mb-5">
                         <div class="relative flex-grow">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-550">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-textMuted">
                                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
                             </span>
                             <input type="text" required id="scan-directory-input-field" placeholder="Enter secondary email or 10-digit mobile number"
-                                class="w-full bg-slate-950/60 border border-white/10 rounded-xl py-3 pl-9 pr-4 text-xs text-white focus:outline-none focus:border-brand-500 placeholder-slate-650 font-sans">
+                                class="w-full bg-inputBg border border-glassBorder rounded-xl py-3 pl-9 pr-4 text-xs text-cardTitle focus:outline-none focus:border-brand-500 placeholder-slate-650 font-sans">
                         </div>
-                        <button type="submit" class="bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-white font-bold text-xs px-5 py-3 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.15)] whitespace-nowrap font-space">
+                        <button type="submit" class="bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-cardTitle font-bold text-xs px-5 py-3 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.15)] whitespace-nowrap font-space">
                             Link & Scan
                         </button>
                     </form>
@@ -1511,23 +1511,23 @@ function renderAccountTab() {
                         ${state.currentUser.linkedCredentials.length > 0 ? state.currentUser.linkedCredentials.map((cred, idx) => {
                             const isEmail = cred.type === 'Email';
                             return `
-                                <div class="flex items-center justify-between p-3.5 bg-slate-950/40 border border-white/5 rounded-2xl text-xs hover:border-brand-500/15 transition-all">
+                                <div class="flex items-center justify-between p-3.5 bg-glassBg border border-glassBorder rounded-2xl text-xs hover:border-brand-500/15 transition-all">
                                     <div class="flex items-center space-x-3.5">
-                                        <div class="p-2.5 bg-slate-900 border border-white/5 text-slate-400 rounded-xl flex-shrink-0">
+                                        <div class="p-2.5 bg-inputBg border border-glassBorder text-textMuted rounded-xl flex-shrink-0">
                                             <i data-lucide="${isEmail ? 'mail' : 'smartphone'}" class="w-4.5 h-4.5"></i>
                                         </div>
                                         <div>
-                                            <div class="font-semibold text-white font-space truncate max-w-[130px]">${cred.value}</div>
-                                            <div class="text-[9px] text-slate-500">Connected: ${cred.dateAdded}</div>
+                                            <div class="font-semibold text-cardTitle font-space truncate max-w-[130px]">${cred.value}</div>
+                                            <div class="text-[9px] text-textMuted">Connected: ${cred.dateAdded}</div>
                                         </div>
                                     </div>
-                                    <button class="btn-delete-credential p-2 bg-red-500/10 border border-red-500/25 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all flex-shrink-0" data-index="${idx}" title="Unlink Directory">
+                                    <button class="btn-delete-credential p-2 bg-red-500/10 border border-red-500/25 text-red-400 hover:bg-red-500 hover:text-cardTitle rounded-xl transition-all flex-shrink-0" data-index="${idx}" title="Unlink Directory">
                                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                                     </button>
                                 </div>
                             `;
                         }).join('') : `
-                            <div class="col-span-full py-8 text-center text-slate-500 text-xs font-sans">No directories linked. Enter one above to scan for bills.</div>
+                            <div class="col-span-full py-8 text-center text-textMuted text-xs font-sans">No directories linked. Enter one above to scan for bills.</div>
                         `}
                     </div>
                 </div>
@@ -1539,8 +1539,8 @@ function renderAccountTab() {
                             <i data-lucide="credit-card" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-white font-space">Primary Billing Card</h3>
-                            <p class="text-[10px] text-slate-500 font-sans">Emulated credit card details parsed for subscription auto-debit payments.</p>
+                            <h3 class="text-sm font-bold text-cardTitle font-space">Primary Billing Card</h3>
+                            <p class="text-[10px] text-textMuted font-sans">Emulated credit card details parsed for subscription auto-debit payments.</p>
                         </div>
                     </div>
 
@@ -1554,14 +1554,14 @@ function renderAccountTab() {
                             <!-- Card Brand header -->
                             <div class="flex justify-between items-start z-10">
                                 <div class="glass-card-chip"></div>
-                                <div id="card-vendor-icon" class="text-white opacity-85">
-                                    <span class="font-space text-[10px] font-black tracking-widest bg-white/10 px-2 py-0.5 rounded border border-white/10">${state.billingCard.provider.toUpperCase()}</span>
+                                <div id="card-vendor-icon" class="text-cardTitle opacity-85">
+                                    <span class="font-space text-[10px] font-black tracking-widest bg-white/10 px-2 py-0.5 rounded border border-glassBorder">${state.billingCard.provider.toUpperCase()}</span>
                                 </div>
                             </div>
                             
                             <!-- Card Number -->
                             <div class="z-10 mt-6">
-                                <div id="card-preview-number" class="embossed-text text-sm sm:text-base md:text-sm lg:text-base font-mono text-center tracking-widest text-white/95">
+                                <div id="card-preview-number" class="embossed-text text-sm sm:text-base md:text-sm lg:text-base font-mono text-center tracking-widest text-cardTitle/95">
                                     ${state.billingCard.number}
                                 </div>
                             </div>
@@ -1569,14 +1569,14 @@ function renderAccountTab() {
                             <!-- Card Name and Expiry -->
                             <div class="flex justify-between items-end z-10 mt-6 font-sans">
                                 <div>
-                                    <div class="text-[7px] text-slate-450 font-bold uppercase tracking-widest font-space mb-0.5">Card Holder</div>
-                                    <div id="card-preview-name" class="text-[10px] font-semibold text-white/90 uppercase tracking-wider font-space truncate max-w-[130px]">
+                                    <div class="text-[7px] text-textMuted font-bold uppercase tracking-widest font-space mb-0.5">Card Holder</div>
+                                    <div id="card-preview-name" class="text-[10px] font-semibold text-cardTitle/90 uppercase tracking-wider font-space truncate max-w-[130px]">
                                         ${state.billingCard.name}
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-[7px] text-slate-450 font-bold uppercase tracking-widest font-space mb-0.5">Expires</div>
-                                    <div id="card-preview-expiry" class="text-[10px] font-semibold text-white/90 font-mono">
+                                    <div class="text-[7px] text-textMuted font-bold uppercase tracking-widest font-space mb-0.5">Expires</div>
+                                    <div id="card-preview-expiry" class="text-[10px] font-semibold text-cardTitle/90 font-mono">
                                         ${state.billingCard.expiry}
                                     </div>
                                 </div>
@@ -1586,21 +1586,21 @@ function renderAccountTab() {
                         <!-- Card form settings -->
                         <form id="billing-card-edit-form" class="space-y-3.5">
                             <div>
-                                <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 font-space">Card Holder</label>
-                                <input type="text" id="card-input-name" value="${state.billingCard.name}" class="w-full bg-slate-950/60 border border-white/5 focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-white focus:outline-none">
+                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Card Holder</label>
+                                <input type="text" id="card-input-name" value="${state.billingCard.name}" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 font-space">Card Number</label>
-                                <input type="text" id="card-input-number" value="${state.billingCard.number}" placeholder="4321 0000 0000 9876" class="w-full bg-slate-950/60 border border-white/5 focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-white focus:outline-none">
+                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Card Number</label>
+                                <input type="text" id="card-input-number" value="${state.billingCard.number}" placeholder="4321 0000 0000 9876" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle focus:outline-none">
                             </div>
                             <div class="grid grid-cols-2 gap-3.5">
                                 <div>
-                                    <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 font-space">Expiry Date</label>
-                                    <input type="text" id="card-input-expiry" value="${state.billingCard.expiry}" placeholder="MM/YY" class="w-full bg-slate-950/60 border border-white/5 focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-white focus:outline-none">
+                                    <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Expiry Date</label>
+                                    <input type="text" id="card-input-expiry" value="${state.billingCard.expiry}" placeholder="MM/YY" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle focus:outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 font-space">CVV</label>
-                                    <input type="password" id="card-input-cvv" value="${state.billingCard.cvv}" placeholder="123" class="w-full bg-slate-950/60 border border-white/5 focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-white focus:outline-none">
+                                    <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">CVV</label>
+                                    <input type="password" id="card-input-cvv" value="${state.billingCard.cvv}" placeholder="123" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle focus:outline-none">
                                 </div>
                             </div>
                         </form>
@@ -1614,15 +1614,15 @@ function renderAccountTab() {
                             <i data-lucide="palette" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-white font-space">Accent Vibe & Preferences</h3>
-                            <p class="text-[10px] text-slate-500 font-sans">Modify cosmic colors, currencies, and notifications alerts protocols.</p>
+                            <h3 class="text-sm font-bold text-cardTitle font-space">Accent Vibe & Preferences</h3>
+                            <p class="text-[10px] text-textMuted font-sans">Modify cosmic colors, currencies, and notifications alerts protocols.</p>
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <!-- Theme custom swatch lists -->
                         <div>
-                            <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-3.5 font-space">Cosmic Color Presets</label>
+                            <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-3.5 font-space">Cosmic Color Presets</label>
                             <div class="flex flex-wrap gap-4 items-center">
                                 ${Object.keys(THEMES).map(themeName => {
                                     const isSelected = state.preferences.theme === themeName;
@@ -1632,21 +1632,21 @@ function renderAccountTab() {
                                     
                                     return `
                                         <button class="theme-select-btn flex flex-col items-center gap-1.5 focus:outline-none" data-theme="${themeName}">
-                                            <div style="background: linear-gradient(135deg, ${colors.brandHex}, ${colors.cosmicHex});" class="w-10 h-10 rounded-full border-2 ${isSelected ? 'border-white scale-110 shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'border-white/10 opacity-70 hover:opacity-100'} transition-all flex items-center justify-center relative">
+                                            <div style="background: linear-gradient(135deg, ${colors.brandHex}, ${colors.cosmicHex});" class="w-10 h-10 rounded-full border-2 ${isSelected ? 'border-white scale-110 shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'border-glassBorder opacity-70 hover:opacity-100'} transition-all flex items-center justify-center relative">
                                                 ${isSelected ? '<span class="absolute w-2.5 h-2.5 rounded-full bg-white"></span>' : ''}
                                             </div>
-                                            <span class="text-[9px] ${isSelected ? 'text-white font-semibold' : 'text-slate-500'} font-space">${displayName}</span>
+                                            <span class="text-[9px] ${isSelected ? 'text-cardTitle font-semibold' : 'text-textMuted'} font-space">${displayName}</span>
                                         </button>
                                     `;
                                 }).join('')}
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-glassBorder">
                             <!-- Currency -->
                             <div>
-                                <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-2 font-space">Currency Unit</label>
-                                <select id="pref-currency-select" class="w-full bg-slate-950/60 border border-white/5 focus:border-brand-500 rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none">
+                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Currency Unit</label>
+                                <select id="pref-currency-select" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2.5 px-3 text-xs text-cardTitle focus:outline-none">
                                     <option value="INR" ${state.preferences.currency === 'INR' ? 'selected' : ''}>INR (₹) - Indian Rupee</option>
                                     <option value="USD" ${state.preferences.currency === 'USD' ? 'selected' : ''}>USD ($) - US Dollar</option>
                                     <option value="EUR" ${state.preferences.currency === 'EUR' ? 'selected' : ''}>EUR (€) - Euro</option>
@@ -1655,33 +1655,33 @@ function renderAccountTab() {
                             </div>
                             <!-- Notifications checkboxes -->
                             <div class="space-y-4 font-sans text-xs">
-                                <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1 font-space">Notifications</label>
+                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1 font-space">Notifications</label>
                                 
                                 <!-- Alert 1 -->
                                 <label class="flex items-center cursor-pointer select-none group">
                                     <div class="relative flex-shrink-0">
                                         <input type="checkbox" id="chk-billing-alerts" ${state.preferences.billingAlerts ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-9 h-5 bg-slate-850 border border-white/10 rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                        <div class="w-9 h-5 bg-inputBg border border-glassBorder rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
                                     </div>
-                                    <span class="ml-3 text-slate-300 hover:text-white transition-all text-xxs font-space leading-tight">Critical billing renewal alerts (5 days warning)</span>
+                                    <span class="ml-3 text-cardTitle hover:text-cardTitle transition-all text-xxs font-space leading-tight">Critical billing renewal alerts (5 days warning)</span>
                                 </label>
 
                                 <!-- Alert 2 -->
                                 <label class="flex items-center cursor-pointer select-none group">
                                     <div class="relative flex-shrink-0">
                                         <input type="checkbox" id="chk-sms-alerts" ${state.preferences.smsAlerts ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-9 h-5 bg-slate-850 border border-white/10 rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                        <div class="w-9 h-5 bg-inputBg border border-glassBorder rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
                                     </div>
-                                    <span class="ml-3 text-slate-300 hover:text-white transition-all text-xxs font-space leading-tight">Mobile SMS notifications on scan matching</span>
+                                    <span class="ml-3 text-cardTitle hover:text-cardTitle transition-all text-xxs font-space leading-tight">Mobile SMS notifications on scan matching</span>
                                 </label>
 
                                 <!-- Alert 3 -->
                                 <label class="flex items-center cursor-pointer select-none group">
                                     <div class="relative flex-shrink-0">
                                         <input type="checkbox" id="chk-monthly-reports" ${state.preferences.monthlyReports ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-9 h-5 bg-slate-850 border border-white/10 rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                        <div class="w-9 h-5 bg-inputBg border border-glassBorder rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
                                     </div>
-                                    <span class="ml-3 text-slate-300 hover:text-white transition-all text-xxs font-space leading-tight">Monthly spending and subscription summary reports</span>
+                                    <span class="ml-3 text-cardTitle hover:text-cardTitle transition-all text-xxs font-space leading-tight">Monthly spending and subscription summary reports</span>
                                 </label>
                             </div>
                         </div>
@@ -1900,7 +1900,7 @@ function updateCardVendorIcon(number) {
     else if (cleanNum.startsWith('3')) vendorText = 'AMEX';
     
     state.billingCard.provider = vendorText.toLowerCase();
-    iconContainer.innerHTML = `<span class="font-space text-[9px] font-black tracking-widest bg-white/10 px-2 py-0.5 rounded border border-white/10">${vendorText}</span>`;
+    iconContainer.innerHTML = `<span class="font-space text-[9px] font-black tracking-widest bg-white/10 px-2 py-0.5 rounded border border-glassBorder">${vendorText}</span>`;
 }
 
 function startDiagnosticLogging() {
@@ -1916,7 +1916,7 @@ function startDiagnosticLogging() {
         const randomLog = DIAGNOSTIC_LOG_TEMPLATES[Math.floor(Math.random() * DIAGNOSTIC_LOG_TEMPLATES.length)];
         const timeStr = new Date().toLocaleTimeString();
         const line = document.createElement('div');
-        line.className = 'text-slate-500 font-mono log-line';
+        line.className = 'text-textMuted font-mono log-line';
         line.innerHTML = `[${timeStr}] ${randomLog}`;
         consoleEl.appendChild(line);
         consoleEl.scrollTop = consoleEl.scrollHeight;
@@ -2074,7 +2074,7 @@ function openCancellationWizard(id) {
     const template = MOCK_PROVIDER_DATA[sub.providerKey] || {
         name: sub.name,
         cost: sub.cost,
-        iconBg: 'bg-slate-900 text-slate-400 border-white/5',
+        iconBg: 'bg-inputBg text-textMuted border-glassBorder',
         lucideIcon: 'credit-card',
         manualSteps: ['Open provider account page.', 'Select cancel billing.']
     };
@@ -2086,7 +2086,7 @@ function openCancellationWizard(id) {
     document.getElementById('manual-cancel-steps').innerHTML = template.manualSteps.map(step => `<li>${step}</li>`).join('');
 
     const logoContainer = document.getElementById('cancel-logo-container');
-    logoContainer.className = `w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-white font-bold text-xl font-space mb-4 border ${template.iconBg}`;
+    logoContainer.className = `w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-cardTitle font-bold text-xl font-space mb-4 border ${template.iconBg}`;
     logoContainer.innerHTML = `<i data-lucide="${template.lucideIcon}" class="w-7 h-7"></i>`;
 
     document.getElementById('cancel-step-intro').classList.remove('hidden');
@@ -2222,8 +2222,8 @@ function switchLoginTab(type) {
 
     if (type === 'email') {
         // Style Email Tab Active
-        tabEmail.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all text-white bg-white/5 border border-white/10 shadow-sm";
-        tabPhone.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all text-slate-400 hover:text-white";
+        tabEmail.classList.add('active', 'shadow-sm');
+        tabPhone.classList.remove('active', 'shadow-sm');
         // Show/Hide inputs
         emailGroup.classList.remove('hidden');
         phoneGroup.classList.add('hidden');
@@ -2231,8 +2231,8 @@ function switchLoginTab(type) {
         if (btnScan) btnScan.classList.add('hidden');
     } else {
         // Style Phone Tab Active
-        tabPhone.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all text-white bg-white/5 border border-white/10 shadow-sm";
-        tabEmail.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all text-slate-400 hover:text-white";
+        tabPhone.classList.add('active', 'shadow-sm');
+        tabEmail.classList.remove('active', 'shadow-sm');
         // Show/Hide inputs
         phoneGroup.classList.remove('hidden');
         emailGroup.classList.add('hidden');
@@ -2397,7 +2397,7 @@ async function sendVerificationCode() {
     // Clear otp digits
     document.querySelectorAll('.otp-box').forEach(box => {
         box.value = '';
-        box.className = "otp-box w-12 h-14 text-center text-xl font-bold bg-slate-950/60 border border-white/10 rounded-2xl focus:border-brand-500 text-white focus:outline-none transition-all font-space";
+        box.className = "otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space";
     });
 
     // Start Timer
@@ -2734,9 +2734,9 @@ function setupEventListeners() {
     registerAvatarBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             registerAvatarBtns.forEach(b => {
-                b.className = "register-avatar-btn w-10 h-10 rounded-full border border-white/5 flex items-center justify-center text-white opacity-70 hover:opacity-100";
+                b.className = "register-avatar-btn w-10 h-10 rounded-full border border-glassBorder flex items-center justify-center text-cardTitle opacity-70 hover:opacity-100";
             });
-            btn.className = "register-avatar-btn w-10 h-10 rounded-full border border-brand-500 flex items-center justify-center text-white scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse";
+            btn.className = "register-avatar-btn w-10 h-10 rounded-full border border-brand-500 flex items-center justify-center text-cardTitle scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse";
             selectedRegisterAvatar = btn.getAttribute('data-avatar');
         });
     });

@@ -68,11 +68,11 @@
 </head>
 
 <body
-    class="bg-cosmicBg text-textMain min-h-screen flex flex-col font-sans overflow-x-hidden selection:bg-brand-500 selection:text-white relative">
+    class="bg-cosmicBg text-textMain min-h-screen flex flex-col font-sans overflow-x-hidden selection:bg-brand-500 selection:text-cardTitle relative">
 
     <!-- Theme Mode Floating Toggle -->
     <div class="fixed top-6 right-6 z-50">
-        <button id="btn-theme-toggle" class="p-2.5 rounded-full bg-glassBg border border-glassBorder hover:border-brand-500/30 text-slate-350 hover:text-white transition-all flex items-center justify-center focus:outline-none backdrop-blur-md shadow-lg group">
+        <button id="btn-theme-toggle" class="p-2.5 rounded-full bg-glassBg border border-glassBorder hover:border-brand-500/30 text-textMuted hover:text-cardTitle transition-all flex items-center justify-center focus:outline-none backdrop-blur-md shadow-lg group">
             <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4 group-hover:-rotate-12 transition-transform"></i>
         </button>
     </div>
@@ -146,7 +146,7 @@
 
                     <!-- Visual Hologram Graphic -->
                     <div
-                        class="relative rounded-2xl border border-white/5 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] aspect-[16/9] lg:aspect-[21/9] max-h-[180px] max-w-xl bg-slate-950/30 group hover:border-brand-500/25 transition-all duration-500">
+                        class="relative rounded-2xl border border-glassBorder overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] aspect-[16/9] lg:aspect-[21/9] max-h-[180px] max-w-xl bg-cardSubBg/30 group hover:border-brand-500/25 transition-all duration-500">
                         <img src="assets/cosmic_dashboard.png"
                             class="w-full h-full object-cover opacity-85 transition-transform duration-700 group-hover:scale-102"
                             alt="Futuristic interface mock visual">
@@ -156,9 +156,9 @@
 
                         <!-- Mini glass badge overlay -->
                         <div
-                            class="absolute bottom-4 left-4 bg-slate-950/60 border border-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-xl flex items-center space-x-2 text-[10px]">
+                            class="absolute bottom-4 left-4 bg-inputBg border border-glassBorder backdrop-blur-md px-3.5 py-1.5 rounded-xl flex items-center space-x-2 text-[10px]">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                            <span class="text-white font-semibold font-space tracking-wide">Live Diagnostics Sync
+                            <span class="text-cardTitle font-semibold font-space tracking-wide">Live Diagnostics Sync
                                 Gateway</span>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
                                         Log in instantly via Gmail to search your inbox receipts and automatically configure your active subscriptions.
                                     </p>
                                     <button id="btn-gmail-login"
-                                        class="w-full bg-slate-900 border border-white/10 hover:border-brand-500/50 hover:bg-slate-900/80 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_4px_20px_rgba(0,0,0,0.4)] flex items-center justify-center space-x-3 group">
+                                        class="w-full bg-cardSubBg border border-glassBorder hover:border-brand-500/50 hover:bg-cardSubBg/80 text-cardTitle font-bold py-4 rounded-2xl transition-all shadow-[0_4px_20px_rgba(0,0,0,0.4)] flex items-center justify-center space-x-3 group">
                                         <svg class="w-5 h-5 group-hover:scale-105 transition-transform" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
                                             <g transform="matrix(1, 0, 0, 1, 0, 0)">
                                                 <path d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.96,2.37 -2.04,3.1v2.58h3.3c1.93,-1.78 3.04,-4.4 3.04,-7.38c0,-0.68 -0.06,-1.33 -0.18,-1.98Z" fill="#4285F4" />
@@ -234,13 +234,13 @@
                                         <span
                                             class="absolute inset-y-0 left-0 pl-4 flex items-center text-textMuted font-medium font-space">+91</span>
                                         <input type="tel" id="scan-phone" placeholder="98765 43210"
-                                            class="w-full bg-slate-950/60 border border-white/10 focus:border-brand-500 rounded-2xl py-3.5 pl-14 pr-4 text-white placeholder-slate-650 focus:outline-none focus:ring-1 focus:ring-brand-500/20 transition-all font-medium">
+                                            class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 pl-14 pr-4 text-cardTitle placeholder-slate-650 focus:outline-none focus:ring-1 focus:ring-brand-500/20 transition-all font-medium">
                                     </div>
                                 </div>
                             </div>
 
                             <button id="btn-start-scan"
-                                class="w-full bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_4px_25px_rgba(236,72,153,0.2)] hover:shadow-[0_4px_30px_rgba(236,72,153,0.4)] flex items-center justify-center space-x-2 group hidden">
+                                class="w-full bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-cardTitle font-bold py-4 rounded-2xl transition-all shadow-[0_4px_25px_rgba(236,72,153,0.2)] hover:shadow-[0_4px_30px_rgba(236,72,153,0.4)] flex items-center justify-center space-x-2 group hidden">
                                 <span class="font-space tracking-wide">Send Verification Code</span>
                                 <i data-lucide="arrow-right"
                                     class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
@@ -261,29 +261,29 @@
                         <!-- OTP VERIFICATION FORM (hidden by default) -->
                         <div id="otp-form-panel" class="hidden space-y-6">
                             <!-- Back Button -->
-                            <button id="btn-otp-back" class="flex items-center space-x-2 text-xs text-slate-400 hover:text-white transition-all font-space group">
+                            <button id="btn-otp-back" class="flex items-center space-x-2 text-xs text-textMuted hover:text-cardTitle transition-all font-space group">
                                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
                                 <span>Change login details</span>
                             </button>
 
                             <div class="space-y-2">
-                                <h3 class="text-lg font-semibold text-white font-space">Enter Verification Code</h3>
-                                <p class="text-xs text-slate-400 leading-relaxed">
+                                <h3 class="text-lg font-semibold text-cardTitle font-space">Enter Verification Code</h3>
+                                <p class="text-xs text-textMuted leading-relaxed">
                                     We sent a secure verification code to <span id="otp-recipient-display" class="text-brand-400 font-semibold"></span>.
                                 </p>
-                                <p id="otp-mock-notice" class="hidden text-[10px] text-slate-500 leading-relaxed mt-1 bg-white/5 border border-white/5 p-2 rounded-xl font-space">
+                                <p id="otp-mock-notice" class="hidden text-[10px] text-textMuted leading-relaxed mt-1 bg-white/5 border border-glassBorder p-2 rounded-xl font-space">
                                     Running in simulated offline mode. Check browser console logs (F12) to retrieve your code.
                                 </p>
                             </div>
 
                             <!-- Digits Row -->
                             <div class="flex justify-between gap-2.5 my-4" id="otp-input-row">
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-slate-950/60 border border-white/10 rounded-2xl focus:border-brand-500 text-white focus:outline-none transition-all font-space" data-index="0" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-slate-950/60 border border-white/10 rounded-2xl focus:border-brand-500 text-white focus:outline-none transition-all font-space" data-index="1" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-slate-950/60 border border-white/10 rounded-2xl focus:border-brand-500 text-white focus:outline-none transition-all font-space" data-index="2" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-slate-950/60 border border-white/10 rounded-2xl focus:border-brand-500 text-white focus:outline-none transition-all font-space" data-index="3" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-slate-950/60 border border-white/10 rounded-2xl focus:border-brand-500 text-white focus:outline-none transition-all font-space" data-index="4" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-slate-950/60 border border-white/10 rounded-2xl focus:border-brand-500 text-white focus:outline-none transition-all font-space" data-index="5" inputmode="numeric" pattern="[0-9]*" />
+                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="0" inputmode="numeric" pattern="[0-9]*" />
+                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="1" inputmode="numeric" pattern="[0-9]*" />
+                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="2" inputmode="numeric" pattern="[0-9]*" />
+                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="3" inputmode="numeric" pattern="[0-9]*" />
+                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="4" inputmode="numeric" pattern="[0-9]*" />
+                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="5" inputmode="numeric" pattern="[0-9]*" />
                             </div>
 
                             <!-- Error Message Display -->
@@ -293,14 +293,14 @@
                             </div>
 
                             <button id="btn-verify-otp"
-                                class="w-full bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_4px_25px_rgba(236,72,153,0.2)] hover:shadow-[0_4px_30px_rgba(236,72,153,0.4)] flex items-center justify-center space-x-2 group">
+                                class="w-full bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-cardTitle font-bold py-4 rounded-2xl transition-all shadow-[0_4px_25px_rgba(236,72,153,0.2)] hover:shadow-[0_4px_30px_rgba(236,72,153,0.4)] flex items-center justify-center space-x-2 group">
                                 <span class="font-space tracking-wide">Verify & Discover</span>
                                 <i data-lucide="shield-check"
                                     class="w-5 h-5 group-hover:scale-105 transition-transform"></i>
                             </button>
 
                             <div class="flex items-center justify-between text-xs pt-2">
-                                <span class="text-slate-500" id="otp-timer-text">Resend code in <span id="otp-countdown" class="text-slate-400 font-bold font-space">30</span>s</span>
+                                <span class="text-textMuted" id="otp-timer-text">Resend code in <span id="otp-countdown" class="text-textMuted font-bold font-space">30</span>s</span>
                                 <button id="btn-resend-otp" class="text-brand-400 hover:text-brand-300 font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed hidden" disabled>Resend Code</button>
                             </div>
                         </div>
@@ -308,14 +308,14 @@
                         <!-- REGISTRATION PROFILE SETUP FORM (hidden by default) -->
                         <div id="register-setup-panel" class="hidden space-y-6">
                             <!-- Back Button -->
-                            <button id="btn-register-back" class="flex items-center space-x-2 text-xs text-slate-400 hover:text-white transition-all font-space group">
+                            <button id="btn-register-back" class="flex items-center space-x-2 text-xs text-textMuted hover:text-cardTitle transition-all font-space group">
                                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
                                 <span>Back to Authentication</span>
                             </button>
 
                             <div class="space-y-2">
-                                <h3 class="text-lg font-semibold text-white font-space">Complete Your Profile</h3>
-                                <p class="text-xs text-slate-400 leading-relaxed font-sans">
+                                <h3 class="text-lg font-semibold text-cardTitle font-space">Complete Your Profile</h3>
+                                <p class="text-xs text-textMuted leading-relaxed font-sans">
                                     Set up your profile to start aggregate discovery scanner.
                                 </p>
                             </div>
@@ -323,32 +323,32 @@
                             <div class="space-y-4">
                                 <!-- Full name -->
                                 <div>
-                                    <label for="register-name" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Full Name</label>
+                                    <label for="register-name" class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Full Name</label>
                                     <input type="text" id="register-name" placeholder="John Doe"
-                                        class="w-full bg-slate-950/60 border border-white/10 focus:border-brand-500 rounded-2xl py-3.5 px-4 text-white placeholder-slate-650 focus:outline-none transition-all">
+                                        class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 px-4 text-cardTitle placeholder-slate-650 focus:outline-none transition-all">
                                 </div>
 
                                 <!-- Secondary contact -->
                                 <div id="register-secondary-group">
-                                    <label id="register-secondary-label" for="register-secondary" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Email Address</label>
+                                    <label id="register-secondary-label" for="register-secondary" class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Email Address</label>
                                     <input type="text" id="register-secondary" placeholder="name@domain.com"
-                                        class="w-full bg-slate-950/60 border border-white/10 focus:border-brand-500 rounded-2xl py-3.5 px-4 text-white placeholder-slate-650 focus:outline-none transition-all">
+                                        class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 px-4 text-cardTitle placeholder-slate-650 focus:outline-none transition-all">
                                 </div>
 
                                 <!-- Avatar selection -->
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Select Avatar</label>
+                                    <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Select Avatar</label>
                                     <div class="flex gap-2 justify-between" id="register-avatar-row">
-                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-pink-500 border border-brand-500 flex items-center justify-center text-white scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse" data-avatar="nebula">
+                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-pink-500 border border-brand-500 flex items-center justify-center text-cardTitle scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse" data-avatar="nebula">
                                             <i data-lucide="sparkles" class="w-4 h-4"></i>
                                         </button>
-                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-cosmicBlue-600 to-cyan-500 border border-white/5 flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="nova">
+                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-cosmicBlue-600 to-cyan-500 border border-glassBorder flex items-center justify-center text-cardTitle opacity-70 hover:opacity-100" data-avatar="nova">
                                             <i data-lucide="zap" class="w-4 h-4"></i>
                                         </button>
-                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 border border-white/5 flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="pulsar">
+                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 border border-glassBorder flex items-center justify-center text-cardTitle opacity-70 hover:opacity-100" data-avatar="pulsar">
                                             <i data-lucide="activity" class="w-4 h-4"></i>
                                         </button>
-                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-amber-600 to-orange-500 border border-white/5 flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="quasar">
+                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-amber-600 to-orange-500 border border-glassBorder flex items-center justify-center text-cardTitle opacity-70 hover:opacity-100" data-avatar="quasar">
                                             <i data-lucide="target" class="w-4 h-4"></i>
                                         </button>
                                     </div>
@@ -356,7 +356,7 @@
                             </div>
 
                             <button id="btn-complete-register"
-                                class="w-full bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-white font-bold py-4 rounded-2xl transition-all shadow-[0_4px_25px_rgba(236,72,153,0.2)] hover:shadow-[0_4px_30px_rgba(236,72,153,0.4)] flex items-center justify-center space-x-2 group">
+                                class="w-full bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-cardTitle font-bold py-4 rounded-2xl transition-all shadow-[0_4px_25px_rgba(236,72,153,0.2)] hover:shadow-[0_4px_30px_rgba(236,72,153,0.4)] flex items-center justify-center space-x-2 group">
                                 <span class="font-space tracking-wide">Complete Registration</span>
                                 <i data-lucide="check" class="w-5 h-5 group-hover:scale-105 transition-transform"></i>
                             </button>
@@ -385,10 +385,10 @@
                         class="p-1.5 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.15)]">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
-                    <span class="text-lg font-bold font-space text-white tracking-tight">AIOManager Sync</span>
+                    <span class="text-lg font-bold font-space text-cardTitle tracking-tight">AIOManager Sync</span>
                 </div>
                 <div
-                    class="text-[9px] font-bold text-slate-550 uppercase tracking-widest font-space bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+                    class="text-[9px] font-bold text-slate-550 uppercase tracking-widest font-space bg-white/5 border border-glassBorder px-3 py-1 rounded-full">
                     Directory Mapping active
                 </div>
             </header>
@@ -406,9 +406,9 @@
                                 <i data-lucide="pie-chart" class="w-3 h-3"></i>
                                 <span>Features Tour 1/3</span>
                             </div>
-                            <h2 class="text-3xl sm:text-4xl text-white font-normal serif-title italic leading-tight">
+                            <h2 class="text-3xl sm:text-4xl text-cardTitle font-normal serif-title italic leading-tight">
                                 Unified Spending &amp; Category Share</h2>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md">See your entire
+                            <p class="text-textMuted text-xs sm:text-sm leading-relaxed max-w-md">See your entire
                                 software, telecom, and utility spending mapped into interactive visualization charts.
                                 Get direct percentages breakdown on each category.</p>
                         </div>
@@ -421,9 +421,9 @@
                                 <i data-lucide="lock" class="w-3 h-3"></i>
                                 <span>Features Tour 2/3</span>
                             </div>
-                            <h2 class="text-3xl sm:text-4xl text-white font-normal serif-title italic leading-tight">
+                            <h2 class="text-3xl sm:text-4xl text-cardTitle font-normal serif-title italic leading-tight">
                                 Automated API Directories sync</h2>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md">Connect secondary
+                            <p class="text-textMuted text-xs sm:text-sm leading-relaxed max-w-md">Connect secondary
                                 emails or phone numbers. AIOManager securely intercepts bank transaction reminders and
                                 aggregates them with zero credentials sharing.</p>
                         </div>
@@ -436,9 +436,9 @@
                                 <i data-lucide="credit-card" class="w-3 h-3"></i>
                                 <span>Features Tour 3/3</span>
                             </div>
-                            <h2 class="text-3xl sm:text-4xl text-white font-normal serif-title italic leading-tight">
+                            <h2 class="text-3xl sm:text-4xl text-cardTitle font-normal serif-title italic leading-tight">
                                 Liquid Glass Card Customizations</h2>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md">Personalize your
+                            <p class="text-textMuted text-xs sm:text-sm leading-relaxed max-w-md">Personalize your
                                 control deck using dynamic custom cosmic presets. Customize credit cards with real-time
                                 updates and holographic shine effects.</p>
                         </div>
@@ -448,14 +448,14 @@
                     <div id="slideshow-image-container" class="flex justify-center md:justify-end">
 
                         <!-- Slide 1 Graphic: Dashboard Visual -->
-                        <div class="discovery-slide-graphic opacity-100 transition-all duration-700 w-full max-w-sm rounded-2xl border border-white/5 overflow-hidden shadow-2xl bg-slate-950/30"
+                        <div class="discovery-slide-graphic opacity-100 transition-all duration-700 w-full max-w-sm rounded-2xl border border-glassBorder overflow-hidden shadow-2xl bg-cardSubBg/30"
                             data-slide="0">
                             <img src="assets/cosmic_dashboard.png" class="w-full h-auto object-cover opacity-90"
                                 alt="Dashboard Feature illustration">
                         </div>
 
                         <!-- Slide 2 Graphic: Holographic Sync Visual -->
-                        <div class="discovery-slide-graphic hidden opacity-0 transition-all duration-700 w-full max-w-sm rounded-2xl border border-white/5 overflow-hidden shadow-2xl bg-slate-950/30"
+                        <div class="discovery-slide-graphic hidden opacity-0 transition-all duration-700 w-full max-w-sm rounded-2xl border border-glassBorder overflow-hidden shadow-2xl bg-cardSubBg/30"
                             data-slide="1">
                             <img src="assets/cosmic_sync_gate.png" class="w-full h-auto object-cover opacity-90"
                                 alt="API sync visual">
@@ -471,26 +471,26 @@
                                 <div class="flex justify-between items-start z-10">
                                     <div class="glass-card-chip"></div>
                                     <span
-                                        class="font-space text-[9px] font-black tracking-widest bg-white/10 px-2 py-0.5 rounded border border-white/10 text-white">VISA</span>
+                                        class="font-space text-[9px] font-black tracking-widest bg-white/10 px-2 py-0.5 rounded border border-glassBorder text-cardTitle">VISA</span>
                                 </div>
                                 <div class="z-10 mt-4 text-center">
                                     <div
-                                        class="embossed-text text-sm sm:text-base font-mono tracking-widest text-white/95">
+                                        class="embossed-text text-sm sm:text-base font-mono tracking-widest text-cardTitle/95">
                                         4321 •••• •••• 9876</div>
                                 </div>
                                 <div class="flex justify-between items-end z-10 mt-4 font-sans text-[9px]">
                                     <div>
                                         <div
-                                            class="text-[6px] text-slate-400 font-bold uppercase tracking-widest font-space">
+                                            class="text-[6px] text-textMuted font-bold uppercase tracking-widest font-space">
                                             Card Holder</div>
-                                        <div class="font-semibold text-white/90 uppercase tracking-wider font-space">
+                                        <div class="font-semibold text-cardTitle/90 uppercase tracking-wider font-space">
                                             RISHABH RAJ</div>
                                     </div>
                                     <div class="text-right">
                                         <div
-                                            class="text-[6px] text-slate-400 font-bold uppercase tracking-widest font-space">
+                                            class="text-[6px] text-textMuted font-bold uppercase tracking-widest font-space">
                                             Expires</div>
-                                        <div class="font-semibold text-white/90 font-mono">12/29</div>
+                                        <div class="font-semibold text-cardTitle/90 font-mono">12/29</div>
                                     </div>
                                 </div>
                             </div>
@@ -502,7 +502,7 @@
             <!-- Bottom Footer: Floating Progress Pill -->
             <footer class="w-full max-w-3xl mx-auto z-10 relative">
                 <div
-                    class="bg-slate-950/50 border border-white/10 backdrop-blur-2xl p-4 sm:p-5 rounded-full flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_15px_40px_rgba(0,0,0,0.7)] hover:border-brand-500/10 transition-all">
+                    class="bg-cardSubBg/50 border border-glassBorder backdrop-blur-2xl p-4 sm:p-5 rounded-full flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_15px_40px_rgba(0,0,0,0.7)] hover:border-brand-500/10 transition-all">
 
                     <!-- Left: Pulsating status text -->
                     <div class="flex items-center space-x-3.5 pl-2">
@@ -522,7 +522,7 @@
                     <div class="flex items-center space-x-4 w-full sm:w-auto flex-grow sm:flex-grow-0 justify-end">
                         <!-- Sleek gradient progress bar -->
                         <div
-                            class="w-full sm:w-48 bg-slate-950 border border-white/5 rounded-full h-2.5 p-0.5 overflow-hidden">
+                            class="w-full sm:w-48 bg-cardSubBg border border-glassBorder rounded-full h-2.5 p-0.5 overflow-hidden">
                             <div id="login-progress-bar"
                                 class="bg-gradient-to-r from-brand-500 via-cosmicBlue-400 to-purple-500 h-full rounded-full w-0 transition-all duration-300">
                             </div>
@@ -531,7 +531,7 @@
                         <!-- Glowing percentage -->
                         <div class="text-right pr-2">
                             <span id="login-progress-pct"
-                                class="text-lg font-black text-white font-space text-neon-glow">0%</span>
+                                class="text-lg font-black text-cardTitle font-space text-neon-glow">0%</span>
                         </div>
                     </div>
 
@@ -545,28 +545,28 @@
             <!-- FLOATING NAV PILL BAR -->
             <div class="fixed top-5 left-0 right-0 px-4 z-40">
                 <header
-                    class="max-w-3xl mx-auto bg-slate-950/40 border border-white/10 backdrop-blur-2xl h-16 rounded-full flex items-center justify-between px-6 shadow-[0_12px_40px_rgba(236,72,153,0.08)]">
+                    class="max-w-3xl mx-auto bg-inputBg border border-glassBorder backdrop-blur-2xl h-16 rounded-full flex items-center justify-between px-6 shadow-[0_12px_40px_rgba(236,72,153,0.08)]">
 
                     <!-- Left: Logo & Icon -->
                     <div class="flex items-center space-x-2.5 cursor-pointer" id="logo-refresh">
                         <div
-                            class="w-8 h-8 rounded-full overflow-hidden border border-brand-500/20 shadow-[0_0_12px_rgba(236,72,153,0.25)] flex items-center justify-center p-0.5 bg-slate-950/60">
+                            class="w-8 h-8 rounded-full overflow-hidden border border-brand-500/20 shadow-[0_0_12px_rgba(236,72,153,0.25)] flex items-center justify-center p-0.5 bg-inputBg">
                             <img src="favicon.png" class="w-full h-full object-cover rounded-full"
                                 alt="AIOManager Logo">
                         </div>
                         <span
-                            class="text-lg font-bold font-space text-white tracking-tight hidden sm:inline-block">AIOManager</span>
+                            class="text-lg font-bold font-space text-cardTitle tracking-tight hidden sm:inline-block">AIOManager</span>
                     </div>
 
                     <!-- Middle: Glass Pill Tabs with improved spacing and icons -->
-                    <nav class="flex space-x-1.5 bg-slate-950/70 border border-white/5 p-1 rounded-full">
+                    <nav class="flex space-x-1.5 bg-inputBg border border-glassBorder p-1 rounded-full">
                         <button data-tab="home"
-                            class="tab-btn px-6 py-2 rounded-full text-[11px] font-bold tracking-wider transition-all flex items-center space-x-3 text-slate-400 hover:text-white">
+                            class="tab-btn px-6 py-2 rounded-full text-[11px] font-bold tracking-wider transition-all flex items-center space-x-3 text-textMuted hover:text-cardTitle">
                             <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                             <span class="font-space">Home</span>
                         </button>
                         <button data-tab="manage"
-                            class="tab-btn px-6 py-2 rounded-full text-[11px] font-bold tracking-wider transition-all flex items-center space-x-3 text-slate-400 hover:text-white">
+                            class="tab-btn px-6 py-2 rounded-full text-[11px] font-bold tracking-wider transition-all flex items-center space-x-3 text-textMuted hover:text-cardTitle">
                             <i data-lucide="credit-card" class="w-4 h-4"></i>
                             <span class="font-space">Manage</span>
                         </button>
@@ -575,7 +575,7 @@
                     <!-- Right: Active Profile Button -->
                     <div class="flex items-center space-x-3">
                         <button id="btn-profile-trigger"
-                            class="h-9 w-9 rounded-full bg-gradient-to-tr from-brand-500 to-cosmicBlue-400 hover:from-brand-400 hover:to-cosmicBlue-300 flex items-center justify-center text-white text-sm font-black font-space shadow-[0_0_15px_rgba(236,72,153,0.25)] border border-brand-400/35 cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                            class="h-9 w-9 rounded-full bg-gradient-to-tr from-brand-500 to-cosmicBlue-400 hover:from-brand-400 hover:to-cosmicBlue-300 flex items-center justify-center text-cardTitle text-sm font-black font-space shadow-[0_0_15px_rgba(236,72,153,0.25)] border border-brand-400/35 cursor-pointer transition-transform hover:scale-105 active:scale-95"
                             title="Manage Account Profile">
                             <span id="user-avatar">U</span>
                         </button>
@@ -613,14 +613,14 @@
             <!-- Mobile Sticky Bottom Nav Bar Pill -->
             <div class="md:hidden fixed bottom-4 left-4 right-4 z-40">
                 <nav
-                    class="bg-slate-950/70 border border-white/10 backdrop-blur-xl p-1.5 rounded-full flex justify-around shadow-2xl">
+                    class="bg-inputBg border border-glassBorder backdrop-blur-xl p-1.5 rounded-full flex justify-around shadow-2xl">
                     <button data-tab="home"
-                        class="tab-btn-mobile flex flex-col items-center space-y-1 text-slate-400 hover:text-white px-10 py-2.5 rounded-full transition-all">
+                        class="tab-btn-mobile flex flex-col items-center space-y-1 text-textMuted hover:text-cardTitle px-10 py-2.5 rounded-full transition-all">
                         <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                         <span class="text-[9px] font-bold font-space tracking-wide">Home</span>
                     </button>
                     <button data-tab="manage"
-                        class="tab-btn-mobile flex flex-col items-center space-y-1 text-slate-400 hover:text-white px-10 py-2.5 rounded-full transition-all">
+                        class="tab-btn-mobile flex flex-col items-center space-y-1 text-textMuted hover:text-cardTitle px-10 py-2.5 rounded-full transition-all">
                         <i data-lucide="credit-card" class="w-4 h-4"></i>
                         <span class="text-[9px] font-bold font-space tracking-wide">Manage</span>
                     </button>
@@ -634,19 +634,19 @@
 
     <!-- MODAL OVERLAY: ADD SUBSCRIPTION -->
     <div id="add-sub-modal"
-        class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        class="fixed inset-0 bg-inputBg backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div
-            class="bg-[#0a0515]/90 border border-white/10 backdrop-blur-2xl rounded-[32px] w-full max-w-md p-6 shadow-2xl relative overflow-hidden transform scale-95 transition-transform duration-300">
+            class="bg-glassBg border border-glassBorder backdrop-blur-2xl rounded-[32px] w-full max-w-md p-6 shadow-2xl relative overflow-hidden transform scale-95 transition-transform duration-300">
             <!-- Modal Header -->
-            <div class="flex items-center justify-between pb-4 border-b border-white/5 mb-6">
+            <div class="flex items-center justify-between pb-4 border-b border-glassBorder mb-6">
                 <div class="flex items-center space-x-3">
                     <div class="p-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl">
                         <i data-lucide="plus-circle" class="w-5 h-5"></i>
                     </div>
-                    <h3 class="text-base font-bold text-white font-space">Add New Subscription</h3>
+                    <h3 class="text-base font-bold text-cardTitle font-space">Add New Subscription</h3>
                 </div>
                 <button id="btn-close-add-modal"
-                    class="p-1.5 hover:bg-white/5 rounded-full text-slate-400 hover:text-white transition-colors">
+                    class="p-1.5 hover:bg-glassBorder rounded-full text-textMuted hover:text-cardTitle transition-colors">
                     <i data-lucide="x" class="w-4.5 h-4.5"></i>
                 </button>
             </div>
@@ -655,10 +655,10 @@
             <form id="add-sub-form" class="space-y-4">
                 <div>
                     <label
-                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Service
+                        class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Service
                         Provider</label>
                     <select id="modal-sub-service"
-                        class="w-full bg-slate-950/60 border border-white/10 rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                        class="w-full bg-inputBg border border-glassBorder rounded-xl py-2.5 px-3.5 text-xs text-cardTitle focus:outline-none focus:border-brand-500">
                         <option value="">Custom Service...</option>
                         <option value="netflix">Netflix</option>
                         <option value="jio">Jio Fibre / Mobile</option>
@@ -673,26 +673,26 @@
 
                 <div id="custom-name-container" class="transition-all duration-300">
                     <label
-                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Service
+                        class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Service
                         Name</label>
                     <input type="text" id="modal-sub-custom-name" placeholder="e.g. Adobe Creative Cloud"
-                        class="w-full bg-slate-950/60 border border-white/10 rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                        class="w-full bg-inputBg border border-glassBorder rounded-xl py-2.5 px-3.5 text-xs text-cardTitle focus:outline-none focus:border-brand-500">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label
-                            class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Cost
+                            class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Cost
                             (₹)</label>
                         <input type="number" min="0" required id="modal-sub-cost" placeholder="e.g. 199"
-                            class="w-full bg-slate-950/60 border border-white/10 rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-brand-500 font-medium">
+                            class="w-full bg-inputBg border border-glassBorder rounded-xl py-2.5 px-3.5 text-xs text-cardTitle focus:outline-none focus:border-brand-500 font-medium">
                     </div>
                     <div>
                         <label
-                            class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Billing
+                            class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Billing
                             Cycle</label>
                         <select id="modal-sub-cycle"
-                            class="w-full bg-slate-950/60 border border-white/10 rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                            class="w-full bg-inputBg border border-glassBorder rounded-xl py-2.5 px-3.5 text-xs text-cardTitle focus:outline-none focus:border-brand-500">
                             <option value="monthly">Monthly</option>
                             <option value="yearly">Yearly</option>
                         </select>
@@ -702,16 +702,16 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label
-                            class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Next
+                            class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Next
                             Renewal</label>
                         <input type="date" required id="modal-sub-date"
-                            class="w-full bg-slate-950/60 border border-white/10 rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                            class="w-full bg-inputBg border border-glassBorder rounded-xl py-2.5 px-3.5 text-xs text-cardTitle focus:outline-none focus:border-brand-500">
                     </div>
                     <div>
                         <label
-                            class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Category</label>
+                            class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Category</label>
                         <select id="modal-sub-category"
-                            class="w-full bg-slate-950/60 border border-white/10 rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                            class="w-full bg-inputBg border border-glassBorder rounded-xl py-2.5 px-3.5 text-xs text-cardTitle focus:outline-none focus:border-brand-500">
                             <option value="Entertainment">Entertainment</option>
                             <option value="Telecom & Fiber">Telecom & Fiber</option>
                             <option value="Music">Music</option>
@@ -724,10 +724,10 @@
 
                 <div>
                     <label
-                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Payment
+                        class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Payment
                         Method</label>
                     <select id="modal-sub-payment"
-                        class="w-full bg-slate-950/60 border border-white/10 rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-brand-500">
+                        class="w-full bg-inputBg border border-glassBorder rounded-xl py-2.5 px-3.5 text-xs text-cardTitle focus:outline-none focus:border-brand-500">
                         <option value="Visa **** 4321">Visa ending in 4321</option>
                         <option value="UPI: pay@okaxis">UPI (pay@okaxis)</option>
                         <option value="Apple Pay / iTunes">Apple Pay / iTunes</option>
@@ -736,7 +736,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-gradient-to-r from-brand-500 to-cosmicBlue-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-[0_4px_15px_rgba(236,72,153,0.2)] mt-6 font-space">
+                    class="w-full bg-gradient-to-r from-brand-500 to-cosmicBlue-500 text-cardTitle font-bold py-3.5 rounded-xl transition-all shadow-[0_4px_15px_rgba(236,72,153,0.2)] mt-6 font-space">
                     Add Subscription
                 </button>
             </form>
@@ -745,12 +745,12 @@
 
     <!-- MODAL OVERLAY: CANCELLATION WIZARD -->
     <div id="cancel-sub-modal"
-        class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        class="fixed inset-0 bg-inputBg backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
         <div
-            class="bg-[#0a0515]/90 border border-white/10 backdrop-blur-2xl rounded-[32px] w-full max-w-md p-6 shadow-2xl relative overflow-hidden transform scale-95 transition-transform duration-300">
+            class="bg-glassBg border border-glassBorder backdrop-blur-2xl rounded-[32px] w-full max-w-md p-6 shadow-2xl relative overflow-hidden transform scale-95 transition-transform duration-300">
             <!-- Close Button -->
             <button id="btn-close-cancel-modal"
-                class="absolute top-4 right-4 p-1.5 hover:bg-white/5 rounded-full text-slate-400 hover:text-white transition-colors">
+                class="absolute top-4 right-4 p-1.5 hover:bg-glassBorder rounded-full text-textMuted hover:text-cardTitle transition-colors">
                 <i data-lucide="x" class="w-4.5 h-4.5"></i>
             </button>
 
@@ -758,40 +758,40 @@
             <div id="cancel-step-intro" class="space-y-6 mt-4">
                 <div class="text-center">
                     <div id="cancel-logo-container"
-                        class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-white font-bold text-xl font-space mb-4">
+                        class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-cardTitle font-bold text-xl font-space mb-4">
                         <!-- Icon -->
                     </div>
-                    <h3 class="text-lg font-bold text-white font-space">Cancel <span
+                    <h3 class="text-lg font-bold text-cardTitle font-space">Cancel <span
                             id="cancel-target-name">Netflix</span></h3>
-                    <p class="text-slate-400 text-xs mt-1 font-sans">We can help you unsubscribe and save ₹<span
+                    <p class="text-textMuted text-xs mt-1 font-sans">We can help you unsubscribe and save ₹<span
                             id="cancel-target-savings">199</span>/month.</p>
                 </div>
 
                 <div class="space-y-3">
                     <button id="btn-trigger-autosub"
-                        class="w-full bg-slate-950/40 border border-white/10 hover:border-brand-500 rounded-2xl p-4 text-left flex items-start space-x-3.5 transition-all hover:bg-slate-950/80 group">
+                        class="w-full bg-inputBg border border-glassBorder hover:border-brand-500 rounded-2xl p-4 text-left flex items-start space-x-3.5 transition-all hover:bg-inputBg group">
                         <div
                             class="p-2.5 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl group-hover:bg-brand-500/20 transition-all">
                             <i data-lucide="zap" class="w-5.5 h-5.5"></i>
                         </div>
                         <div class="flex-grow">
-                            <div class="text-xs font-bold text-white font-space tracking-wide">One-Click Auto Cancel
+                            <div class="text-xs font-bold text-cardTitle font-space tracking-wide">One-Click Auto Cancel
                             </div>
-                            <div class="text-[10px] text-slate-400 mt-1 font-sans">AIOManager will automatically request
+                            <div class="text-[10px] text-textMuted mt-1 font-sans">AIOManager will automatically request
                                 cancellation via connected credentials.</div>
                         </div>
                     </button>
 
                     <button id="btn-trigger-manualsub"
-                        class="w-full bg-slate-950/40 border border-white/10 hover:border-brand-500 rounded-2xl p-4 text-left flex items-start space-x-3.5 transition-all hover:bg-slate-950/80 group">
+                        class="w-full bg-inputBg border border-glassBorder hover:border-brand-500 rounded-2xl p-4 text-left flex items-start space-x-3.5 transition-all hover:bg-inputBg group">
                         <div
                             class="p-2.5 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl group-hover:bg-brand-500/20 transition-all">
                             <i data-lucide="book-open" class="w-5.5 h-5.5"></i>
                         </div>
                         <div class="flex-grow">
-                            <div class="text-xs font-bold text-white font-space tracking-wide">View Manual Cancellation
+                            <div class="text-xs font-bold text-cardTitle font-space tracking-wide">View Manual Cancellation
                                 Steps</div>
-                            <div class="text-[10px] text-slate-400 mt-1 font-sans">Get step-by-step instructions on how
+                            <div class="text-[10px] text-textMuted mt-1 font-sans">Get step-by-step instructions on how
                                 to cancel this service manually.</div>
                         </div>
                     </button>
@@ -808,11 +808,11 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-white font-space">Initiating Automated Cancel</h4>
+                    <h4 class="text-lg font-bold text-cardTitle font-space">Initiating Automated Cancel</h4>
                     <p id="cancel-progress-text" class="text-[10px] text-brand-400 mt-1">Connecting to API endpoints...
                     </p>
                 </div>
-                <div class="w-full bg-slate-950 border border-white/5 rounded-full h-1.5 overflow-hidden">
+                <div class="w-full bg-cardSubBg border border-glassBorder rounded-full h-1.5 overflow-hidden">
                     <div id="cancel-progress-bar" class="bg-brand-500 h-full w-0 transition-all duration-300"></div>
                 </div>
             </div>
@@ -820,19 +820,19 @@
             <!-- Screen 3: Manual Guide -->
             <div id="cancel-step-manual" class="hidden space-y-6 mt-4">
                 <div>
-                    <h3 class="text-base font-bold text-white font-space">How to Cancel <span
+                    <h3 class="text-base font-bold text-cardTitle font-space">How to Cancel <span
                             id="manual-cancel-name">Netflix</span></h3>
-                    <p class="text-[10px] text-slate-400 mt-1">Follow these steps on your provider's website to stop
+                    <p class="text-[10px] text-textMuted mt-1">Follow these steps on your provider's website to stop
                         billing.</p>
                 </div>
 
-                <ol id="manual-cancel-steps" class="space-y-4 text-xs text-slate-350 list-decimal pl-4">
+                <ol id="manual-cancel-steps" class="space-y-4 text-xs text-textMuted list-decimal pl-4">
                     <!-- Steps populated by JS -->
                 </ol>
 
-                <div class="flex space-x-3 border-t border-white/5 pt-5">
+                <div class="flex space-x-3 border-t border-glassBorder pt-5">
                     <button id="btn-manual-back"
-                        class="flex-1 bg-slate-950 border border-white/5 hover:bg-slate-900 text-white text-xs font-semibold py-3 rounded-xl transition-all font-space">
+                        class="flex-1 bg-cardSubBg border border-glassBorder hover:bg-cardSubBg text-cardTitle text-xs font-semibold py-3 rounded-xl transition-all font-space">
                         Back
                     </button>
                     <button id="btn-manual-confirm"
@@ -849,18 +849,18 @@
                     <i data-lucide="check-circle" class="w-8 h-8"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold text-white font-space">Subscription Cancelled!</h3>
-                    <p class="text-slate-400 text-xs mt-1">You successfully removed <span id="success-cancel-name"
-                            class="font-semibold text-white">Netflix</span>.</p>
+                    <h3 class="text-lg font-bold text-cardTitle font-space">Subscription Cancelled!</h3>
+                    <p class="text-textMuted text-xs mt-1">You successfully removed <span id="success-cancel-name"
+                            class="font-semibold text-cardTitle">Netflix</span>.</p>
                 </div>
-                <div class="bg-slate-950/60 border border-white/5 rounded-2xl p-4 text-left max-w-xs mx-auto">
-                    <div class="flex justify-between items-center text-xs text-slate-400">
+                <div class="bg-inputBg border border-glassBorder rounded-2xl p-4 text-left max-w-xs mx-auto">
+                    <div class="flex justify-between items-center text-xs text-textMuted">
                         <span>New Total Spend:</span>
-                        <span class="text-white font-semibold" id="success-new-cost">₹0</span>
+                        <span class="text-cardTitle font-semibold" id="success-new-cost">₹0</span>
                     </div>
                 </div>
                 <button id="btn-cancel-finish"
-                    class="w-full bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold py-3 rounded-xl transition-all font-space">
+                    class="w-full bg-brand-500 hover:bg-brand-600 text-textMain font-bold py-3 rounded-xl transition-all font-space">
                     Back to Dashboard
                 </button>
             </div>
