@@ -185,12 +185,35 @@ let state = {
 // ==========================================
 // SYSTEM LOGIC AND EVENT LIFECYCLE
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     loadStateFromStorage();
     initStarfield();
-    initAppView();
     setupEventListeners();
     lucide.createIcons();
+
+    // Check query params for simulated mock Gmail redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mock_login') === 'gmail') {
+        const newUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+        startScanning(null, 'mock.user@gmail.com');
+        return;
+    }
+
+    // Check live Supabase session if configured and not logged in yet
+    if (isSupabaseConfigured && !state.isLoggedIn) {
+        try {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session && session.user) {
+                startScanning(null, session.user.email);
+                return;
+            }
+        } catch (e) {
+            console.error("Error reading Supabase session on startup:", e);
+        }
+    }
+
+    initAppView();
 });
 
 // Load state from local storage
@@ -1841,6 +1864,9 @@ function triggerAccountReset() {
             clearInterval(diagnosticInterval);
             diagnosticInterval = null;
         }
+        if (isSupabaseConfigured) {
+            supabaseClient.auth.signOut().catch(e => console.error("Sign out error:", e));
+        }
         localStorage.removeItem('subsentry_state');
         state = {
             isLoggedIn: false,
@@ -2053,6 +2079,7 @@ function switchLoginTab(type) {
     const tabPhone = document.getElementById('login-tab-phone');
     const emailGroup = document.getElementById('email-input-group');
     const phoneGroup = document.getElementById('phone-input-group');
+    const btnScan = document.getElementById('btn-start-scan');
 
     if (type === 'email') {
         // Style Email Tab Active
@@ -2062,6 +2089,7 @@ function switchLoginTab(type) {
         emailGroup.classList.remove('hidden');
         phoneGroup.classList.add('hidden');
         document.getElementById('scan-phone').value = '';
+        if (btnScan) btnScan.classList.add('hidden');
     } else {
         // Style Phone Tab Active
         tabPhone.className = "flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all text-white bg-white/5 border border-white/10 shadow-sm";
@@ -2069,7 +2097,7 @@ function switchLoginTab(type) {
         // Show/Hide inputs
         phoneGroup.classList.remove('hidden');
         emailGroup.classList.add('hidden');
-        document.getElementById('scan-email').value = '';
+        if (btnScan) btnScan.classList.remove('hidden');
     }
 }
 
@@ -2291,6 +2319,28 @@ async function verifyEnteredOtp() {
     }
 }
 
+// Gmail OAuth Redirect Sign In
+async function signInWithGmail() {
+    if (isSupabaseConfigured) {
+        try {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + window.location.pathname
+                }
+            });
+            if (error) {
+                alert(`Google Login Error: ${error.message}`);
+            }
+        } catch (err) {
+            alert(`Failed to contact Supabase for Google OAuth: ${err.message}`);
+        }
+    } else {
+        // Simulated mock redirect
+        window.location.href = window.location.origin + window.location.pathname + '?mock_login=gmail';
+    }
+}
+
 // ==========================================
 // EVENTS LISTENERS SETUP
 // ==========================================
@@ -2301,6 +2351,14 @@ function setupEventListeners() {
     
     const tabPhone = document.getElementById('login-tab-phone');
     if (tabPhone) tabPhone.addEventListener('click', () => switchLoginTab('phone'));
+
+    // Gmail Login Button
+    const btnGmailLogin = document.getElementById('btn-gmail-login');
+    if (btnGmailLogin) {
+        btnGmailLogin.addEventListener('click', () => {
+            signInWithGmail();
+        });
+    }
 
     // Start Scan / Send OTP Button
     const btnScan = document.getElementById('btn-start-scan');
