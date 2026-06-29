@@ -191,12 +191,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
     lucide.createIcons();
 
+    // Check saved auth mode redirect from localStorage
+    const savedAuthMode = localStorage.getItem('auth_mode_redirect') || 'login';
+    localStorage.removeItem('auth_mode_redirect');
+
     // Check query params for simulated mock Gmail redirect
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('mock_login') === 'gmail') {
         const newUrl = window.location.origin + window.location.pathname;
         window.history.replaceState({}, document.title, newUrl);
-        startScanning(null, 'mock.user@gmail.com');
+        if (savedAuthMode === 'signup') {
+            showRegisterSetup('', 'mock.user@gmail.com');
+        } else {
+            const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
+            const isRegistered = registeredUsers.some(u => u.email === 'mock.user@gmail.com');
+            if (isRegistered) {
+                startScanning(null, 'mock.user@gmail.com');
+            } else {
+                alert("This Gmail account is not registered. Please switch to Sign Up mode to register first.");
+                initAppView();
+            }
+        }
         return;
     }
 
@@ -205,7 +220,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session && session.user) {
-                startScanning(null, session.user.email);
+                if (savedAuthMode === 'signup') {
+                    showRegisterSetup('', session.user.email);
+                } else {
+                    const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
+                    const isRegistered = registeredUsers.some(u => u.email === session.user.email);
+                    if (isRegistered) {
+                        startScanning(null, session.user.email);
+                    } else {
+                        alert("This Gmail account is not registered. Please switch to Sign Up mode to register first.");
+                        await supabaseClient.auth.signOut();
+                        initAppView();
+                    }
+                }
                 return;
             }
         } catch (e) {
@@ -218,6 +245,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Load state from local storage
 function loadStateFromStorage() {
+    // Seed registered users list if empty
+    if (!localStorage.getItem('subsentry_registered_users')) {
+        const defaultUsers = [
+            { name: 'Rishabh Raj', phone: '9876543210', email: 'rishabh.raj@gmail.com' }
+        ];
+        localStorage.setItem('subsentry_registered_users', JSON.stringify(defaultUsers));
+    }
+
     const savedState = localStorage.getItem('subsentry_state');
     if (savedState) {
         try {
@@ -1385,10 +1420,14 @@ function renderAccountTab() {
                         </div>
                     </div>
 
-                    <div class="pt-4 relative z-10">
-                        <button onclick="triggerAccountReset()" class="w-full bg-red-500/10 border border-red-500/25 hover:bg-red-550 hover:text-white text-red-400 font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
-                            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-                            <span>Disconnect Session</span>
+                    <div class="pt-4 relative z-10 space-y-2">
+                        <button onclick="triggerAccountReset()" class="w-full bg-slate-900 border border-white/5 hover:border-white/25 text-slate-350 hover:text-white font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
+                            <i data-lucide="log-out" class="w-3.5 h-3.5 text-slate-450"></i>
+                            <span>Disconnect Session (Log Out)</span>
+                        </button>
+                        <button onclick="triggerDeleteAccount()" class="w-full bg-red-500/10 border border-red-500/25 hover:bg-red-550 hover:text-white text-red-400 font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
+                            <i data-lucide="user-x" class="w-3.5 h-3.5"></i>
+                            <span>Delete Account & Wipe Data</span>
                         </button>
                     </div>
                 </div>
@@ -1598,19 +1637,34 @@ function renderAccountTab() {
                                 </select>
                             </div>
                             <!-- Notifications checkboxes -->
-                            <div class="space-y-3 font-sans text-xs">
+                            <div class="space-y-4 font-sans text-xs">
                                 <label class="block text-[8px] font-bold text-slate-500 uppercase tracking-widest mb-1 font-space">Notifications</label>
-                                <label class="flex items-center space-x-3 text-slate-300 hover:text-white cursor-pointer select-none">
-                                    <input type="checkbox" id="chk-billing-alerts" ${state.preferences.billingAlerts ? 'checked' : ''} class="w-4 h-4 rounded text-brand-500 bg-slate-950 border-white/10 focus:ring-0 focus:ring-offset-0">
-                                    <span>Critical billing renewal alerts (5 days warning)</span>
+                                
+                                <!-- Alert 1 -->
+                                <label class="flex items-center cursor-pointer select-none group">
+                                    <div class="relative flex-shrink-0">
+                                        <input type="checkbox" id="chk-billing-alerts" ${state.preferences.billingAlerts ? 'checked' : ''} class="sr-only peer">
+                                        <div class="w-9 h-5 bg-slate-850 border border-white/10 rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                    </div>
+                                    <span class="ml-3 text-slate-300 hover:text-white transition-all text-xxs font-space leading-tight">Critical billing renewal alerts (5 days warning)</span>
                                 </label>
-                                <label class="flex items-center space-x-3 text-slate-300 hover:text-white cursor-pointer select-none">
-                                    <input type="checkbox" id="chk-sms-alerts" ${state.preferences.smsAlerts ? 'checked' : ''} class="w-4 h-4 rounded text-brand-500 bg-slate-950 border-white/10 focus:ring-0 focus:ring-offset-0">
-                                    <span>Mobile SMS notifications on scan matching</span>
+
+                                <!-- Alert 2 -->
+                                <label class="flex items-center cursor-pointer select-none group">
+                                    <div class="relative flex-shrink-0">
+                                        <input type="checkbox" id="chk-sms-alerts" ${state.preferences.smsAlerts ? 'checked' : ''} class="sr-only peer">
+                                        <div class="w-9 h-5 bg-slate-850 border border-white/10 rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                    </div>
+                                    <span class="ml-3 text-slate-300 hover:text-white transition-all text-xxs font-space leading-tight">Mobile SMS notifications on scan matching</span>
                                 </label>
-                                <label class="flex items-center space-x-3 text-slate-300 hover:text-white cursor-pointer select-none">
-                                    <input type="checkbox" id="chk-monthly-reports" ${state.preferences.monthlyReports ? 'checked' : ''} class="w-4 h-4 rounded text-brand-500 bg-slate-950 border-white/10 focus:ring-0 focus:ring-offset-0">
-                                    <span>Monthly spending and subscription summary reports</span>
+
+                                <!-- Alert 3 -->
+                                <label class="flex items-center cursor-pointer select-none group">
+                                    <div class="relative flex-shrink-0">
+                                        <input type="checkbox" id="chk-monthly-reports" ${state.preferences.monthlyReports ? 'checked' : ''} class="sr-only peer">
+                                        <div class="w-9 h-5 bg-slate-850 border border-white/10 rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                    </div>
+                                    <span class="ml-3 text-slate-300 hover:text-white transition-all text-xxs font-space leading-tight">Monthly spending and subscription summary reports</span>
                                 </label>
                             </div>
                         </div>
@@ -1868,6 +1922,8 @@ function triggerAccountReset() {
             supabaseClient.auth.signOut().catch(e => console.error("Sign out error:", e));
         }
         localStorage.removeItem('subsentry_state');
+        const phoneInput = document.getElementById('scan-phone');
+        if (phoneInput) phoneInput.value = '';
         state = {
             isLoggedIn: false,
             currentUser: {
@@ -1899,6 +1955,69 @@ function triggerAccountReset() {
                 lastScanTime: new Date().toLocaleString()
             }
         };
+        initAppView();
+        lucide.createIcons();
+    }
+}
+
+function triggerDeleteAccount() {
+    if (confirm("⚠️ WARNING: Are you sure you want to permanently delete your account? This will wipe all subscription settings, billing cards, and linked scanner directories from this browser. This action cannot be undone.")) {
+        // Reset intervals
+        if (diagnosticInterval) {
+            clearInterval(diagnosticInterval);
+            diagnosticInterval = null;
+        }
+        if (isSupabaseConfigured) {
+            supabaseClient.auth.signOut().catch(e => console.error("Sign out error:", e));
+        }
+        // Wipe user registration from system lists
+        const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
+        const phoneToWipe = state.currentUser.phone;
+        const emailToWipe = state.currentUser.email;
+        const updatedUsers = registeredUsers.filter(u => {
+            const cleanUPhone = u.phone ? u.phone.replace(/[^0-9]/g, '') : '';
+            const cleanStatePhone = phoneToWipe ? phoneToWipe.replace(/[^0-9]/g, '') : '';
+            const matchPhone = cleanStatePhone && cleanUPhone === cleanStatePhone;
+            const matchEmail = emailToWipe && u.email === emailToWipe;
+            return !(matchPhone || matchEmail);
+        });
+        localStorage.setItem('subsentry_registered_users', JSON.stringify(updatedUsers));
+
+        localStorage.removeItem('subsentry_state');
+        const phoneInput = document.getElementById('scan-phone');
+        if (phoneInput) phoneInput.value = '';
+        state = {
+            isLoggedIn: false,
+            currentUser: {
+                name: 'Rishabh Raj',
+                phone: '',
+                email: '',
+                avatar: 'nebula',
+                linkedCredentials: []
+            },
+            subscriptions: [],
+            activeTab: 'home',
+            preferences: {
+                theme: 'cosmic',
+                currency: 'INR',
+                billingAlerts: true,
+                smsAlerts: false,
+                monthlyReports: true
+            },
+            billingCard: {
+                number: '4321 0000 0000 9876',
+                name: 'RISHABH RAJ',
+                expiry: '12/29',
+                cvv: '***',
+                provider: 'visa'
+            },
+            diagnostics: {
+                scansRun: 14,
+                apiConnected: 5,
+                lastScanTime: new Date().toLocaleString()
+            }
+        };
+        alert("Your account has been deleted and all local data has been wiped.");
         initAppView();
         lucide.createIcons();
     }
@@ -2066,9 +2185,12 @@ if (SUPABASE_URL && SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL' && SUPABASE_ANO
 // OTP VERIFICATION STATE & LOGIC
 // ==========================================
 let activeLoginTab = 'email'; // 'email' or 'phone'
+let authMode = 'login'; // 'login' or 'signup'
 let generatedOtpCode = '';
 let otpTimerInterval = null;
 let otpCountdownValue = 30;
+let selectedRegisterAvatar = 'nebula';
+let pendingRegisterDetails = { phone: '', email: '' };
 
 // Tab Switching
 function switchLoginTab(type) {
@@ -2098,6 +2220,35 @@ function switchLoginTab(type) {
         phoneGroup.classList.remove('hidden');
         emailGroup.classList.add('hidden');
         if (btnScan) btnScan.classList.remove('hidden');
+    }
+}
+
+// Switch between Log In and Sign Up modes
+function switchAuthMode(mode) {
+    if (mode === authMode) return;
+    authMode = mode;
+
+    const toggleLabel = document.getElementById('auth-toggle-label');
+    const toggleBtn = document.getElementById('btn-toggle-auth-mode');
+    const scanBtn = document.getElementById('btn-start-scan');
+    const gmailBtnText = document.querySelector('#btn-gmail-login span');
+
+    if (mode === 'signup') {
+        if (toggleLabel) toggleLabel.innerText = "Already have an account?";
+        if (toggleBtn) toggleBtn.innerText = "Log In";
+        if (scanBtn) {
+            const btnSpan = scanBtn.querySelector('span');
+            if (btnSpan) btnSpan.innerText = "Register via Phone";
+        }
+        if (gmailBtnText) gmailBtnText.innerText = "Sign Up with Gmail";
+    } else {
+        if (toggleLabel) toggleLabel.innerText = "Don't have an account?";
+        if (toggleBtn) toggleBtn.innerText = "Sign Up";
+        if (scanBtn) {
+            const btnSpan = scanBtn.querySelector('span');
+            if (btnSpan) btnSpan.innerText = "Send Verification Code";
+        }
+        if (gmailBtnText) gmailBtnText.innerText = "Continue with Gmail";
     }
 }
 
@@ -2152,6 +2303,17 @@ async function sendVerificationCode() {
             alert('Please enter a valid 10-digit mobile number.');
             return;
         }
+
+        // Perform registration check in Login mode
+        if (authMode === 'login') {
+            const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
+            const isRegistered = registeredUsers.some(u => u.phone && u.phone.replace(/[^0-9]/g, '') === cleanPhone);
+            if (!isRegistered) {
+                alert("This phone number is not registered. Please switch to Sign Up mode to register first.");
+                return;
+            }
+        }
+
         recipient = `+91 ${phoneVal}`;
     }
 
@@ -2171,13 +2333,22 @@ async function sendVerificationCode() {
             if (activeLoginTab === 'email') {
                 options = { email: emailVal };
             } else {
-                options = { phone: `+91${phoneVal.replace(/[^0-9]/g, '')}` };
+                options = { 
+                    phone: `+91${phoneVal.replace(/[^0-9]/g, '')}`
+                };
+                if (authMode === 'login') {
+                    options.options = { shouldCreateUser: false };
+                }
             }
             
             const { error } = await supabaseClient.auth.signInWithOtp(options);
             
             if (error) {
-                alert(`Supabase Auth Error: ${error.message}`);
+                if (error.message.toLowerCase().includes("user not found") || error.message.toLowerCase().includes("not registered")) {
+                    alert(`This phone number is not registered on Supabase. Please switch to Sign Up mode.`);
+                } else {
+                    alert(`Supabase Auth Error: ${error.message}`);
+                }
                 btnScan.disabled = false;
                 btnScan.innerHTML = originalText;
                 return;
@@ -2294,11 +2465,15 @@ async function verifyEnteredOtp() {
 
         errEl.classList.add('hidden');
 
-        const email = activeLoginTab === 'email' ? document.getElementById('scan-email').value.trim() : '';
-        const phone = activeLoginTab === 'phone' ? document.getElementById('scan-phone').value.trim() : '';
+        const phone = document.getElementById('scan-phone').value.trim();
+        const email = '';
 
         setTimeout(() => {
-            startScanning(phone, email);
+            if (authMode === 'signup') {
+                showRegisterSetup(phone, email);
+            } else {
+                startScanning(phone, email);
+            }
         }, 800);
     } else {
         // Incorrect Code
@@ -2321,6 +2496,7 @@ async function verifyEnteredOtp() {
 
 // Gmail OAuth Redirect Sign In
 async function signInWithGmail() {
+    localStorage.setItem('auth_mode_redirect', authMode);
     if (isSupabaseConfigured) {
         try {
             const { error } = await supabaseClient.auth.signInWithOAuth({
@@ -2339,6 +2515,87 @@ async function signInWithGmail() {
         // Simulated mock redirect
         window.location.href = window.location.origin + window.location.pathname + '?mock_login=gmail';
     }
+}
+
+// Show Profile Registration Setup screen
+function showRegisterSetup(phone, email) {
+    pendingRegisterDetails = { phone, email };
+
+    // Hide OTP panel, login panels
+    document.getElementById('otp-form-panel').classList.add('hidden');
+    document.getElementById('scan-form-panel').classList.add('hidden');
+    document.getElementById('login-tabs-bar').classList.add('hidden');
+    
+    // Show register setup panel
+    const regPanel = document.getElementById('register-setup-panel');
+    if (regPanel) regPanel.classList.remove('hidden');
+
+    // Configure secondary contact label and input
+    const secondaryLabel = document.getElementById('register-secondary-label');
+    const secondaryInput = document.getElementById('register-secondary');
+    
+    if (email) {
+        // Registered with Gmail: secondary contact is Phone
+        if (secondaryLabel) secondaryLabel.innerText = "Phone Number";
+        if (secondaryInput) {
+            secondaryInput.placeholder = "98765 43210";
+            secondaryInput.value = phone || '';
+        }
+    } else {
+        // Registered with Phone: secondary contact is Email
+        if (secondaryLabel) secondaryLabel.innerText = "Email Address";
+        if (secondaryInput) {
+            secondaryInput.placeholder = "name@domain.com";
+            secondaryInput.value = email || '';
+        }
+    }
+
+    // Reset name field
+    const nameInput = document.getElementById('register-name');
+    if (nameInput) nameInput.value = '';
+}
+
+// Complete profile registration and trigger scan
+function completeRegistration() {
+    const nameInput = document.getElementById('register-name');
+    const name = nameInput ? nameInput.value.trim() : '';
+    if (!name) {
+        alert("Please enter your name to complete registration.");
+        return;
+    }
+
+    const secondaryInput = document.getElementById('register-secondary');
+    const secondaryValue = secondaryInput ? secondaryInput.value.trim() : '';
+
+    let phone = pendingRegisterDetails.phone;
+    let email = pendingRegisterDetails.email;
+
+    if (email) {
+        phone = secondaryValue;
+    } else {
+        email = secondaryValue;
+    }
+
+    // Save in user profile state
+    state.currentUser.name = name;
+    state.currentUser.avatar = selectedRegisterAvatar;
+    state.currentUser.phone = phone;
+    state.currentUser.email = email;
+
+    // Append to registered users list in localStorage
+    const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
+    if (phone && !registeredUsers.some(u => u.phone === phone)) {
+        registeredUsers.push({ name, phone, email });
+    } else if (email && !registeredUsers.some(u => u.email === email)) {
+        registeredUsers.push({ name, phone, email });
+    }
+    localStorage.setItem('subsentry_registered_users', JSON.stringify(registeredUsers));
+
+    // Hide panel and start scanning
+    const regPanel = document.getElementById('register-setup-panel');
+    if (regPanel) regPanel.classList.add('hidden');
+
+    startScanning(phone, email);
 }
 
 // ==========================================
@@ -2394,6 +2651,46 @@ function setupEventListeners() {
             sendVerificationCode();
         });
     }
+
+    // Toggle Auth Mode Button
+    const btnToggleAuth = document.getElementById('btn-toggle-auth-mode');
+    if (btnToggleAuth) {
+        btnToggleAuth.addEventListener('click', () => {
+            const nextMode = authMode === 'login' ? 'signup' : 'login';
+            switchAuthMode(nextMode);
+        });
+    }
+
+    // Register setup panel back button
+    const btnRegBack = document.getElementById('btn-register-back');
+    if (btnRegBack) {
+        btnRegBack.addEventListener('click', () => {
+            const regPanel = document.getElementById('register-setup-panel');
+            if (regPanel) regPanel.classList.add('hidden');
+            document.getElementById('scan-form-panel').classList.remove('hidden');
+            document.getElementById('login-tabs-bar').classList.remove('hidden');
+        });
+    }
+
+    // Complete registration button
+    const btnCompleteReg = document.getElementById('btn-complete-register');
+    if (btnCompleteReg) {
+        btnCompleteReg.addEventListener('click', () => {
+            completeRegistration();
+        });
+    }
+
+    // Avatar selection in registration
+    const registerAvatarBtns = document.querySelectorAll('.register-avatar-btn');
+    registerAvatarBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            registerAvatarBtns.forEach(b => {
+                b.className = "register-avatar-btn w-10 h-10 rounded-full border border-white/5 flex items-center justify-center text-white opacity-70 hover:opacity-100";
+            });
+            btn.className = "register-avatar-btn w-10 h-10 rounded-full border border-brand-500 flex items-center justify-center text-white scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse";
+            selectedRegisterAvatar = btn.getAttribute('data-avatar');
+        });
+    });
 
 
 
