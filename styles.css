@@ -26,12 +26,53 @@
     /* RGB values for custom glow shadows and drop shadows */
     --brand-rgb: 236, 72, 153;      /* #ec4899 */
     --cosmic-rgb: 34, 211, 238;     /* #22d3ee */
+
+    /* Theme-switch variables default (Dark) */
+    --cosmicBg: #04020a;
+    --glassBg: rgba(6, 4, 15, 0.55);
+    --glassBorder: rgba(255, 255, 255, 0.08);
+    --text-main: #cbd5e1;
+    --card-title: #ffffff;
+    --glow-opacity-pink: 0.15;
+    --glow-opacity-blue: 0.15;
+    --text-muted: #94a3b8;
+    --card-sub-bg: rgba(3, 2, 8, 0.6);
+    --tab-inactive: #94a3b8;
+    --tab-active-bg: rgba(255, 255, 255, 0.1);
+    --input-bg: rgba(3, 2, 8, 0.4);
+    --input-border: rgba(255, 255, 255, 0.08);
+}
+
+html.light, body.light {
+    --cosmicBg: #dcd3f5;
+    --glassBg: rgba(255, 255, 255, 0.65);
+    --glassBorder: rgba(236, 72, 153, 0.2);
+    --text-main: #2b2240;
+    --card-title: #180e2b;
+    --glow-opacity-pink: 0.12;
+    --glow-opacity-blue: 0.12;
+    --text-muted: #6b6282;
+    --card-sub-bg: rgba(228, 222, 243, 0.7);
+    --tab-inactive: #6b6282;
+    --tab-active-bg: rgba(255, 255, 255, 0.95);
+    --input-bg: rgba(255, 255, 255, 0.9);
+    --input-border: rgba(236, 72, 153, 0.25);
 }
 
 /* Deep space root adjustments */
 body {
-    background-color: #04020a;
-    overflow-y: scroll;
+    background-color: var(--cosmicBg);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+body.light {
+    background: radial-gradient(circle at 50% 30%, #f6e6ff 0%, #dcd3f5 100%) !important;
+}
+
+/* Smooth transitions for theme switches */
+body, .liquid-glass-card, .glass-panel, main, section, button, input {
+    transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
 }
 
 /* Custom Scrollbar globally */
@@ -525,5 +566,32 @@ input:focus, select:focus, textarea:focus {
     border-color: rgba(16, 185, 129, 0.5) !important;
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.25) !important;
     color: #a7f3d0 !important;
+}
+
+/* Theme adjustments for tab buttons and inputs */
+.login-tab-btn {
+    color: var(--text-muted) !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+.login-tab-btn:hover {
+    color: var(--card-title) !important;
+}
+
+.login-tab-btn.active {
+    color: var(--card-title) !important;
+    background-color: var(--tab-active-bg) !important;
+    border-color: var(--glassBorder) !important;
+}
+
+input[type="tel"], input[type="text"], .otp-box {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--card-title) !important;
+}
+
+input::placeholder {
+    color: var(--text-muted) !important;
 }
 

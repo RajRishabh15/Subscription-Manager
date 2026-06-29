@@ -40,9 +40,15 @@
                             600: 'rgb(var(--cosmic-600-rgb, 8 145 178) / <alpha-value>)',
                             900: 'rgb(var(--cosmic-900-rgb, 8 51 68) / <alpha-value>)',
                         },
-                        cosmicBg: '#04020a',
-                        glassBg: 'rgba(6, 4, 15, 0.55)',
-                        glassBorder: 'rgba(255, 255, 255, 0.08)',
+                        cosmicBg: 'var(--cosmicBg)',
+                        glassBg: 'var(--glassBg)',
+                        glassBorder: 'var(--glassBorder)',
+                        textMain: 'var(--text-main)',
+                        cardTitle: 'var(--card-title)',
+                        textMuted: 'var(--text-muted)',
+                        cardSubBg: 'var(--card-sub-bg)',
+                        inputBg: 'var(--input-bg)',
+                        inputBorder: 'var(--input-border)',
                     }
                 }
             }
@@ -62,27 +68,31 @@
 </head>
 
 <body
-    class="bg-[#04020a] text-slate-200 min-h-screen flex flex-col font-sans overflow-x-hidden selection:bg-brand-500 selection:text-white relative">
+    class="bg-cosmicBg text-textMain min-h-screen flex flex-col font-sans overflow-x-hidden selection:bg-brand-500 selection:text-white relative">
+
+    <!-- Theme Mode Floating Toggle -->
+    <div class="fixed top-6 right-6 z-50">
+        <button id="btn-theme-toggle" class="p-2.5 rounded-full bg-glassBg border border-glassBorder hover:border-brand-500/30 text-slate-350 hover:text-white transition-all flex items-center justify-center focus:outline-none backdrop-blur-md shadow-lg group">
+            <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4 group-hover:-rotate-12 transition-transform"></i>
+        </button>
+    </div>
 
     <!-- STARFIELD CANVAS -->
     <canvas id="starfield-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
     <!-- Background Cosmic Nebulae Glows -->
-    <div
-        class="fixed top-[-10%] left-[-10%] w-[55%] h-[55%] rounded-full bg-brand-900/15 blur-[160px] pointer-events-none z-0">
-    </div> <!-- Pink glow -->
-    <div
-        class="fixed bottom-[-10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-cosmicBlue-900/15 blur-[130px] pointer-events-none z-0">
-    </div> <!-- Light Blue glow -->
-    <div
-        class="fixed top-[40%] left-[60%] w-[35%] h-[35%] rounded-full bg-pink-950/10 blur-[140px] pointer-events-none z-0">
-    </div>
+    <div id="bg-nebula-glow-1"
+        class="fixed top-[-10%] left-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-brand-500/10 to-cosmicBlue-500/10 blur-[180px] pointer-events-none z-0">
+    </div> <!-- Pink-Blue main glow -->
+    <div id="bg-nebula-glow-2"
+        class="fixed bottom-[-15%] right-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-cosmicBlue-500/10 to-brand-500/10 blur-[150px] pointer-events-none z-0">
+    </div> <!-- Blue-Pink secondary glow -->
 
     <!-- MAIN APP WRAPPER -->
     <main class="flex-grow flex flex-col z-10 relative">
         <!-- 1. LANDING & SCAN VIEW -->
-        <section id="scan-view" class="flex-grow flex items-center justify-center px-4 py-8 lg:py-16">
-            <div class="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <section id="scan-view" class="h-screen max-h-screen overflow-hidden flex items-center justify-center px-4 py-0">
+            <div class="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
                 <!-- Left column: techy features & description info -->
                 <div class="lg:col-span-7 space-y-6 pr-0 lg:pr-6 text-left">
@@ -95,14 +105,14 @@
 
                     <!-- Serif Title -->
                     <h1
-                        class="text-4xl sm:text-5xl lg:text-6xl text-white font-normal serif-title italic leading-[1.1] tracking-tight">
+                        class="text-4xl sm:text-5xl lg:text-6xl text-cardTitle font-normal serif-title italic leading-[1.1] tracking-tight">
                         Take Control of Your <br class="hidden sm:inline">
                         <span
                             class="text-neon-glow font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cosmicBlue-400">Digital
                             Subscriptions</span>
                     </h1>
 
-                    <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-lg">
+                    <p class="text-textMuted text-sm sm:text-base leading-relaxed max-w-lg">
                         AIOManager securely scans your linked directories to automatically aggregate recurring bills,
                         track billing timelines, and cancel premium memberships instantly.
                     </p>
@@ -110,25 +120,25 @@
                     <!-- Feature Cards row / grid (Frosted Glass UI) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
                         <div
-                            class="p-4 bg-slate-950/40 border border-white/5 rounded-2xl flex items-start space-x-3 hover:border-brand-500/20 transition-all">
+                            class="p-4 bg-cardSubBg border border-glassBorder rounded-2xl flex items-start space-x-3 hover:border-brand-500/20 transition-all">
                             <div class="p-2.5 bg-brand-500/10 border border-brand-500/25 text-brand-400 rounded-xl">
                                 <i data-lucide="scan" class="w-4.5 h-4.5"></i>
                             </div>
                             <div>
-                                <h4 class="text-xs font-bold text-white font-space">Automated Scanner</h4>
-                                <p class="text-[10px] text-slate-500 mt-0.5">Scrapes invoices from payment receipt logs.
+                                <h4 class="text-xs font-bold text-cardTitle font-space">Automated Scanner</h4>
+                                <p class="text-[10px] text-textMuted mt-0.5">Scrapes invoices from payment receipt logs.
                                 </p>
                             </div>
                         </div>
                         <div
-                            class="p-4 bg-slate-950/40 border border-white/5 rounded-2xl flex items-start space-x-3 hover:border-cosmicBlue-500/20 transition-all">
+                            class="p-4 bg-cardSubBg border border-glassBorder rounded-2xl flex items-start space-x-3 hover:border-cosmicBlue-500/20 transition-all">
                             <div
                                 class="p-2.5 bg-cosmicBlue-500/10 border border-cosmicBlue-500/25 text-cosmicBlue-400 rounded-xl">
                                 <i data-lucide="zap" class="w-4.5 h-4.5"></i>
                             </div>
                             <div>
-                                <h4 class="text-xs font-bold text-white font-space">One-Click Cancel</h4>
-                                <p class="text-[10px] text-slate-500 mt-0.5">Cancel plan agreements via security
+                                <h4 class="text-xs font-bold text-cardTitle font-space">One-Click Cancel</h4>
+                                <p class="text-[10px] text-textMuted mt-0.5">Cancel plan agreements via security
                                     webhooks.</p>
                             </div>
                         </div>
@@ -136,12 +146,12 @@
 
                     <!-- Visual Hologram Graphic -->
                     <div
-                        class="relative rounded-2xl border border-white/5 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] aspect-[16/9] max-w-xl bg-slate-950/30 group hover:border-brand-500/25 transition-all duration-500">
+                        class="relative rounded-2xl border border-white/5 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] aspect-[16/9] lg:aspect-[21/9] max-h-[180px] max-w-xl bg-slate-950/30 group hover:border-brand-500/25 transition-all duration-500">
                         <img src="assets/cosmic_dashboard.png"
-                            class="w-full h-full object-cover opacity-85 transition-transform duration-700 group-hover:scale-103"
+                            class="w-full h-full object-cover opacity-85 transition-transform duration-700 group-hover:scale-102"
                             alt="Futuristic interface mock visual">
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-[#04020a] via-transparent to-transparent opacity-80">
+                            class="absolute inset-0 bg-gradient-to-t from-cosmicBg via-transparent to-transparent opacity-80">
                         </div>
 
                         <!-- Mini glass badge overlay -->
@@ -164,30 +174,30 @@
                         </div>
 
                         <!-- Logo & Heading -->
-                        <div class="text-center mb-8">
+                        <div id="login-card-header" class="text-center mb-8">
                             <div
-                                class="w-16 h-16 mx-auto rounded-[20px] overflow-hidden border border-brand-500/20 shadow-[0_0_20px_rgba(236,72,153,0.2)] flex items-center justify-center p-1 bg-slate-950/60 mb-4">
+                                class="w-16 h-16 mx-auto rounded-[20px] overflow-hidden border border-brand-500/20 shadow-[0_0_20px_rgba(236,72,153,0.2)] flex items-center justify-center p-1 bg-cardSubBg mb-4">
                                 <img src="favicon.png" class="w-full h-full object-cover rounded-[14px]"
                                     alt="AIOManager Logo">
                             </div>
                             <h1
-                                class="text-3xl sm:text-4xl font-normal serif-title italic text-white tracking-tight mb-2">
+                                class="text-3xl sm:text-4xl font-normal serif-title italic text-cardTitle tracking-tight mb-2">
                                 AIOMANAGER <span
                                     class="text-neon-glow font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cosmicBlue-400">ACCESS</span>
                             </h1>
-                            <p class="text-slate-400 text-xs font-sans">Authenticate directory credentials to search for
+                            <p class="text-textMuted text-xs font-sans">Authenticate directory credentials to search for
                                 active bills.</p>
                         </div>
 
 
 
                         <!-- Login Tabs -->
-                        <div id="login-tabs-bar" class="flex p-1 bg-slate-950/60 border border-white/5 rounded-2xl mb-6 relative z-10">
-                            <button id="login-tab-email" class="flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all text-white bg-white/5 border border-white/10 shadow-sm">
+                        <div id="login-tabs-bar" class="flex p-1 bg-cardSubBg border border-glassBorder rounded-2xl mb-6 relative z-10">
+                            <button id="login-tab-email" class="login-tab-btn active flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all border border-transparent shadow-sm">
                                 <i data-lucide="mail" class="w-3.5 h-3.5"></i>
                                 <span>Gmail</span>
                             </button>
-                            <button id="login-tab-phone" class="flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all text-slate-400 hover:text-white">
+                            <button id="login-tab-phone" class="login-tab-btn flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all border border-transparent">
                                 <i data-lucide="phone" class="w-3.5 h-3.5"></i>
                                 <span>Phone Number</span>
                             </button>
@@ -198,7 +208,7 @@
                             <div class="space-y-4">
                                 <!-- Gmail input group -->
                                 <div id="email-input-group" class="transition-all duration-300">
-                                    <p class="text-xs text-slate-400 mb-4 text-center leading-relaxed font-sans">
+                                    <p class="text-xs text-textMuted mb-4 text-center leading-relaxed font-sans">
                                         Log in instantly via Gmail to search your inbox receipts and automatically configure your active subscriptions.
                                     </p>
                                     <button id="btn-gmail-login"
@@ -218,11 +228,11 @@
                                 <!-- Phone input group (hidden by default) -->
                                 <div id="phone-input-group" class="hidden transition-all duration-300">
                                     <label for="scan-phone"
-                                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Phone
+                                        class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Phone
                                         Number</label>
                                     <div class="relative">
                                         <span
-                                            class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 font-medium font-space">+91</span>
+                                            class="absolute inset-y-0 left-0 pl-4 flex items-center text-textMuted font-medium font-space">+91</span>
                                         <input type="tel" id="scan-phone" placeholder="98765 43210"
                                             class="w-full bg-slate-950/60 border border-white/10 focus:border-brand-500 rounded-2xl py-3.5 pl-14 pr-4 text-white placeholder-slate-650 focus:outline-none focus:ring-1 focus:ring-brand-500/20 transition-all font-medium">
                                     </div>
@@ -236,13 +246,13 @@
                                     class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
                             </button>
                             <div
-                                class="flex items-center justify-center space-x-2 text-[10px] text-slate-500 border-t border-slate-900/60 pt-4">
+                                class="flex items-center justify-center space-x-2 text-[10px] text-textMuted border-t border-glassBorder pt-4">
                                 <i data-lucide="lock" class="w-4 h-4"></i>
                                 <span>Secure bank-grade scanning. No credentials shared.</span>
                             </div>
                             
                             <!-- Auth Mode Selector (Login vs SignUp) -->
-                            <div class="text-center text-xs text-slate-400 mt-4 border-t border-slate-900/60 pt-4">
+                            <div class="text-center text-xs text-textMuted mt-4 border-t border-glassBorder pt-4">
                                 <span id="auth-toggle-label">Don't have an account?</span>
                                 <button id="btn-toggle-auth-mode" class="text-brand-400 hover:text-brand-300 font-semibold transition-all ml-1">Sign Up</button>
                             </div>
@@ -298,14 +308,14 @@
                         <!-- REGISTRATION PROFILE SETUP FORM (hidden by default) -->
                         <div id="register-setup-panel" class="hidden space-y-6">
                             <!-- Back Button -->
-                            <button id="btn-register-back" class="flex items-center space-x-2 text-xs text-slate-400 hover:text-white transition-all font-space group">
+                            <button id="btn-register-back" class="flex items-center space-x-2 text-xs text-textMuted hover:text-cardTitle transition-all font-space group">
                                 <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
                                 <span>Back to Authentication</span>
                             </button>
 
                             <div class="space-y-2">
-                                <h3 class="text-lg font-semibold text-white font-space">Complete Your Profile</h3>
-                                <p class="text-xs text-slate-400 leading-relaxed font-sans">
+                                <h3 class="text-lg font-semibold text-cardTitle font-space">Complete Your Profile</h3>
+                                <p class="text-xs text-textMuted leading-relaxed font-sans">
                                     Set up your profile to start aggregate discovery scanner.
                                 </p>
                             </div>
@@ -313,32 +323,32 @@
                             <div class="space-y-4">
                                 <!-- Full name -->
                                 <div>
-                                    <label for="register-name" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Full Name</label>
+                                    <label for="register-name" class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Full Name</label>
                                     <input type="text" id="register-name" placeholder="John Doe"
-                                        class="w-full bg-slate-950/60 border border-white/10 focus:border-brand-500 rounded-2xl py-3.5 px-4 text-white placeholder-slate-650 focus:outline-none transition-all">
+                                        class="w-full bg-inputBg border border-inputBorder focus:border-brand-500 rounded-2xl py-3.5 px-4 text-cardTitle placeholder-textMuted focus:outline-none transition-all">
                                 </div>
 
                                 <!-- Secondary contact -->
                                 <div id="register-secondary-group">
-                                    <label id="register-secondary-label" for="register-secondary" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Email Address</label>
+                                    <label id="register-secondary-label" for="register-secondary" class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Email Address</label>
                                     <input type="text" id="register-secondary" placeholder="name@domain.com"
-                                        class="w-full bg-slate-950/60 border border-white/10 focus:border-brand-500 rounded-2xl py-3.5 px-4 text-white placeholder-slate-650 focus:outline-none transition-all">
+                                        class="w-full bg-inputBg border border-inputBorder focus:border-brand-500 rounded-2xl py-3.5 px-4 text-cardTitle placeholder-textMuted focus:outline-none transition-all">
                                 </div>
 
                                 <!-- Avatar selection -->
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-space">Select Avatar</label>
+                                    <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Select Avatar</label>
                                     <div class="flex gap-2 justify-between" id="register-avatar-row">
                                         <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-pink-500 border border-brand-500 flex items-center justify-center text-white scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse" data-avatar="nebula">
                                             <i data-lucide="sparkles" class="w-4 h-4"></i>
                                         </button>
-                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-cosmicBlue-600 to-cyan-500 border border-white/5 flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="nova">
+                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-cosmicBlue-600 to-cyan-500 border border-glassBorder flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="nova">
                                             <i data-lucide="zap" class="w-4 h-4"></i>
                                         </button>
-                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 border border-white/5 flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="pulsar">
+                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 border border-glassBorder flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="pulsar">
                                             <i data-lucide="activity" class="w-4 h-4"></i>
                                         </button>
-                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-amber-600 to-orange-500 border border-white/5 flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="quasar">
+                                        <button type="button" class="register-avatar-btn w-10 h-10 rounded-full bg-gradient-to-tr from-amber-600 to-orange-500 border border-glassBorder flex items-center justify-center text-white opacity-70 hover:opacity-100" data-avatar="quasar">
                                             <i data-lucide="target" class="w-4 h-4"></i>
                                         </button>
                                     </div>
