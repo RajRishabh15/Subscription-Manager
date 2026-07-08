@@ -232,6 +232,12 @@ void main() {
     this.onResize = this.onResize.bind(this);
     window.addEventListener('resize', this.onResize);
 
+    // Also use ResizeObserver to catch when container becomes visible
+    this.resizeObserver = new ResizeObserver(() => {
+      this.onResize();
+    });
+    this.resizeObserver.observe(this.container);
+
     this.startTime = performance.now();
     this.animate = this.animate.bind(this);
     this.animate();
@@ -262,6 +268,7 @@ void main() {
     window.removeEventListener('resize', this.onResize);
     if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
     if (this.observer) this.observer.disconnect();
+    if (this.resizeObserver) this.resizeObserver.disconnect();
     
     if (this.container && this.renderer && this.container.contains(this.renderer.domElement)) {
       this.container.removeChild(this.renderer.domElement);

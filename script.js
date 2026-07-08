@@ -673,7 +673,6 @@ function renderHomeTab() {
     // Category Spending Breakdown
     const categoriesData = {};
     let totalCategorized = 0;
-    
     state.subscriptions.forEach(sub => {
         const monthlyEq = sub.cycle === 'monthly' ? sub.cost : sub.cost / 12;
         categoriesData[sub.category] = (categoriesData[sub.category] || 0) + monthlyEq;
@@ -681,220 +680,87 @@ function renderHomeTab() {
     });
 
     let html = `
-        <!-- Top Summary Cards Grid (Premium Rich Vitals) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Hero Section -->
+        <div class="flex flex-col items-center justify-center text-center space-y-6 pt-12 pb-16">
+            <div class="inline-flex items-center space-x-2 bg-glassBg border border-glassBorder rounded-full px-4 py-1.5 mb-2 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-[11px] font-medium text-textMuted font-sans">Live scanning • ${state.currentUser.linkedCredentials.length} sources connected</span>
+            </div>
             
-            <!-- 1. Sync Directory Vitals Card -->
-            <div class="galactic-card rounded-[28px] p-6 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-8 opacity-[0.03] -mr-4 -mt-4 text-emerald-500 pointer-events-none group-hover:scale-110 transition-transform duration-300">
-                    <i data-lucide="wifi" class="w-24 h-24"></i>
-                </div>
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-[10px] font-bold text-textMuted uppercase tracking-widest font-space">Sync Directory Vitals</span>
-                    <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-bold tracking-widest font-space flex items-center space-x-1.5 shadow-[0_0_10px_rgba(16,185,129,0.15)]">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>SECURE SYNC</span>
-                    </span>
-                </div>
-                <div class="space-y-3 mt-2.5">
-                    <div class="flex justify-between items-center border-b border-glassBorder pb-2">
-                        <span class="text-[11px] text-textMuted font-sans">Active Channels:</span>
-                        <span class="text-[11px] font-bold text-cardTitle font-space">${state.currentUser.linkedCredentials.length} Scanners</span>
-                    </div>
-                    <div class="flex justify-between items-center border-b border-glassBorder pb-2">
-                        <span class="text-[11px] text-textMuted font-sans">Sync Frequency:</span>
-                        <span class="text-[11px] font-bold text-cardTitle font-space">Automated (12h)</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-[11px] text-textMuted font-sans">Last Scan:</span>
-                        <span class="text-[11px] font-bold text-emerald-400 font-space">${state.diagnostics.lastScanTime ? state.diagnostics.lastScanTime.split(',')[1] || state.diagnostics.lastScanTime : 'Just now'}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. Subscription Vitals Index Card -->
-            <div class="galactic-card rounded-[28px] p-6 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-8 opacity-[0.03] -mr-4 -mt-4 text-brand-500 pointer-events-none group-hover:scale-110 transition-transform duration-300">
-                    <i data-lucide="cpu" class="w-24 h-24"></i>
-                </div>
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-[10px] font-bold text-textMuted uppercase tracking-widest font-space">Subscription Health Index</span>
-                    <span class="p-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.15)]">
-                        <i data-lucide="cpu" class="w-4 h-4"></i>
-                    </span>
-                </div>
-                <div class="flex items-center space-x-4 mt-2">
-                    <div class="relative w-14 h-14 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                            <path class="text-cardTitle" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                            <path class="text-brand-500" stroke-dasharray="${healthScore}, 100" stroke-width="3.2" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        </svg>
-                        <span class="absolute text-xs font-extrabold text-cardTitle font-space">${healthScore}</span>
-                    </div>
-                    <div class="text-left space-y-0.5">
-                        <div class="text-[9px] font-bold text-textMuted tracking-wide font-space uppercase">Vitals score</div>
-                        <p class="text-[10px] text-textMuted leading-normal font-sans font-medium">${optimizationTips}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. Next Billings Sentinel Card -->
-            <div class="galactic-card rounded-[28px] p-6 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-8 opacity-[0.03] -mr-4 -mt-4 text-cosmicBlue-400 pointer-events-none group-hover:scale-110 transition-transform duration-300">
-                    <i data-lucide="clock" class="w-24 h-24"></i>
-                </div>
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-[10px] font-bold text-textMuted uppercase tracking-widest font-space">impending charge sentinel</span>
-                    <span class="p-2 bg-cosmicBlue-500/10 border border-cosmicBlue-500/20 text-cosmicBlue-400 rounded-full">
-                        <i data-lucide="clock" class="w-4 h-4"></i>
-                    </span>
-                </div>
-                ${nextBill ? `
-                <div class="space-y-3 mt-2.5">
-                    <div class="flex justify-between items-center border-b border-glassBorder pb-2">
-                        <span class="text-[11px] text-textMuted font-sans">Impending:</span>
-                        <span class="text-[11px] font-bold text-cardTitle font-space">${nextBill.name} (${nextBill.cycle === 'monthly' ? 'Monthly' : 'Annual'})</span>
-                    </div>
-                    <div class="flex justify-between items-center border-b border-glassBorder pb-2">
-                        <span class="text-[11px] text-textMuted font-sans">Payment Amount:</span>
-                        <span class="text-[11px] font-bold text-brand-400 font-space">₹${nextBill.cost}</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-[11px] text-textMuted font-sans">Due In:</span>
-                        <span class="text-[11px] font-bold ${nextBill.daysRemaining <= 5 ? 'text-red-400 animate-pulse' : 'text-cosmicBlue-400'} font-space">${nextBill.daysRemaining === 0 ? 'Today' : nextBill.daysRemaining === 1 ? 'Tomorrow' : `${nextBill.daysRemaining} days`}</span>
-                    </div>
-                </div>
-                ` : `
-                <div class="py-4 text-center">
-                    <p class="text-xs text-textMuted font-sans">No impending billing intervals active.</p>
-                </div>
-                `}
-            </div>
-        </div>
-    `;
-
-    // Alert Banner if critical bills exist
-    if (criticalBills.length > 0) {
-        html += `
-        <!-- Critical Renewal Warning Notification Banner -->
-        <div class="bg-brand-500/5 border border-brand-500/25 rounded-[24px] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 alert-ring-pulse">
-            <div class="flex items-start space-x-4">
-                <div class="p-2.5 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-xl flex-shrink-0">
-                    <i data-lucide="bell-ring" class="w-5.5 h-5.5 animate-bounce"></i>
-                </div>
-                <div>
-                    <h4 class="font-bold text-cardTitle font-space text-base">Critical Subscription Renewals Pending</h4>
-                    <p class="text-xs text-textMuted mt-1 font-sans">
-                        You have ${criticalBills.length} billing renewals coming up in the next 5 days. Ensure funding is available to prevent interruptions.
-                    </p>
-                </div>
-            </div>
-            <button onclick="switchTab('manage')" class="bg-brand-600/20 border border-brand-500/35 hover:bg-brand-500 hover:text-cardTitle text-brand-400 font-semibold text-xs px-5 py-3 rounded-xl transition-all self-start sm:self-center font-space">
-                Review Renewals
+            <h1 class="text-5xl md:text-7xl font-extrabold text-cardTitle font-sans tracking-tight leading-[1.1]">
+                Your subscription<br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">universe</span>
+            </h1>
+            
+            <p class="text-textMuted text-sm md:text-base max-w-lg mx-auto font-sans leading-relaxed">
+                Every service you pay for, detected and organized automatically from your email and phone.
+            </p>
+            
+            <button onclick="switchTab('manage')" class="mt-4 bg-indigo-500 hover:bg-indigo-400 text-white font-medium py-3 px-8 rounded-xl transition-all shadow-[0_0_20px_rgba(99,102,241,0.4)] flex items-center space-x-2 font-sans">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                <span>Scan now</span>
             </button>
         </div>
-        `;
-    }
 
-    // Chart and Upcoming Bills Layout Row
-    html += `
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- Left Side: Interactive SVG Spend Category Chart -->
-            <div class="lg:col-span-5 galactic-card rounded-[28px] p-6 flex flex-col justify-between">
-                <div>
-                    <h3 class="text-base font-bold text-cardTitle font-space mb-1">Spend Category Share</h3>
-                    <p class="text-xs text-textMuted mb-6 font-sans font-medium">Monthly: <span class="text-brand-400 font-bold font-space">₹${monthlySpend.toLocaleString('en-IN')}</span> • Annual: <span class="text-cosmicBlue-400 font-bold font-space">₹${yearlySpend.toLocaleString('en-IN')}</span></p>
-                </div>
-
-                <!-- SVG Donut Chart -->
-                <div class="flex flex-col items-center justify-center py-4">
-                    ${totalCategorized > 0 ? generateSVGDonutChart(categoriesData, totalCategorized) : `
-                        <div class="text-center py-12">
-                            <i data-lucide="pie-chart" class="w-12 h-12 text-textMuted mx-auto mb-2"></i>
-                            <p class="text-xs text-textMuted font-sans">No data to display. Add subscriptions.</p>
-                        </div>
-                    `}
-                </div>
-                
-                <!-- Category Legend List -->
-                <div class="space-y-2 mt-4 border-t border-glassBorder pt-4">
-                    ${Object.keys(categoriesData).map(cat => {
-                        const amt = Math.round(categoriesData[cat]);
-                        const pct = Math.round((amt / totalCategorized) * 100);
-                        const labelBg = CATEGORY_COLORS[cat] || CATEGORY_COLORS['Other'];
-                        return `
-                            <div class="flex justify-between items-center text-xs">
-                                <div class="flex items-center space-x-2">
-                                    <span class="w-2 h-2 rounded-full inline-block ${labelBg.split(' ')[0]} bg-current"></span>
-                                    <span class="text-textMuted font-medium font-sans">${cat}</span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-cardTitle font-semibold font-space">₹${amt}</span>
-                                    <span class="text-textMuted ml-1 font-sans">(${pct}%)</span>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            </div>
-
-            <!-- Right Side: Chronological Billing Calendar Timeline -->
-            <div class="lg:col-span-7 galactic-card rounded-[28px] p-6 flex flex-col justify-between">
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <h3 class="text-base font-bold text-cardTitle font-space">Upcoming Billing Renewal Schedule</h3>
-                        <button onclick="switchTab('manage')" class="text-xs text-brand-400 hover:text-brand-300 font-semibold font-space">See All</button>
+        <!-- 4 Summary Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-2">
+            
+            <!-- Card 1: Monthly spend -->
+            <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between h-40 hover:bg-glassBorder/50 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-medium text-textMuted font-sans">Monthly spend</span>
+                    <div class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg group-hover:bg-indigo-500/20 transition-colors">
+                        <i data-lucide="trending-up" class="w-4 h-4"></i>
                     </div>
-                    <p class="text-xs text-textMuted mb-6 font-sans">Upcoming payments sorted chronologically.</p>
                 </div>
-
-                <div class="space-y-4 max-h-[360px] overflow-y-auto scrollbar-thin pr-1 flex-grow">
-                    ${upcomingBills.length > 0 ? upcomingBills.map(bill => {
-                        const template = MOCK_PROVIDER_DATA[bill.providerKey] || {
-                            iconBg: 'bg-cardSubBg text-textMuted border-glassBorder',
-                            lucideIcon: 'credit-card'
-                        };
-                        
-                        let remainingBadge = '';
-                        if (bill.daysRemaining === 0) {
-                            remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-red-500/20 border border-red-500/30 text-red-400 font-space tracking-wide">RENEWING TODAY</span>`;
-                        } else if (bill.daysRemaining === 1) {
-                            remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-amber-500/20 border border-amber-500/30 text-amber-400 font-space tracking-wide">TOMORROW</span>`;
-                        } else if (bill.daysRemaining < 0) {
-                            remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-cardSubBg border border-glassBorder text-textMuted font-space tracking-wide">PAST DUE</span>`;
-                        } else {
-                            remainingBadge = `<span class="px-2 py-0.5 rounded-md text-[9px] font-semibold bg-cardSubBg border border-glassBorder text-textMuted font-sans">${bill.daysRemaining} days left</span>`;
-                        }
-
-                        return `
-                            <div class="flex items-center justify-between p-3.5 bg-glassBg border border-glassBorder hover:border-brand-500/20 rounded-2xl transition-all">
-                                <div class="flex items-center space-x-3.5">
-                                    <div class="p-2.5 rounded-xl border ${template.iconBg} flex-shrink-0">
-                                        <i data-lucide="${template.lucideIcon}" class="w-5 h-5"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-cardTitle font-space">${bill.name}</h4>
-                                        <div class="text-[10px] text-textMuted mt-0.5 flex items-center space-x-2 font-sans">
-                                            <span>${bill.payment}</span>
-                                            <span>•</span>
-                                            <span>Next: ${new Date(bill.nextRenewal).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-sm font-bold text-cardTitle font-space">₹${bill.cost} <span class="text-[10px] text-textMuted font-normal">/${bill.cycle === 'monthly' ? 'mo' : 'yr'}</span></div>
-                                    <div class="mt-1.5">${remainingBadge}</div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('') : `
-                        <div class="text-center py-16">
-                            <i data-lucide="check-circle" class="w-12 h-12 text-textMuted mx-auto mb-2"></i>
-                            <p class="text-xs text-textMuted font-sans">All set! No upcoming subscription bills active.</p>
-                        </div>
-                    `}
+                <div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">₹${monthlySpend.toLocaleString('en-IN')}</div>
+                    <div class="text-[11px] text-textMuted mt-1 font-sans">Includes ${activeCount} active plans</div>
                 </div>
             </div>
+
+            <!-- Card 2: Active plans -->
+            <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between h-40 hover:bg-glassBorder/50 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-medium text-textMuted font-sans">Active plans</span>
+                    <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg group-hover:bg-emerald-500/20 transition-colors">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${activeCount}</div>
+                    <div class="text-[11px] text-textMuted mt-1 font-sans">${criticalBills.length} renewing soon</div>
+                </div>
+            </div>
+
+            <!-- Card 3: Detected via email -->
+            <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between h-40 hover:bg-glassBorder/50 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-medium text-textMuted font-sans">Detected via sources</span>
+                    <div class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
+                        <i data-lucide="mail" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${activeCount}</div>
+                    <div class="text-[11px] text-textMuted mt-1 font-sans">auto-synced</div>
+                </div>
+            </div>
+
+            <!-- Card 4: Alerts -->
+            <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between h-40 hover:bg-glassBorder/50 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-medium text-textMuted font-sans">Alerts</span>
+                    <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg group-hover:bg-amber-500/20 transition-colors">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${criticalBills.length}</div>
+                    <div class="text-[11px] text-textMuted mt-1 font-sans">actions required</div>
+                </div>
+            </div>
+
         </div>
     `;
 
