@@ -29,18 +29,18 @@
 
     /* Theme-switch variables default (Dark) */
     --cosmicBg: #04020a;
-    --glassBg: rgba(6, 4, 15, 0.55);
-    --glassBorder: rgba(255, 255, 255, 0.08);
-    --text-main: #cbd5e1;
+    --glassBg: rgba(18, 12, 28, 0.85);
+    --glassBorder: rgba(255, 255, 255, 0.12);
+    --text-main: #f1f5f9;
     --card-title: #ffffff;
     --glow-opacity-pink: 0.15;
     --glow-opacity-blue: 0.15;
-    --text-muted: #94a3b8;
-    --card-sub-bg: rgba(3, 2, 8, 0.6);
+    --text-muted: #cbd5e1;
+    --card-sub-bg: rgba(25, 18, 35, 0.8);
     --tab-inactive: #94a3b8;
-    --tab-active-bg: rgba(255, 255, 255, 0.1);
-    --input-bg: rgba(3, 2, 8, 0.4);
-    --input-border: rgba(255, 255, 255, 0.08);
+    --tab-active-bg: rgba(255, 255, 255, 0.15);
+    --input-bg: rgba(15, 10, 25, 0.7);
+    --input-border: rgba(255, 255, 255, 0.12);
 }
 
 /* Deep space root adjustments */
