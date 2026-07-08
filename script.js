@@ -188,24 +188,17 @@ let state = {
 document.addEventListener('DOMContentLoaded', async () => {
     loadStateFromStorage();
     
-    // Initialize Dark/Light Mode Theme
-    const savedThemeMode = localStorage.getItem('subsentry_theme_mode') || 'dark';
-    if (savedThemeMode === 'light') {
-        document.documentElement.classList.add('light');
-        document.body.classList.add('light');
-        const icon = document.getElementById('theme-toggle-icon');
-        if (icon) icon.setAttribute('data-lucide', 'sun');
-    } else {
-        document.documentElement.classList.remove('light');
-        document.body.classList.remove('light');
-        const icon = document.getElementById('theme-toggle-icon');
-        if (icon) icon.setAttribute('data-lucide', 'moon');
-    }
+    // Force dark theme
+    document.documentElement.classList.remove('light');
+    document.body.classList.remove('light');
 
-    initStarfield();
+    initGlitches();
     setupEventListeners();
     lucide.createIcons();
     applyCardTiltEffect();
+    
+    // Render custom GSAP pill nav
+    renderPillNav();
 
     // Check saved auth mode redirect from localStorage
     const savedAuthMode = localStorage.getItem('auth_mode_redirect') || 'login';
@@ -324,113 +317,81 @@ function initAppView() {
 // ==========================================
 // STARFIELD CANVAS BACKGROUND ANIMATION (PINK & CYAN GLITTER)
 // ==========================================
-function initStarfield() {
-    const canvas = document.getElementById('starfield-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    
-    let stars = [];
-    const numStars = 135;
-    
-    function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    
-    window.addEventListener('resize', resize);
-    resize();
-    
-    // Spawn white, baby-pink, and light-blue/cyan stars
-    for (let i = 0; i < numStars; i++) {
-        const rand = Math.random();
-        let starColorType = 'white';
-        if (rand < 0.28) {
-            starColorType = 'pink';
-        } else if (rand < 0.58) {
-            starColorType = 'cyan';
-        }
-        
-        const isSparkle = Math.random() < 0.22;
-        
-        stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 1.5 + 0.4,
-            alpha: Math.random(),
-            twinkleSpeed: 0.005 + Math.random() * 0.015,
-            speedX: (Math.random() - 0.5) * 0.06,
-            speedY: (Math.random() - 0.5) * 0.06,
-            type: isSparkle ? 'sparkle' : 'circle',
-            colorType: starColorType,
-            rot: Math.random() * Math.PI,
-            rotSpeed: (Math.random() - 0.5) * 0.006
+// ==========================================
+// GLITCH CANVAS BACKGROUNDS DEFINITION
+// ==========================================
+let loginGlitchInstance = null;
+let progressGlitchInstance = null;
+
+function initGlitches() {
+    const loginBg = document.getElementById('login-glitch-bg');
+    if (loginBg) {
+        loginGlitchInstance = new LetterGlitch({
+            container: loginBg,
+            glitchSpeed: 50,
+            centerVignette: true,
+            outerVignette: false,
+            smooth: true,
+            glitchColors: ["#2b4539", "#61dca3", "#61b3dc"]
         });
     }
+    
+    const progressBg = document.getElementById('progress-glitch-bg');
+    if (progressBg) {
+        progressGlitchInstance = new LetterGlitch({
+            container: progressBg,
+            glitchSpeed: 50,
+            centerVignette: true,
+            outerVignette: false,
+            smooth: true,
+            glitchColors: ["#2b4539", "#61dca3", "#61b3dc"]
+        });
+    }
+}
 
-    // Helper to draw 4-pointed diamond star sparkles
-    function drawDiamondSparkle(ctx, cx, cy, size, color, rotation) {
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(rotation);
-        ctx.fillStyle = color;
-        
-        ctx.beginPath();
-        ctx.moveTo(0, -size * 3.5);
-        ctx.quadraticCurveTo(0, 0, size * 3.5, 0);
-        ctx.quadraticCurveTo(0, 0, 0, size * 3.5);
-        ctx.quadraticCurveTo(0, 0, -size * 3.5, 0);
-        ctx.quadraticCurveTo(0, 0, 0, -size * 3.5);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
+// ==========================================
+// CUSTOM FLOATING PILL NAVIGATION (GSAP)
+// ==========================================
+let pillNavInstance = null;
+
+function renderPillNav() {
+    const container = document.getElementById('nav-container');
+    if (!container) return;
+
+    if (pillNavInstance) {
+        pillNavInstance.destroy();
     }
-    
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        for (let i = 0; i < numStars; i++) {
-            const star = stars[i];
-            
-            star.alpha += star.twinkleSpeed;
-            if (star.alpha > 1.0 || star.alpha < 0.1) {
-                star.twinkleSpeed = -star.twinkleSpeed;
-            }
-            
-            star.x += star.speedX;
-            star.y += star.speedY;
-            
-            if (star.x < 0) star.x = canvas.width;
-            if (star.x > canvas.width) star.x = 0;
-            if (star.y < 0) star.y = canvas.height;
-            if (star.y > canvas.height) star.y = 0;
-            
-            // Build rgba string based on star type
-            let opacity = Math.max(0.1, Math.min(1.0, star.alpha));
-            let colorString = document.documentElement.classList.contains('light')
-                ? `rgba(99, 102, 241, ${opacity})` // Soft Indigo/Lavender in Light mode
-                : `rgba(235, 235, 255, ${opacity})`; // white/silver in Dark mode
-            
-            if (star.colorType === 'pink') {
-                colorString = `rgba(244, 114, 182, ${opacity})`; // Baby pink
-            } else if (star.colorType === 'cyan') {
-                colorString = `rgba(34, 211, 238, ${opacity})`; // Cyan / light blue
-            }
-            
-            if (star.type === 'sparkle') {
-                star.rot += star.rotSpeed;
-                drawDiamondSparkle(ctx, star.x, star.y, star.size, colorString, star.rot);
-            } else {
-                ctx.fillStyle = colorString;
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-        
-        requestAnimationFrame(animate);
+
+    const avatarName = state.currentUser.avatar || 'nebula';
+    const firstChar = (state.currentUser.name || 'U')[0].toUpperCase();
+
+    pillNavInstance = new PillNav({
+        container: container,
+        logo: '',
+        logoAlt: 'Profile',
+        items: [
+            { label: 'Home', href: 'home' },
+            { label: 'Manage', href: 'manage' }
+        ],
+        activeHref: state.activeTab,
+        baseColor: '#000000',
+        pillColor: '#ffffff',
+        pillTextColor: '#000000',
+        hoveredPillTextColor: '#ffffff',
+        onTabClick: (tabName) => {
+            switchTab(tabName);
+        },
+        initialLoadAnimation: false
+    });
+
+    // Style the left profile avatar button inside PillNav
+    const avatarEl = document.getElementById('pillnav-logo-avatar');
+    if (avatarEl) {
+        avatarEl.innerText = firstChar;
+        const activeAvatarVibe = AVATAR_VIBES[avatarName] || AVATAR_VIBES.nebula;
+        avatarEl.style.background = '';
+        avatarEl.className = `w-full h-full rounded-full flex items-center justify-center text-xs font-black font-space select-none bg-gradient-to-tr ${activeAvatarVibe.gradient}`;
     }
-    
-    animate();
 }
 
 // ==========================================
@@ -443,30 +404,6 @@ function switchTab(tabName) {
     state.activeTab = tabName;
     saveStateToStorage();
 
-    // Toggle active classes on Navigation buttons (Desktop)
-    document.querySelectorAll('nav [data-tab]').forEach(btn => {
-        const isSelected = btn.getAttribute('data-tab') === tabName;
-        if (isSelected) {
-            btn.classList.add('active-pill');
-            btn.classList.remove('text-textMuted');
-        } else {
-            btn.classList.remove('active-pill');
-            btn.classList.add('text-textMuted');
-        }
-    });
-
-    // Toggle active classes on Navigation buttons (Mobile)
-    document.querySelectorAll('.tab-btn-mobile').forEach(btn => {
-        const isSelected = btn.getAttribute('data-tab') === tabName;
-        if (isSelected) {
-            btn.classList.add('active-pill-mobile');
-            btn.classList.remove('text-textMuted');
-        } else {
-            btn.classList.remove('active-pill-mobile');
-            btn.classList.add('text-textMuted');
-        }
-    });
-
     document.querySelectorAll('.tab-pane').forEach(pane => {
         pane.classList.add('hidden');
     });
@@ -476,9 +413,6 @@ function switchTab(tabName) {
         targetPane.classList.remove('hidden');
     }
 
-    // Update avatar glowing outline state based on page
-    syncAvatarActiveState();
-
     if (tabName === 'home') {
         renderHomeTab();
     } else if (tabName === 'manage') {
@@ -486,7 +420,8 @@ function switchTab(tabName) {
     } else if (tabName === 'account') {
         renderAccountTab();
     }
-    
+
+    renderPillNav();
     lucide.createIcons();
 }
 
@@ -1306,41 +1241,7 @@ function applyCardTiltEffect() {
 
 // Sync Avatar pill in floating header
 function syncAvatarUI() {
-    const btn = document.getElementById('btn-profile-trigger');
-    if (!btn) return;
-    const avatar = state.currentUser.avatar || 'nebula';
-    const vibe = AVATAR_VIBES[avatar] || AVATAR_VIBES.nebula;
-    
-    // Remove existing gradient and border classes
-    btn.className = btn.className.replace(/from-\S+/g, '')
-                                 .replace(/to-\S+/g, '')
-                                 .replace(/hover:from-\S+/g, '')
-                                 .replace(/hover:to-\S+/g, '')
-                                 .replace(/border-\S+/g, '')
-                                 .replace(/shadow-\S+/g, '');
-                                 
-    // Add new ones
-    btn.classList.add(...vibe.gradient.split(' '));
-    btn.classList.add(vibe.shadow);
-    
-    const avatarText = document.getElementById('user-avatar');
-    if (avatarText) {
-        avatarText.innerText = (state.currentUser.name || state.currentUser.email || 'U')[0].toUpperCase();
-    }
-
-    // Update active highlight border
-    syncAvatarActiveState();
-}
-
-// Update avatar active glow border depending on activeTab
-function syncAvatarActiveState() {
-    const btn = document.getElementById('btn-profile-trigger');
-    if (!btn) return;
-    if (state.activeTab === 'account') {
-        btn.classList.add('avatar-active-glow');
-    } else {
-        btn.classList.remove('avatar-active-glow');
-    }
+    renderPillNav();
 }
 
 // ==========================================
@@ -2282,41 +2183,13 @@ function completeRegistration() {
     startScanning(null, email);
 }
 
-// Toggle Dark/Light mode theme
-function toggleThemeMode() {
-    const isLight = document.documentElement.classList.contains('light');
-    if (isLight) {
-        document.documentElement.classList.remove('light');
-        document.body.classList.remove('light');
-        localStorage.setItem('subsentry_theme_mode', 'dark');
-        const icon = document.getElementById('theme-toggle-icon');
-        if (icon) {
-            icon.setAttribute('data-lucide', 'moon');
-            lucide.createIcons();
-        }
-    } else {
-        document.documentElement.classList.add('light');
-        document.body.classList.add('light');
-        localStorage.setItem('subsentry_theme_mode', 'light');
-        const icon = document.getElementById('theme-toggle-icon');
-        if (icon) {
-            icon.setAttribute('data-lucide', 'sun');
-            lucide.createIcons();
-        }
-    }
-}
+
 
 // ==========================================
 // EVENTS LISTENERS SETUP
 // ==========================================
 function setupEventListeners() {
-    // Theme Toggle Button
-    const btnThemeToggle = document.getElementById('btn-theme-toggle');
-    if (btnThemeToggle) {
-        btnThemeToggle.addEventListener('click', () => {
-            toggleThemeMode();
-        });
-    }
+
 
     // Gmail Login Button
     const btnGmailLogin = document.getElementById('btn-gmail-login');

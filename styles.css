@@ -43,31 +43,11 @@
     --input-border: rgba(255, 255, 255, 0.08);
 }
 
-html.light, body.light {
-    --cosmicBg: #dcd3f5;
-    --glassBg: rgba(255, 255, 255, 0.65);
-    --glassBorder: rgba(236, 72, 153, 0.2);
-    --text-main: #2b2240;
-    --card-title: #180e2b;
-    --glow-opacity-pink: 0.12;
-    --glow-opacity-blue: 0.12;
-    --text-muted: #6b6282;
-    --card-sub-bg: rgba(228, 222, 243, 0.7);
-    --tab-inactive: #6b6282;
-    --tab-active-bg: rgba(255, 255, 255, 0.95);
-    --input-bg: rgba(255, 255, 255, 0.9);
-    --input-border: rgba(236, 72, 153, 0.25);
-}
-
 /* Deep space root adjustments */
 body {
     background-color: var(--cosmicBg);
     color: var(--text-main);
     overflow-x: hidden;
-}
-
-body.light {
-    background: radial-gradient(circle at 50% 30%, #f6e6ff 0%, #dcd3f5 100%) !important;
 }
 
 /* Smooth transitions for theme switches */

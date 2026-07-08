@@ -70,26 +70,10 @@
 <body
     class="bg-cosmicBg text-textMain min-h-screen flex flex-col font-sans overflow-x-hidden selection:bg-brand-500 selection:text-cardTitle relative">
 
-    <!-- Theme Mode Floating Toggle -->
-    <div class="fixed top-6 right-6 z-50">
-        <button id="btn-theme-toggle" class="p-2.5 rounded-full bg-glassBg border border-glassBorder hover:border-brand-500/30 text-textMuted hover:text-cardTitle transition-all flex items-center justify-center focus:outline-none backdrop-blur-md shadow-lg group">
-            <i id="theme-toggle-icon" data-lucide="moon" class="w-4 h-4 group-hover:-rotate-12 transition-transform"></i>
-        </button>
-    </div>
+    <!-- Theme Switcher Removed -->
 
-    <!-- STARFIELD CANVAS -->
-    <canvas id="starfield-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
-
-    <!-- CYBER-GRID OVERLAY -->
-    <div class="fixed inset-0 cyber-grid pointer-events-none z-0"></div>
-
-    <!-- Background Cosmic Nebulae Glows -->
-    <div
-        class="fixed top-[-10%] left-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-brand-500/10 to-cosmicBlue-500/10 blur-[180px] pointer-events-none z-0">
-    </div> <!-- Pink-Blue main glow -->
-    <div
-        class="fixed bottom-[-15%] right-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-cosmicBlue-500/10 to-brand-500/10 blur-[150px] pointer-events-none z-0">
-    </div> <!-- Blue-Pink secondary glow -->
+    <!-- LOGIN GLITCH BACKGROUND -->
+    <div id="login-glitch-bg" class="fixed inset-0 pointer-events-none z-0 bg-black"></div>
 
     <!-- MAIN APP WRAPPER -->
     <main class="flex-grow flex flex-col z-10 relative">
@@ -288,13 +272,8 @@
         <!-- 1.5. FULL PAGE DISCOVERY SCAN VIEW (Shown during scanning process) -->
         <section id="login-progress-view"
             class="hidden fixed inset-0 z-50 flex flex-col justify-between bg-[#04020a] p-6 sm:p-12 md:p-16">
-            <!-- Background glows -->
-            <div
-                class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-900/10 blur-[150px] pointer-events-none z-0">
-            </div>
-            <div
-                class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-cosmicBlue-900/10 blur-[130px] pointer-events-none z-0">
-            </div>
+            <!-- PROGRESS GLITCH BACKGROUND -->
+            <div id="progress-glitch-bg" class="fixed inset-0 pointer-events-none z-0 bg-black"></div>
 
             <!-- Top Header Branding -->
             <header class="flex justify-between items-center z-10 relative">
@@ -460,52 +439,13 @@
         <!-- 2. DASHBOARD VIEW (Initially Hidden) -->
         <section id="dashboard-view" class="hidden flex-grow flex flex-col">
 
-            <!-- FLOATING NAV PILL BAR -->
-            <div class="fixed top-5 left-0 right-0 px-4 z-40">
-                <header
-                    class="max-w-3xl mx-auto bg-inputBg border border-glassBorder backdrop-blur-2xl h-16 rounded-full flex items-center justify-between px-6 shadow-[0_12px_40px_rgba(236,72,153,0.08)]">
-
-                    <!-- Left: Logo & Icon -->
-                    <div class="flex items-center space-x-2.5 cursor-pointer" id="logo-refresh">
-                        <div
-                            class="w-8 h-8 rounded-full overflow-hidden border border-brand-500/20 shadow-[0_0_12px_rgba(236,72,153,0.25)] flex items-center justify-center p-0.5 bg-inputBg">
-                            <img src="favicon.png" class="w-full h-full object-cover rounded-full"
-                                alt="AIOManager Logo">
-                        </div>
-                        <span
-                            class="text-lg font-bold font-space text-cardTitle tracking-tight hidden sm:inline-block">AIOManager</span>
-                    </div>
-
-                    <!-- Middle: Glass Pill Tabs with improved spacing and icons -->
-                    <nav class="flex space-x-1.5 bg-inputBg border border-glassBorder p-1 rounded-full">
-                        <button data-tab="home"
-                            class="tab-btn px-6 py-2 rounded-full text-[11px] font-bold tracking-wider transition-all flex items-center space-x-3 text-textMuted hover:text-cardTitle">
-                            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                            <span class="font-space">Home</span>
-                        </button>
-                        <button data-tab="manage"
-                            class="tab-btn px-6 py-2 rounded-full text-[11px] font-bold tracking-wider transition-all flex items-center space-x-3 text-textMuted hover:text-cardTitle">
-                            <i data-lucide="credit-card" class="w-4 h-4"></i>
-                            <span class="font-space">Manage</span>
-                        </button>
-                    </nav>
-
-                    <!-- Right: Active Profile Button -->
-                    <div class="flex items-center space-x-3">
-                        <button id="btn-profile-trigger"
-                            class="h-9 w-9 rounded-full bg-gradient-to-tr from-brand-500 to-cosmicBlue-400 hover:from-brand-400 hover:to-cosmicBlue-300 flex items-center justify-center text-cardTitle text-sm font-black font-space shadow-[0_0_15px_rgba(236,72,153,0.25)] border border-brand-400/35 cursor-pointer transition-transform hover:scale-105 active:scale-95"
-                            title="Manage Account Profile">
-                            <span id="user-avatar">U</span>
-                        </button>
-
-                        <!-- Hidden metadata endpoints for JS updates compatibility -->
-                        <div class="hidden">
-                            <span id="user-primary-phone">+91 00000 00000</span>
-                            <span id="user-primary-email">demo@domain.com</span>
-                            <button id="btn-logout"></button>
-                        </div>
-                    </div>
-                </header>
+            <!-- FLOATING NAV PILL BAR CONTAINER -->
+            <div id="nav-container" class="fixed top-5 left-0 right-0 px-4 z-40 flex justify-center"></div>
+            <!-- Hidden metadata endpoints for JS updates compatibility -->
+            <div class="hidden">
+                <span id="user-primary-phone">+91 00000 00000</span>
+                <span id="user-primary-email">demo@domain.com</span>
+                <button id="btn-logout"></button>
             </div>
 
             <!-- Content Area - Extra Padding Top to clear floating bar -->
@@ -788,6 +728,9 @@
     <!-- Modal settings replaced with full page tab content -->
 
     <!-- Script Entry -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="LetterGlitch.js"></script>
+    <script src="PillNav.js"></script>
     <script src="script.js"></script>
 </body>
 
