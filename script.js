@@ -297,6 +297,9 @@ function initAppView() {
         scanView.classList.add('hidden');
         dashboardView.classList.remove('hidden');
         
+        const loginBg = document.getElementById('login-glitch-bg');
+        if (loginBg) loginBg.classList.add('hidden');
+        
         // Update user avatar elements
         syncAvatarUI();
         
@@ -304,6 +307,9 @@ function initAppView() {
     } else {
         scanView.classList.remove('hidden');
         dashboardView.classList.add('hidden');
+        
+        const loginBg = document.getElementById('login-glitch-bg');
+        if (loginBg) loginBg.classList.remove('hidden');
         
         // Reset panels in scan view
         const formPanel = document.getElementById('scan-form-panel');
