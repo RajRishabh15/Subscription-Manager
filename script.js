@@ -504,36 +504,10 @@ function startScanning(phone, email) {
         { pct: 100, text: 'Finalizing secure profile configuration...' }
     ];
 
-    // Slideshow cycler
-    let activeSlideIdx = 0;
-    const descSlides = document.querySelectorAll('.discovery-slide');
-    const graphicSlides = document.querySelectorAll('.discovery-slide-graphic');
-
-    const slideshowInterval = setInterval(() => {
-        if (!descSlides.length || !graphicSlides.length) return;
-        
-        // Fade out active
-        descSlides[activeSlideIdx].classList.add('hidden');
-        descSlides[activeSlideIdx].classList.add('opacity-0');
-        graphicSlides[activeSlideIdx].classList.add('hidden');
-        graphicSlides[activeSlideIdx].classList.add('opacity-0');
-
-        activeSlideIdx = (activeSlideIdx + 1) % descSlides.length;
-
-        // Fade in next
-        descSlides[activeSlideIdx].classList.remove('hidden');
-        graphicSlides[activeSlideIdx].classList.remove('hidden');
-        setTimeout(() => {
-            descSlides[activeSlideIdx].classList.remove('opacity-0');
-            graphicSlides[activeSlideIdx].classList.remove('opacity-0');
-        }, 50);
-    }, 2200);
-
     let currentStep = 0;
 
     function runNextStep() {
         if (currentStep >= scanSteps.length) {
-            clearInterval(slideshowInterval);
             setTimeout(() => {
                 state.subscriptions = [
                     {
@@ -896,54 +870,43 @@ function renderManageTab() {
                 const catBadge = CATEGORY_COLORS[sub.category] || CATEGORY_COLORS['Other'];
 
                 return `
-                    <div class="galactic-card glitter-card-bg ${template.color.split(' ')[0]} rounded-[28px] p-5 flex flex-col justify-between relative group">
+                    <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between relative group hover:bg-glassBorder/50 transition-colors">
                         
                         <!-- Card Header -->
                         <div class="flex justify-between items-start mb-6">
                             <div class="flex items-center space-x-3.5">
-                                <div class="p-3 rounded-2xl border ${template.iconBg}">
+                                <div class="p-3 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-2xl flex-shrink-0">
                                     <i data-lucide="${template.lucideIcon}" class="w-6 h-6"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-cardTitle text-base leading-tight font-space">${sub.name}</h4>
-                                    <span class="inline-block px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border ${catBadge} mt-1.5 font-space">
-                                        ${sub.category}
-                                    </span>
+                                    <h4 class="font-bold text-cardTitle text-lg leading-tight font-sans tracking-tight">${sub.name}</h4>
+                                    <p class="text-xs text-textMuted font-sans mt-0.5">${sub.category}</p>
                                 </div>
                             </div>
-                            
-                            <!-- Toggle alert bell -->
-                            <button onclick="toggleSubscriptionAlert('${sub.id}')" class="p-2 rounded-full border ${sub.alertEnabled ? 'bg-brand-500/10 border-brand-500/25 text-brand-400' : 'bg-cardSubBg border-glassBorder text-textMuted hover:text-cardTitle'} transition-all" title="Toggle warnings">
-                                <i data-lucide="${sub.alertEnabled ? 'bell' : 'bell-off'}" class="w-3.5 h-3.5"></i>
-                            </button>
                         </div>
 
                         <!-- Card Detail Table -->
-                        <div class="space-y-2.5 text-xxs border-b border-glassBorder pb-5 mb-5 font-sans">
-                            <div class="flex justify-between">
-                                <span class="text-textMuted">Monthly Cost</span>
-                                <span class="text-cardTitle font-semibold">₹${sub.cycle === 'monthly' ? sub.cost : Math.round(sub.cost / 12)}</span>
-                            </div>
+                        <div class="space-y-3 text-xs pb-5 mb-5 font-sans">
                             <div class="flex justify-between">
                                 <span class="text-textMuted">Billing Cycle</span>
-                                <span class="text-cardTitle capitalize">${sub.cycle}</span>
+                                <span class="text-cardTitle capitalize font-medium">${sub.cycle}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-textMuted">Next Renewal</span>
-                                <span class="text-cardTitle">${new Date(sub.nextRenewal).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                <span class="text-cardTitle font-medium">${new Date(sub.nextRenewal).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-textMuted">Payment Channel</span>
-                                <span class="text-cardTitle truncate max-w-[140px]">${sub.payment}</span>
+                                <span class="text-cardTitle truncate max-w-[140px] font-medium">${sub.payment}</span>
                             </div>
                         </div>
 
                         <!-- Card Footer actions -->
-                        <div class="flex items-center justify-between gap-3">
-                            <div class="text-lg font-black text-cardTitle font-space">₹${sub.cost}<span class="text-[10px] text-textMuted font-normal">/${sub.cycle === 'monthly' ? 'mo' : 'yr'}</span></div>
-                            <button onclick="openCancellationWizard('${sub.id}')" class="bg-red-500/10 border border-red-500/25 text-red-400 hover:bg-red-550 hover:text-cardTitle font-semibold text-xxs px-4 py-2.5 rounded-xl transition-all flex items-center space-x-1.5 font-space">
+                        <div class="flex items-center justify-between gap-3 pt-2">
+                            <div class="text-2xl font-bold text-cardTitle font-sans tracking-tight">₹${sub.cost}<span class="text-[11px] text-textMuted font-normal ml-1">/${sub.cycle === 'monthly' ? 'mo' : 'yr'}</span></div>
+                            <button onclick="openCancellationWizard('${sub.id}')" class="text-red-400 hover:text-red-300 font-medium text-xs px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5 font-sans bg-red-500/10">
                                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                <span>Cancel Plan</span>
+                                <span>Cancel</span>
                             </button>
                         </div>
                     </div>
@@ -1161,10 +1124,10 @@ function renderAccountTab() {
     }
 
     let html = `
-        <!-- Account Vitals Header -->
-        <div class="mb-2">
-            <h2 class="text-4xl font-normal text-cardTitle serif-title italic mb-2 tracking-tight">Account Control Deck</h2>
-            <p class="text-xs text-textMuted font-sans max-w-xl">Configure directories, adjust billing cards, toggle notification rules, and customize cosmic accent presets from a unified control panel.</p>
+        <!-- Account Settings Header -->
+        <div class="mb-6">
+            <h2 class="text-4xl font-extrabold text-cardTitle font-sans tracking-tight mb-2">Account Settings</h2>
+            <p class="text-sm text-textMuted font-sans max-w-xl">Manage your profile, connected sources, and preferences from a unified control panel.</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -1173,9 +1136,7 @@ function renderAccountTab() {
             <div class="lg:col-span-4 space-y-6">
                 
                 <!-- Profile details & Avatar customizer -->
-                <div class="liquid-glass-card p-6 flex flex-col justify-between">
-                    <!-- Spot Light glow in background -->
-                    <div class="liquid-glow-spot top-0 right-0 w-32 h-32" style="background: ${activeAvatarVibe.glow}"></div>
+                <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between">
                     
                     <div class="text-center pb-6 border-b border-glassBorder relative z-10">
                         <div class="relative w-20 h-20 mx-auto mb-4">
@@ -1226,58 +1187,31 @@ function renderAccountTab() {
                         </div>
                     </div>
 
-                    <div class="pt-4 relative z-10 space-y-2">
-                        <button onclick="triggerAccountReset()" class="w-full bg-inputBg border border-glassBorder hover:border-glassBorder text-cardTitle hover:text-cardTitle font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
-                            <i data-lucide="log-out" class="w-3.5 h-3.5 text-textMuted"></i>
-                            <span>Disconnect Session (Log Out)</span>
+                    <div class="pt-6 relative z-10 space-y-3">
+                        <button onclick="triggerAccountReset()" class="w-full bg-inputBg border border-glassBorder hover:border-glassBorder text-cardTitle hover:text-cardTitle font-semibold text-xs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-sans">
+                            <i data-lucide="log-out" class="w-4 h-4 text-textMuted"></i>
+                            <span>Log Out</span>
                         </button>
-                        <button onclick="triggerDeleteAccount()" class="w-full bg-red-500/10 border border-red-500/25 hover:bg-red-550 hover:text-cardTitle text-red-400 font-semibold text-xxs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
-                            <i data-lucide="user-x" class="w-3.5 h-3.5"></i>
-                            <span>Delete Account & Wipe Data</span>
+                        <button onclick="triggerDeleteAccount()" class="w-full bg-red-500/10 border border-red-500/25 hover:bg-red-550 hover:text-cardTitle text-red-400 font-semibold text-xs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-sans">
+                            <i data-lucide="user-x" class="w-4 h-4"></i>
+                            <span>Delete Account</span>
                         </button>
                     </div>
-                </div>
-
-                <!-- Sync stats diagnostics console -->
-                <div class="liquid-glass-card p-5 relative overflow-hidden">
-                    <h3 class="text-xs font-bold text-cardTitle font-space uppercase tracking-wider mb-2 flex items-center space-x-2">
-                        <i data-lucide="terminal" class="w-4 h-4 text-brand-400"></i>
-                        <span>System Sync Logs</span>
-                    </h3>
-                    <div id="diagnostic-console" class="glass-console rounded-xl p-3.5 text-[9px] text-emerald-450 h-32 overflow-y-auto scrollbar-thin space-y-1.5">
-                        ${logHtml}
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-glassBorder text-xxs font-sans text-textMuted">
-                        <div>
-                            <span class="block text-textMuted text-[8px] uppercase tracking-widest font-space mb-0.5">Scans Performed</span>
-                            <span class="text-cardTitle font-bold font-space text-sm">${state.diagnostics.scansRun}</span>
-                        </div>
-                        <div>
-                            <span class="block text-textMuted text-[8px] uppercase tracking-widest font-space mb-0.5">Linked APIs</span>
-                            <span class="text-cardTitle font-bold font-space text-sm">${state.diagnostics.apiConnected} / 8</span>
-                        </div>
-                    </div>
-
-                    <button id="btn-export-backup" class="w-full mt-4 bg-cardSubBg border border-glassBorder hover:border-brand-500/30 text-cardTitle font-bold text-[10px] py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-space">
-                        <i data-lucide="download" class="w-3.5 h-3.5 text-cosmicBlue-400"></i>
-                        <span>Download Settings Backup (JSON)</span>
-                    </button>
                 </div>
             </div>
 
             <!-- RIGHT COLUMN: Account settings forms & Card visualizer -->
             <div class="lg:col-span-8 space-y-6">
                 
-                <!-- Linked Accounts Scanner Directories -->
-                <div class="liquid-glass-card p-6">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="p-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl">
-                            <i data-lucide="scan" class="w-5 h-5"></i>
+                <!-- Connected Sources -->
+                <div class="bg-glassBg border border-glassBorder rounded-3xl p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="p-3 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-2xl flex-shrink-0">
+                            <i data-lucide="link" class="w-6 h-6"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-cardTitle font-space">Linked Scanning Directories</h3>
-                            <p class="text-[10px] text-textMuted font-sans">Active phone/email accounts AIOManager syncs to scrape billing notifications.</p>
+                            <h3 class="text-lg font-bold text-cardTitle font-sans tracking-tight">Connected Sources</h3>
+                            <p class="text-xs text-textMuted font-sans">Active phone numbers and email accounts used to aggregate billing notifications.</p>
                         </div>
                     </div>
 

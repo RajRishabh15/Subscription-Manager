@@ -37,10 +37,10 @@ class PillNav {
       '--pill-bg': this.pillColor,
       '--hover-text': this.hoveredPillTextColor,
       '--pill-text': this.pillTextColor,
-      '--nav-h': '42px',
-      '--logo': '36px',
-      '--pill-pad-x': '18px',
-      '--pill-gap': '3px'
+      '--nav-h': '52px',
+      '--logo': '44px',
+      '--pill-pad-x': '24px',
+      '--pill-gap': '4px'
     };
 
     // Apply styles to container
@@ -58,7 +58,7 @@ class PillNav {
 
     // Logo Button (Left) - Switches to Account tab
     const logoLink = document.createElement('button');
-    logoLink.className = 'rounded-full p-2 inline-flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 border-0';
+    logoLink.className = 'rounded-full p-1 inline-flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 border-0';
     logoLink.style.width = 'var(--nav-h)';
     logoLink.style.height = 'var(--nav-h)';
     logoLink.style.background = 'var(--base, #000)';
@@ -66,7 +66,7 @@ class PillNav {
 
     const logoImg = document.createElement('div');
     logoImg.id = 'pillnav-logo-avatar';
-    logoImg.className = 'w-full h-full rounded-full flex items-center justify-center text-xs font-black font-space select-none';
+    logoImg.className = 'w-full h-full rounded-full flex items-center justify-center text-sm font-black font-space select-none';
     logoImg.style.color = '#fff';
     logoImg.style.background = 'linear-gradient(135deg, var(--brand-600), var(--cosmicBlue-600))';
     logoImg.innerText = 'U'; // Loaded dynamically from user state
@@ -109,7 +109,7 @@ class PillNav {
       li.setAttribute('role', 'none');
 
       const a = document.createElement('button');
-      a.className = 'relative overflow-hidden inline-flex items-center justify-center h-full no-underline rounded-full box-border font-bold text-xs uppercase tracking-wider whitespace-nowrap cursor-pointer px-4 border-0 focus:outline-none transition-all';
+      a.className = 'relative overflow-hidden inline-flex items-center justify-center h-full no-underline rounded-full box-border font-bold text-sm uppercase tracking-wider whitespace-nowrap cursor-pointer px-6 border-0 focus:outline-none transition-all';
       a.style.background = 'var(--pill-bg, #fff)';
       a.style.color = 'var(--pill-text, var(--base, #000))';
       a.style.paddingLeft = 'var(--pill-pad-x)';
