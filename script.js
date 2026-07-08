@@ -300,6 +300,9 @@ function initAppView() {
         const loginBg = document.getElementById('login-glitch-bg');
         if (loginBg) loginBg.classList.add('hidden');
         
+        const snowBg = document.getElementById('dashboard-snow-bg');
+        if (snowBg) snowBg.classList.remove('hidden');
+        
         // Update user avatar elements
         syncAvatarUI();
         
@@ -310,6 +313,9 @@ function initAppView() {
         
         const loginBg = document.getElementById('login-glitch-bg');
         if (loginBg) loginBg.classList.remove('hidden');
+        
+        const snowBg = document.getElementById('dashboard-snow-bg');
+        if (snowBg) snowBg.classList.add('hidden');
         
         // Reset panels in scan view
         const formPanel = document.getElementById('scan-form-panel');
@@ -328,6 +334,7 @@ function initAppView() {
 // ==========================================
 let loginGlitchInstance = null;
 let progressGlitchInstance = null;
+let dashboardSnowInstance = null;
 
 function initGlitches() {
     const loginBg = document.getElementById('login-glitch-bg');
@@ -351,6 +358,25 @@ function initGlitches() {
             outerVignette: false,
             smooth: true,
             glitchColors: ["#2b4539", "#61dca3", "#61b3dc"]
+        });
+    }
+    
+    const snowBg = document.getElementById('dashboard-snow-bg');
+    if (snowBg && typeof PixelSnow !== 'undefined') {
+        dashboardSnowInstance = new PixelSnow({
+            container: snowBg,
+            color: '#ffffff',
+            flakeSize: 0.01,
+            minFlakeSize: 1.25,
+            pixelResolution: 200,
+            speed: 1.25,
+            density: 0.3,
+            direction: 125,
+            brightness: 1,
+            depthFade: 8,
+            farPlane: 20,
+            gamma: 0.4545,
+            variant: 'square'
         });
     }
 }
