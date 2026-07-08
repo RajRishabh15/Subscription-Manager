@@ -15,8 +15,6 @@ class LetterGlitch {
 
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'block w-full h-full';
-    this.container.style.position = 'relative';
-    this.container.style.overflow = 'hidden';
     this.container.appendChild(this.canvas);
 
     if (this.outerVignette) {
