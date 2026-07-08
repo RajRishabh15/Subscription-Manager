@@ -53,7 +53,7 @@ class PillNav {
     outerDiv.className = `absolute top-[1.2em] z-[1000] w-full left-0 md:w-auto md:left-auto flex justify-center md:block ${this.className}`;
     
     const nav = document.createElement('nav');
-    nav.className = 'w-[90%] md:w-max flex items-center justify-between md:justify-start box-border px-4 md:px-0 rounded-full border border-glassBorder/10 backdrop-blur-md bg-black/10';
+    nav.className = 'w-[90%] md:w-max flex items-center justify-between md:justify-start box-border p-[4px] rounded-full border border-glassBorder/10 backdrop-blur-md bg-black/10';
     nav.setAttribute('aria-label', 'Primary');
 
     // Logo Button (Left) - Switches to Account tab
