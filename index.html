@@ -80,6 +80,9 @@
     <!-- STARFIELD CANVAS -->
     <canvas id="starfield-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
+    <!-- CYBER-GRID OVERLAY -->
+    <div class="fixed inset-0 cyber-grid pointer-events-none z-0"></div>
+
     <!-- Background Cosmic Nebulae Glows -->
     <div
         class="fixed top-[-10%] left-[-15%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-brand-500/10 to-cosmicBlue-500/10 blur-[180px] pointer-events-none z-0">
@@ -191,25 +194,13 @@
 
 
 
-                        <!-- Login Tabs -->
-                        <div id="login-tabs-bar" class="flex p-1 bg-cardSubBg border border-glassBorder rounded-2xl mb-6 relative z-10">
-                            <button id="login-tab-email" class="login-tab-btn active flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all border border-transparent shadow-sm">
-                                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
-                                <span>Gmail</span>
-                            </button>
-                            <button id="login-tab-phone" class="login-tab-btn flex-1 py-2.5 rounded-xl text-xs font-semibold font-space tracking-wide flex items-center justify-center space-x-2 transition-all border border-transparent">
-                                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-                                <span>Phone Number</span>
-                            </button>
-                        </div>
-
                         <!-- SCAN FORM -->
                         <div id="scan-form-panel" class="space-y-6">
                             <div class="space-y-4">
                                 <!-- Gmail input group -->
                                 <div id="email-input-group" class="transition-all duration-300">
-                                    <p class="text-xs text-textMuted mb-4 text-center leading-relaxed font-sans">
-                                        Log in instantly via Gmail to search your inbox receipts and automatically configure your active subscriptions.
+                                    <p class="text-xs text-textMuted mb-6 text-center leading-relaxed font-sans">
+                                        Sign in securely using your Google account to automatically import and manage your digital subscriptions.
                                     </p>
                                     <button id="btn-gmail-login"
                                         class="w-full bg-cardSubBg border border-glassBorder hover:border-brand-500/50 hover:bg-cardSubBg/80 text-cardTitle font-bold py-4 rounded-2xl transition-all shadow-[0_4px_20px_rgba(0,0,0,0.4)] flex items-center justify-center space-x-3 group">
@@ -221,30 +212,11 @@
                                                 <path d="M12,5.38c1.32,0 2.51,0.45 3.44,1.35l2.58,-2.58C16.46,2.78 14.43,2 12,2C8.51,2 5.43,4.05 3.94,7.02l5.02,2.52c0.71,-2.12 2.7,-3.7 5.04,-3.7Z" fill="#EA4335" />
                                             </g>
                                         </svg>
-                                        <span class="font-space tracking-wide">Continue with Gmail</span>
+                                        <span class="font-space tracking-wide">Continue with Google</span>
                                     </button>
-                                </div>
-
-                                <!-- Phone input group (hidden by default) -->
-                                <div id="phone-input-group" class="hidden transition-all duration-300">
-                                    <label for="scan-phone"
-                                        class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Phone
-                                        Number</label>
-                                    <div class="relative">
-                                        <span
-                                            class="absolute inset-y-0 left-0 pl-4 flex items-center text-textMuted font-medium font-space">+91</span>
-                                        <input type="tel" id="scan-phone" placeholder="98765 43210"
-                                            class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 pl-14 pr-4 text-cardTitle placeholder-slate-650 focus:outline-none focus:ring-1 focus:ring-brand-500/20 transition-all font-medium">
-                                    </div>
                                 </div>
                             </div>
 
-                            <button id="btn-start-scan"
-                                class="w-full bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-cardTitle font-bold py-4 rounded-2xl transition-all shadow-[0_4px_25px_rgba(236,72,153,0.2)] hover:shadow-[0_4px_30px_rgba(236,72,153,0.4)] flex items-center justify-center space-x-2 group hidden">
-                                <span class="font-space tracking-wide">Send Verification Code</span>
-                                <i data-lucide="arrow-right"
-                                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
-                            </button>
                             <div
                                 class="flex items-center justify-center space-x-2 text-[10px] text-textMuted border-t border-glassBorder pt-4">
                                 <i data-lucide="lock" class="w-4 h-4"></i>
@@ -255,53 +227,6 @@
                             <div class="text-center text-xs text-textMuted mt-4 border-t border-glassBorder pt-4">
                                 <span id="auth-toggle-label">Don't have an account?</span>
                                 <button id="btn-toggle-auth-mode" class="text-brand-400 hover:text-brand-300 font-semibold transition-all ml-1">Sign Up</button>
-                            </div>
-                        </div>
-
-                        <!-- OTP VERIFICATION FORM (hidden by default) -->
-                        <div id="otp-form-panel" class="hidden space-y-6">
-                            <!-- Back Button -->
-                            <button id="btn-otp-back" class="flex items-center space-x-2 text-xs text-textMuted hover:text-cardTitle transition-all font-space group">
-                                <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
-                                <span>Change login details</span>
-                            </button>
-
-                            <div class="space-y-2">
-                                <h3 class="text-lg font-semibold text-cardTitle font-space">Enter Verification Code</h3>
-                                <p class="text-xs text-textMuted leading-relaxed">
-                                    We sent a secure verification code to <span id="otp-recipient-display" class="text-brand-400 font-semibold"></span>.
-                                </p>
-                                <p id="otp-mock-notice" class="hidden text-[10px] text-textMuted leading-relaxed mt-1 bg-white/5 border border-glassBorder p-2 rounded-xl font-space">
-                                    Running in simulated offline mode. Check browser console logs (F12) to retrieve your code.
-                                </p>
-                            </div>
-
-                            <!-- Digits Row -->
-                            <div class="flex justify-between gap-2.5 my-4" id="otp-input-row">
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="0" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="1" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="2" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="3" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="4" inputmode="numeric" pattern="[0-9]*" />
-                                <input type="text" maxlength="1" class="otp-box w-12 h-14 text-center text-xl font-bold bg-inputBg border border-glassBorder rounded-2xl focus:border-brand-500 text-cardTitle focus:outline-none transition-all font-space" data-index="5" inputmode="numeric" pattern="[0-9]*" />
-                            </div>
-
-                            <!-- Error Message Display -->
-                            <div id="otp-error-message" class="hidden text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-3.5 py-2.5 rounded-xl flex items-start space-x-2">
-                                <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i>
-                                <span id="otp-error-text">Incorrect verification code. Please check and try again.</span>
-                            </div>
-
-                            <button id="btn-verify-otp"
-                                class="w-full bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-cardTitle font-bold py-4 rounded-2xl transition-all shadow-[0_4px_25px_rgba(236,72,153,0.2)] hover:shadow-[0_4px_30px_rgba(236,72,153,0.4)] flex items-center justify-center space-x-2 group">
-                                <span class="font-space tracking-wide">Verify & Discover</span>
-                                <i data-lucide="shield-check"
-                                    class="w-5 h-5 group-hover:scale-105 transition-transform"></i>
-                            </button>
-
-                            <div class="flex items-center justify-between text-xs pt-2">
-                                <span class="text-textMuted" id="otp-timer-text">Resend code in <span id="otp-countdown" class="text-textMuted font-bold font-space">30</span>s</span>
-                                <button id="btn-resend-otp" class="text-brand-400 hover:text-brand-300 font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed hidden" disabled>Resend Code</button>
                             </div>
                         </div>
 
@@ -325,13 +250,6 @@
                                 <div>
                                     <label for="register-name" class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Full Name</label>
                                     <input type="text" id="register-name" placeholder="John Doe"
-                                        class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 px-4 text-cardTitle placeholder-slate-650 focus:outline-none transition-all">
-                                </div>
-
-                                <!-- Secondary contact -->
-                                <div id="register-secondary-group">
-                                    <label id="register-secondary-label" for="register-secondary" class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Email Address</label>
-                                    <input type="text" id="register-secondary" placeholder="name@domain.com"
                                         class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 px-4 text-cardTitle placeholder-slate-650 focus:outline-none transition-all">
                                 </div>
 
@@ -465,7 +383,7 @@
                         <div class="discovery-slide-graphic hidden opacity-0 transition-all duration-700 w-full max-w-sm"
                             data-slide="2">
                             <div
-                                class="glass-credit-card relative p-6 flex flex-col justify-between overflow-hidden aspect-[1.58/1]">
+                                class="glass-credit-card interactive-tilt relative p-6 flex flex-col justify-between overflow-hidden aspect-[1.58/1]">
                                 <div class="glass-card-bg-gradient"></div>
                                 <div class="glass-card-bg-gradient-secondary"></div>
                                 <div class="flex justify-between items-start z-10">
