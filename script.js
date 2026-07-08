@@ -823,104 +823,109 @@ function renderManageTab() {
     const categoriesList = ['All', 'Entertainment', 'Telecom & Fiber', 'Music', 'Utilities', 'Shopping', 'Other'];
 
     let html = `
-        <!-- Filter Header Section -->
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-glassBg border border-glassBorder backdrop-blur-xl p-5 rounded-[24px] shadow-lg">
-            <!-- Search bar -->
-            <div class="relative w-full md:max-w-xs">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-textMuted">
-                    <i data-lucide="search" class="w-4 h-4"></i>
-                </span>
-                <input type="text" id="manage-search" placeholder="Search subscriptions..." value="${manageSearchQuery}"
-                    class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2.5 pl-10 pr-4 text-xs text-cardTitle focus:outline-none focus:ring-1 focus:ring-brand-500/20 placeholder-slate-600">
+        <!-- Header -->
+        <div class="mb-8 flex justify-between items-start">
+            <div>
+                <h1 class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 font-space tracking-wide mb-2">Manage</h1>
+                <p class="text-sm text-textMuted font-sans">${state.subscriptions.length} subscriptions found</p>
             </div>
-
-            <!-- Category Pills Filter -->
-            <div class="flex items-center space-x-1.5 overflow-x-auto w-full md:w-auto scrollbar-none py-1">
-                ${categoriesList.map(cat => {
-                    const isSelected = cat === manageCategoryFilter;
-                    return `
-                        <button onclick="setManageCategory('${cat}')" class="px-4 py-2 rounded-full text-[10px] font-bold whitespace-nowrap transition-all border font-space ${
-                            isSelected 
-                            ? 'bg-brand-500 border-brand-500 text-cardTitle shadow-md shadow-brand-500/10' 
-                            : 'bg-cardSubBg border-glassBorder text-textMuted hover:text-cardTitle hover:bg-inputBg'
-                        }">
-                            ${cat}
-                        </button>
-                    `;
-                }).join('')}
-            </div>
-
-            <!-- Add Sub Trigger -->
-            <button onclick="openAddSubModal()" class="w-full md:w-auto bg-gradient-to-r from-brand-500 to-cosmicBlue-500 text-cardTitle font-bold text-xs px-5 py-2.5 rounded-full transition-all shadow-[0_4px_15px_rgba(236,72,153,0.2)] flex items-center justify-center space-x-2 font-space">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                <span>Add Subscription</span>
+            <button class="bg-[#13111a] border border-glassBorder text-textMuted px-4 py-2 rounded-xl text-xs flex items-center space-x-2 font-sans hover:bg-[#1a1723]">
+                <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+                <span>Name</span>
+                <i data-lucide="chevron-down" class="w-3 h-3 ml-1"></i>
             </button>
         </div>
 
+        <!-- Search bar -->
+        <div class="relative w-full mb-6">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-textMuted">
+                <i data-lucide="search" class="w-4 h-4"></i>
+            </span>
+            <input type="text" id="manage-search" placeholder="Search subscriptions..." value="${manageSearchQuery}"
+                class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-cardTitle focus:outline-none placeholder-slate-500 font-sans shadow-inner">
+        </div>
+
+        <!-- Category Pills Filter -->
+        <div class="flex items-center space-x-2 overflow-x-auto w-full scrollbar-none mb-4 pb-1">
+            ${categoriesList.map(cat => {
+                const isSelected = cat === manageCategoryFilter;
+                return `
+                    <button onclick="setManageCategory('${cat}')" class="px-5 py-2 rounded-full text-[11px] font-medium whitespace-nowrap transition-all border font-sans ${
+                        isSelected 
+                        ? 'bg-brand-500/20 border-brand-500 text-cardTitle' 
+                        : 'bg-[#13111a] border-glassBorder text-textMuted hover:text-cardTitle hover:bg-[#1a1723]'
+                    }">
+                        ${cat}
+                    </button>
+                `;
+            }).join('')}
+        </div>
+
+        <!-- Status Filter -->
+        <div class="flex items-center space-x-4 mb-8 text-[11px] font-medium font-sans">
+            <button class="px-4 py-1.5 rounded-full bg-teal-500/20 text-teal-400">All</button>
+            <button class="text-textMuted hover:text-cardTitle transition-colors px-2">Active</button>
+            <button class="text-textMuted hover:text-cardTitle transition-colors px-2">Trial</button>
+            <button class="text-textMuted hover:text-cardTitle transition-colors px-2">Cancelled</button>
+        </div>
+
         <!-- Subscriptions Grid List -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            ${filteredSubs.length > 0 ? filteredSubs.map(sub => {
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            ${filteredSubs.length > 0 ? filteredSubs.map((sub, index) => {
                 const template = MOCK_PROVIDER_DATA[sub.providerKey] || {
                     lucideIcon: 'credit-card',
-                    color: 'border-glassBorder bg-glassBg text-cardTitle',
-                    iconBg: 'bg-inputBg text-textMuted border-glassBorder',
-                    manualSteps: ['Open the dashboard/portal of provider.', 'Navigate to Account billing settings.', 'Submit cancellation membership request.']
                 };
-
-                const catBadge = CATEGORY_COLORS[sub.category] || CATEGORY_COLORS['Other'];
+                
+                // Mock statuses for visual variety based on index
+                const isActive = index % 3 !== 2; 
+                const statusColor = isActive ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-red-400 bg-red-500/10 border-red-500/20';
+                const statusText = isActive ? 'ACTIVE' : 'CANCELLED';
+                const gradLine = isActive ? 'from-purple-500 via-indigo-500 to-emerald-500' : 'from-orange-500 to-red-500';
 
                 return `
-                    <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between relative group hover:bg-glassBorder/50 transition-colors">
+                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[20px] p-6 relative group hover:border-glassBorder/80 transition-colors flex flex-col justify-between overflow-hidden min-h-[220px]">
                         
-                        <!-- Card Header -->
+                        <!-- Top Row: Icon & Status -->
                         <div class="flex justify-between items-start mb-6">
-                            <div class="flex items-center space-x-3.5">
-                                <div class="p-3 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-2xl flex-shrink-0">
-                                    <i data-lucide="${template.lucideIcon}" class="w-6 h-6"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-cardTitle text-lg leading-tight font-sans tracking-tight">${sub.name}</h4>
-                                    <p class="text-xs text-textMuted font-sans mt-0.5">${sub.category}</p>
-                                </div>
+                            <div class="w-10 h-10 rounded-[14px] bg-[#1a1723] flex items-center justify-center flex-shrink-0 shadow-inner">
+                                <i data-lucide="${template.lucideIcon}" class="w-5 h-5 text-brand-400"></i>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-[9px] font-bold tracking-widest uppercase border ${statusColor} font-sans">
+                                ${statusText}
+                            </span>
+                        </div>
+
+                        <!-- Middle Row: Name & Category -->
+                        <div class="mb-8">
+                            <h4 class="font-bold text-cardTitle text-lg font-sans tracking-tight mb-1">${sub.name}</h4>
+                            <p class="text-[11px] text-slate-500 font-sans">${sub.category}</p>
+                        </div>
+
+                        <!-- Bottom Row: Price & Date -->
+                        <div class="flex items-end justify-between mt-auto mb-4">
+                            <div>
+                                <div class="text-2xl font-bold text-cardTitle font-sans tracking-tight leading-none mb-1">₹${sub.cost}</div>
+                                <div class="text-[10px] text-slate-500 font-sans">/ ${sub.cycle}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-[10px] text-slate-500 font-sans mb-1">${sub.payment.toLowerCase().includes('card') ? 'via card' : 'via email'}</div>
+                                <div class="text-xs text-slate-300 font-medium font-sans">${new Date(sub.nextRenewal).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
                             </div>
                         </div>
 
-                        <!-- Card Detail Table -->
-                        <div class="space-y-3 text-xs pb-5 mb-5 font-sans">
-                            <div class="flex justify-between">
-                                <span class="text-textMuted">Billing Cycle</span>
-                                <span class="text-cardTitle capitalize font-medium">${sub.cycle}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-textMuted">Next Renewal</span>
-                                <span class="text-cardTitle font-medium">${new Date(sub.nextRenewal).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-textMuted">Payment Channel</span>
-                                <span class="text-cardTitle truncate max-w-[140px] font-medium">${sub.payment}</span>
-                            </div>
-                        </div>
-
-                        <!-- Card Footer actions -->
-                        <div class="flex items-center justify-between gap-3 pt-2">
-                            <div class="text-2xl font-bold text-cardTitle font-sans tracking-tight">₹${sub.cost}<span class="text-[11px] text-textMuted font-normal ml-1">/${sub.cycle === 'monthly' ? 'mo' : 'yr'}</span></div>
-                            <button onclick="openCancellationWizard('${sub.id}')" class="text-red-400 hover:text-red-300 font-medium text-xs px-3 py-2 rounded-xl transition-all flex items-center space-x-1.5 font-sans bg-red-500/10">
-                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                <span>Cancel</span>
-                            </button>
+                        <!-- Bottom Gradient Progress Line -->
+                        <div class="absolute bottom-6 left-6 right-6 h-[3px] bg-[#1a1723] rounded-full overflow-hidden">
+                            <div class="h-full w-2/3 bg-gradient-to-r ${gradLine} rounded-full"></div>
                         </div>
                     </div>
                 `;
             }).join('') : `
-                <div class="col-span-full bg-glassBg border border-dashed border-glassBorder rounded-3xl p-12 text-center">
-                    <div class="p-4 bg-cardSubBg border border-glassBorder text-textMuted rounded-full w-14 h-14 mx-auto mb-4 flex items-center justify-center">
+                <div class="col-span-full bg-[#13111a] border border-dashed border-glassBorder rounded-3xl p-12 text-center">
+                    <div class="p-4 bg-[#1a1723] border border-glassBorder text-textMuted rounded-full w-14 h-14 mx-auto mb-4 flex items-center justify-center">
                         <i data-lucide="credit-card" class="w-6 h-6"></i>
                     </div>
                     <h4 class="text-cardTitle font-bold text-base font-space">No Active Subscriptions</h4>
                     <p class="text-textMuted text-xs mt-1 mb-6 font-sans">No integrations match your search parameters.</p>
-                    <button onclick="openAddSubModal()" class="bg-brand-650 hover:bg-brand-500 text-slate-950 font-bold text-xs px-5 py-3 rounded-full transition-all shadow-[0_4px_15px_rgba(245,158,11,0.2)] font-space">
-                        Add New Subscription
-                    </button>
                 </div>
             `}
         </div>
