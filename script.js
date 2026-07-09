@@ -157,6 +157,7 @@ let state = {
         phone: '',
         email: '',
         avatar: 'nebula', // default premium avatar (nebula, pulsar, supernova, stardust)
+        avatarIcon: null, // custom icon override (lucide icon name), null = use initials
         linkedCredentials: []
     },
     subscriptions: [],
@@ -419,10 +420,15 @@ function renderPillNav() {
     // Style the left profile avatar button inside PillNav
     const avatarEl = document.getElementById('pillnav-logo-avatar');
     if (avatarEl) {
-        avatarEl.innerText = firstChar;
         const activeAvatarVibe = AVATAR_VIBES[avatarName] || AVATAR_VIBES.nebula;
         avatarEl.style.background = '';
         avatarEl.className = `w-full h-full rounded-full flex items-center justify-center text-xs font-black font-space select-none bg-gradient-to-tr ${activeAvatarVibe.gradient}`;
+        if (state.currentUser.avatarIcon) {
+            avatarEl.innerHTML = `<i data-lucide="${state.currentUser.avatarIcon}" class="w-4 h-4"></i>`;
+            lucide.createIcons({ nodes: [avatarEl] });
+        } else {
+            avatarEl.innerText = firstChar;
+        }
     }
 }
 
@@ -1110,7 +1116,89 @@ const THEMES = {
         '--cosmic-rgb': '217, 70, 239',
         brandHex: '#8b5cf6',
         cosmicHex: '#ec4899'
+    },
+    crimson: {
+        '--brand-500-rgb': '225 29 72',
+        '--brand-600-rgb': '190 18 60',
+        '--brand-700-rgb': '159 18 57',
+        '--brand-900-rgb': '136 19 55',
+        '--cosmic-400-rgb': '251 146 60',
+        '--cosmic-500-rgb': '249 115 22',
+        '--cosmic-600-rgb': '234 88 12',
+        '--cosmic-900-rgb': '154 52 18',
+        '--brand-rgb': '225, 29, 72',
+        '--cosmic-rgb': '251, 146, 60',
+        brandHex: '#e11d48',
+        cosmicHex: '#fb923c'
+    },
+    luxury: {
+        '--brand-500-rgb': '234 179 8',
+        '--brand-600-rgb': '202 138 4',
+        '--brand-700-rgb': '161 98 7',
+        '--brand-900-rgb': '113 63 18',
+        '--cosmic-400-rgb': '125 211 252',
+        '--cosmic-500-rgb': '56 189 248',
+        '--cosmic-600-rgb': '2 132 199',
+        '--cosmic-900-rgb': '12 74 110',
+        '--brand-rgb': '234, 179, 8',
+        '--cosmic-rgb': '125, 211, 252',
+        brandHex: '#eab308',
+        cosmicHex: '#7dd3fc'
     }
+};
+
+// Categorized icon options for avatar icon picker
+const AVATAR_ICONS = {
+    People: [
+        { id: 'user', label: 'Person', icon: 'user' },
+        { id: 'user-round', label: 'User', icon: 'user-round' },
+        { id: 'baby', label: 'Baby', icon: 'baby' },
+        { id: 'glasses', label: 'Glasses', icon: 'glasses' },
+        { id: 'smile', label: 'Happy', icon: 'smile' },
+        { id: 'laugh', label: 'Laugh', icon: 'laugh' },
+        { id: 'meh', label: 'Chill', icon: 'meh' },
+        { id: 'crown', label: 'Crown', icon: 'crown' },
+    ],
+    Nature: [
+        { id: 'tree-pine', label: 'Pine', icon: 'tree-pine' },
+        { id: 'flower', label: 'Flower', icon: 'flower' },
+        { id: 'flower-2', label: 'Bloom', icon: 'flower-2' },
+        { id: 'leaf', label: 'Leaf', icon: 'leaf' },
+        { id: 'sun', label: 'Sun', icon: 'sun' },
+        { id: 'moon', label: 'Moon', icon: 'moon' },
+        { id: 'cloud', label: 'Cloud', icon: 'cloud' },
+        { id: 'mountain', label: 'Mountain', icon: 'mountain' },
+    ],
+    Vehicles: [
+        { id: 'car', label: 'Car', icon: 'car' },
+        { id: 'rocket', label: 'Rocket', icon: 'rocket' },
+        { id: 'plane', label: 'Plane', icon: 'plane' },
+        { id: 'bike', label: 'Bike', icon: 'bike' },
+        { id: 'ship', label: 'Ship', icon: 'ship' },
+        { id: 'train', label: 'Train', icon: 'train' },
+        { id: 'bus', label: 'Bus', icon: 'bus' },
+        { id: 'sailboat', label: 'Sail', icon: 'sailboat' },
+    ],
+    Space: [
+        { id: 'sparkles', label: 'Sparkles', icon: 'sparkles' },
+        { id: 'star', label: 'Star', icon: 'star' },
+        { id: 'orbit', label: 'Orbit', icon: 'orbit' },
+        { id: 'zap', label: 'Zap', icon: 'zap' },
+        { id: 'flame', label: 'Flame', icon: 'flame' },
+        { id: 'aperture', label: 'Lens', icon: 'aperture' },
+        { id: 'atom', label: 'Atom', icon: 'atom' },
+        { id: 'telescope', label: 'Scope', icon: 'telescope' },
+    ],
+    Objects: [
+        { id: 'music', label: 'Music', icon: 'music' },
+        { id: 'gamepad-2', label: 'Gaming', icon: 'gamepad-2' },
+        { id: 'camera', label: 'Camera', icon: 'camera' },
+        { id: 'headphones', label: 'Audio', icon: 'headphones' },
+        { id: 'coffee', label: 'Coffee', icon: 'coffee' },
+        { id: 'pizza', label: 'Pizza', icon: 'pizza' },
+        { id: 'gem', label: 'Gem', icon: 'gem' },
+        { id: 'shield', label: 'Shield', icon: 'shield' },
+    ]
 };
 
 const AVATAR_VIBES = {
@@ -1145,6 +1233,38 @@ const AVATAR_VIBES = {
         shadow: 'shadow-[0_0_20px_rgba(16,185,129,0.3)]',
         colorClass: 'text-emerald-400 border-emerald-500/20 bg-emerald-950/20',
         icon: 'sparkles'
+    },
+    crimson: {
+        name: 'Crimson',
+        gradient: 'from-rose-500 to-red-700 hover:from-rose-400 hover:to-red-600 border-rose-400/30',
+        glow: 'rgba(225, 29, 72, 0.25)',
+        shadow: 'shadow-[0_0_20px_rgba(225,29,72,0.3)]',
+        colorClass: 'text-rose-400 border-rose-500/20 bg-rose-950/20',
+        icon: 'flame'
+    },
+    sapphire: {
+        name: 'Sapphire',
+        gradient: 'from-blue-400 to-indigo-600 hover:from-blue-300 hover:to-indigo-500 border-blue-400/30',
+        glow: 'rgba(59, 130, 246, 0.25)',
+        shadow: 'shadow-[0_0_20px_rgba(59,130,246,0.3)]',
+        colorClass: 'text-blue-400 border-blue-500/20 bg-blue-950/20',
+        icon: 'gem'
+    },
+    nova: {
+        name: 'Nova',
+        gradient: 'from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 border-cyan-400/30',
+        glow: 'rgba(34, 211, 238, 0.25)',
+        shadow: 'shadow-[0_0_20px_rgba(34,211,238,0.3)]',
+        colorClass: 'text-cyan-400 border-cyan-500/20 bg-cyan-950/20',
+        icon: 'hexagon'
+    },
+    quasar: {
+        name: 'Quasar',
+        gradient: 'from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 border-orange-400/30',
+        glow: 'rgba(249, 115, 22, 0.25)',
+        shadow: 'shadow-[0_0_20px_rgba(249,115,22,0.3)]',
+        colorClass: 'text-orange-400 border-orange-500/20 bg-orange-950/20',
+        icon: 'target'
     }
 };
 
@@ -1237,8 +1357,11 @@ function renderAccountTab() {
                     
                     <div class="text-center pb-6 border-b border-glassBorder relative z-10">
                         <div class="relative w-20 h-20 mx-auto mb-4">
-                            <div class="w-20 h-20 rounded-full bg-gradient-to-tr ${activeAvatarVibe.gradient} flex items-center justify-center text-cardTitle text-3xl font-black font-space shadow-2xl border-2 ${activeAvatarVibe.gradient.split(' ').pop()}">
-                                <span id="account-large-avatar-char">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>
+                            <div id="account-avatar-ring" class="w-20 h-20 rounded-full bg-gradient-to-tr ${activeAvatarVibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl border-2 ${activeAvatarVibe.gradient.split(' ').pop()}">
+                                ${state.currentUser.avatarIcon 
+                                    ? `<i id="account-large-avatar-icon" data-lucide="${state.currentUser.avatarIcon}" class="w-9 h-9"></i>`
+                                    : `<span id="account-large-avatar-char" class="text-3xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`
+                                }
                             </div>
                             <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-cardSubBg border border-glassBorder flex items-center justify-center text-brand-400">
                                 <i data-lucide="${activeAvatarVibe.icon}" class="w-3.5 h-3.5 animate-pulse"></i>
@@ -1265,30 +1388,12 @@ function renderAccountTab() {
                         </div>
                     </div>
 
-                    <!-- Avatar Vibe selector -->
-                    <div class="py-6 border-b border-glassBorder relative z-10">
-                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-4 font-space text-center">Select Profile Vibe</label>
-                        <div class="grid grid-cols-2 gap-4">
-                            ${Object.keys(AVATAR_VIBES).map(key => {
-                                const active = curAvatar === key;
-                                const v = AVATAR_VIBES[key];
-                                return `
-                                    <button class="avatar-opt-btn group relative flex flex-col items-center p-4 rounded-2xl border ${active ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_20px_rgba(236,72,153,0.15)]' : 'border-glassBorder bg-glassBg hover:border-brand-500/40 hover:bg-white/5'} transition-all duration-300 focus:outline-none overflow-hidden" data-avatar="${key}">
-                                        <!-- Animated background glow on hover/active -->
-                                        <div class="absolute inset-0 opacity-0 ${active ? 'opacity-20' : 'group-hover:opacity-10'} bg-gradient-to-br ${v.gradient} transition-opacity duration-300"></div>
-                                        
-                                        <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr ${v.gradient} flex items-center justify-center text-cardTitle mb-3 shadow-lg ${active ? 'scale-110 ring-2 ring-brand-500 ring-offset-2 ring-offset-[#0f0e13]' : 'group-hover:scale-105 group-hover:-translate-y-1'} transition-all duration-300">
-                                            <i data-lucide="${v.icon}" class="w-5 h-5 ${active ? 'animate-pulse' : ''}"></i>
-                                        </div>
-                                        <span class="relative text-xs ${active ? 'text-brand-400 font-bold' : 'text-slate-400 font-medium'} tracking-wide font-sans">${v.name}</span>
-                                        ${active ? '<div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(236,72,153,0.8)]"></div>' : ''}
-                                    </button>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-
                     <div class="pt-6 relative z-10 space-y-3">
+                        <!-- Customise Profile Button -->
+                        <button id="btn-open-avatar-modal" class="w-full bg-gradient-to-r from-brand-500/20 to-purple-500/20 border border-brand-500/40 hover:border-brand-500/70 hover:from-brand-500/30 hover:to-purple-500/30 text-brand-400 font-semibold text-xs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space group">
+                            <i data-lucide="palette" class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
+                            <span>Customise Profile</span>
+                        </button>
                         <button onclick="triggerAccountReset()" class="w-full bg-inputBg border border-glassBorder hover:border-glassBorder text-cardTitle hover:text-cardTitle font-semibold text-xs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-sans">
                             <i data-lucide="log-out" class="w-4 h-4 text-textMuted"></i>
                             <span>Log Out</span>
@@ -1376,19 +1481,30 @@ function renderAccountTab() {
                         <!-- Theme custom swatch lists -->
                         <div>
                             <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest mb-4 font-space">Neural Color Schemes</label>
-                            <div class="flex flex-wrap gap-5 items-center">
+                            <div class="grid grid-cols-3 gap-3">
                                 ${Object.keys(THEMES).map(themeName => {
                                     const isSelected = state.preferences.theme === themeName;
                                     const colors = THEMES[themeName];
-                                    let displayName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
-                                    if (themeName === 'cosmic') displayName = 'Cosmic';
-                                    
+                                    const displayName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
                                     return `
-                                        <button class="theme-select-btn flex flex-col items-center gap-2 focus:outline-none group/btn" data-theme="${themeName}">
-                                            <div style="background: linear-gradient(135deg, ${colors.brandHex}, ${colors.cosmicHex});" class="w-12 h-12 rounded-full border-2 ${isSelected ? 'border-white scale-110 shadow-[0_0_25px_rgba(255,255,255,0.4)]' : 'border-glassBorder/50 opacity-60 group-hover/btn:opacity-100 group-hover/btn:scale-105 group-hover/btn:shadow-[0_0_15px_rgba(255,255,255,0.1)]'} transition-all duration-300 flex items-center justify-center relative">
-                                                ${isSelected ? '<span class="absolute w-3 h-3 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"></span>' : ''}
+                                        <button class="theme-select-btn group relative flex flex-col items-center gap-2.5 p-3 rounded-2xl border ${
+                                            isSelected 
+                                            ? 'border-white/40 bg-white/5 shadow-[0_0_20px_rgba(255,255,255,0.08)]' 
+                                            : 'border-glassBorder/40 bg-glassBg/30 hover:border-white/20 hover:bg-white/5'
+                                        } transition-all duration-300 focus:outline-none overflow-hidden" data-theme="${themeName}">
+                                            <!-- Animated gradient swatch -->
+                                            <div class="relative w-12 h-12 rounded-full flex-shrink-0" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}, ${colors.brandHex})">
+                                                <div class="absolute inset-0.5 rounded-full" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}); filter: blur(1px);"></div>
+                                                ${isSelected ? `<div class="absolute inset-0 rounded-full flex items-center justify-center"><span class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"></span></div>` : ''}
                                             </div>
-                                            <span class="text-[10px] ${isSelected ? 'text-cardTitle font-bold tracking-wide' : 'text-textMuted group-hover/btn:text-slate-300'} font-space transition-colors">${displayName}</span>
+                                            <!-- Color band preview -->
+                                            <div class="flex gap-1">
+                                                <div class="w-3 h-1.5 rounded-full" style="background:${colors.brandHex}"></div>
+                                                <div class="w-3 h-1.5 rounded-full" style="background:${colors.cosmicHex}"></div>
+                                            </div>
+                                            <span class="text-[10px] ${ isSelected ? 'text-white font-bold' : 'text-textMuted group-hover:text-slate-300' } font-space transition-colors">${displayName}</span>
+                                            <!-- Selected ring glow -->
+                                            ${isSelected ? `<div class="absolute inset-0 rounded-2xl border border-white/20 shadow-[inset_0_0_20px_rgba(255,255,255,0.04)] pointer-events-none"></div>` : ''}
                                         </button>
                                     `;
                                 }).join('')}
@@ -1476,6 +1592,270 @@ function bindAccountEventListeners() {
         saveStateToStorage();
         syncAvatarUI();
     };
+
+    // ---- AVATAR CUSTOMISE MODAL ----
+    let pendingVibe = state.currentUser.avatar || 'nebula';
+    let pendingIcon = state.currentUser.avatarIcon || null;
+
+    const curAvatar = state.currentUser.avatar || 'nebula';
+    const activeAvatarVibe = AVATAR_VIBES[curAvatar] || AVATAR_VIBES.nebula;
+
+    // Build modal HTML and inject into body
+    const buildModalHTML = () => {
+        const av = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
+        const firstChar = (state.currentUser.name || 'U')[0].toUpperCase();
+        const vibeKeys = Object.keys(AVATAR_VIBES);
+        const iconCategories = Object.keys(AVATAR_ICONS);
+
+        const vibeCards = vibeKeys.map(key => {
+            const v = AVATAR_VIBES[key];
+            const active = pendingVibe === key;
+            const borderColor = active ? 'rgba(244,114,182,0.6)' : 'rgba(255,255,255,0.06)';
+            const bg = active ? 'rgba(236,72,153,0.08)' : 'rgba(255,255,255,0.02)';
+            const shadow = active ? '0 0 28px rgba(236,72,153,0.22),inset 0 0 30px rgba(236,72,153,0.04)' : 'none';
+            const dot = active ? '<div style="position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:#f472b6;box-shadow:0 0 8px #f472b6,0 0 20px rgba(244,114,182,0.6);"></div>' : '';
+            const nameColor = active ? '#f472b6' : '#94a3b8';
+            const nameWeight = active ? '700' : '500';
+            return '<button class="modal-vibe-btn" data-vibe="' + key + '" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:0;padding:0;border-radius:18px;border:1px solid ' + borderColor + ';background:' + bg + ';cursor:pointer;overflow:hidden;transition:all 0.25s;box-shadow:' + shadow + ';">' +
+                '<div style="width:100%;height:76px;background:linear-gradient(150deg,rgba(255,255,255,0.04) 0%,rgba(0,0,0,0.3) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">' +
+                    '<div class="w-12 h-12 rounded-full bg-gradient-to-tr ' + v.gradient + ' flex items-center justify-center" style="box-shadow:0 4px 16px rgba(0,0,0,0.5);z-index:1;">' +
+                        '<i data-lucide="' + v.icon + '" class="w-5 h-5 text-white"></i>' +
+                    '</div>' +
+                    dot +
+                '</div>' +
+                '<div style="padding:9px 8px 11px;text-align:center;width:100%;border-top:1px solid rgba(255,255,255,0.04);">' +
+                    '<span style="font-size:11px;font-weight:' + nameWeight + ';color:' + nameColor + ';font-family:Space Grotesk,sans-serif;">' + v.name + '</span>' +
+                '</div>' +
+            '</button>';
+        }).join('');
+
+        const iconGrid = iconCategories.map(category => {
+            const btns = AVATAR_ICONS[category].map(opt => {
+                const isActive = pendingIcon === opt.id;
+                const borderColor = isActive ? 'rgba(244,114,182,0.6)' : 'rgba(255,255,255,0.06)';
+                const bg = isActive ? 'linear-gradient(135deg,rgba(236,72,153,0.18),rgba(139,92,246,0.12))' : 'rgba(255,255,255,0.02)';
+                const shadow = isActive ? '0 0 14px rgba(236,72,153,0.3),inset 0 1px 0 rgba(255,255,255,0.1)' : 'none';
+                const transform = isActive ? 'scale(1.06)' : 'scale(1)';
+                const iconColor = isActive ? '#f472b6' : '#475569';
+                const labelColor = isActive ? '#f472b6' : '#475569';
+                const labelWeight = isActive ? '700' : '500';
+                return '<button class="modal-icon-btn" data-icon="' + opt.id + '" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:14px;border:1px solid ' + borderColor + ';background:' + bg + ';cursor:pointer;transition:all 0.18s;box-shadow:' + shadow + ';transform:' + transform + ';">' +
+                    '<i data-lucide="' + opt.icon + '" style="width:20px;height:20px;color:' + iconColor + ';"></i>' +
+                    '<span style="font-size:8px;font-weight:' + labelWeight + ';color:' + labelColor + ';font-family:Space Grotesk,sans-serif;line-height:1;">' + opt.label + '</span>' +
+                '</button>';
+            }).join('');
+            return '<div style="margin-bottom:20px;">' +
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">' +
+                    '<div style="height:1px;width:16px;background:linear-gradient(90deg,rgba(244,114,182,0.5),transparent);"></div>' +
+                    '<p style="font-size:8px;font-weight:700;color:rgba(244,114,182,0.5);text-transform:uppercase;letter-spacing:0.15em;margin:0;">' + category + '</p>' +
+                    '<div style="height:1px;flex:1;background:linear-gradient(90deg,rgba(244,114,182,0.1),transparent);"></div>' +
+                '</div>' +
+                '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;">' + btns + '</div>' +
+            '</div>';
+        }).join('');
+
+        const previewInner = pendingIcon
+            ? '<i data-lucide="' + pendingIcon + '" class="w-11 h-11"></i>'
+            : '<span style="font-size:36px;font-weight:900;font-family:Space Grotesk,sans-serif;">' + firstChar + '</span>';
+
+        return `
+        <div id="avatar-modal" style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Space Grotesk',sans-serif;">
+            <div id="avatar-modal-backdrop" style="position:absolute;inset:0;background:rgba(2,1,10,0.94);backdrop-filter:blur(24px) saturate(160%);"></div>
+            <div style="position:relative;z-index:1;width:100%;max-width:780px;background:linear-gradient(145deg,#0e0c1a 0%,#0b0917 50%,#0d0b1c 100%);border-radius:28px;box-shadow:0 40px 100px rgba(0,0,0,0.9),0 0 0 1px rgba(255,255,255,0.07),inset 0 1px 0 rgba(255,255,255,0.07);display:flex;flex-direction:column;max-height:90vh;overflow:hidden;">
+                <div style="height:2px;background:linear-gradient(90deg,transparent 0%,rgba(236,72,153,0.7) 25%,rgba(139,92,246,0.9) 50%,rgba(59,130,246,0.7) 75%,transparent 100%);flex-shrink:0;"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 28px 18px;flex-shrink:0;">
+                    <div style="display:flex;align-items:center;gap:14px;">
+                        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(139,92,246,0.2));border:1px solid rgba(236,72,153,0.3);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(236,72,153,0.2),inset 0 1px 0 rgba(255,255,255,0.1);">
+                            <i data-lucide="sparkles" style="width:20px;height:20px;color:#f472b6;"></i>
+                        </div>
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <h3 style="font-size:18px;font-weight:800;color:#fff;margin:0;letter-spacing:-0.3px;">Customise Profile</h3>
+                                <span style="font-size:9px;font-weight:700;color:#f472b6;background:rgba(236,72,153,0.15);border:1px solid rgba(236,72,153,0.3);padding:2px 7px;border-radius:20px;letter-spacing:0.05em;text-transform:uppercase;">LIVE</span>
+                            </div>
+                            <p style="font-size:11px;color:#64748b;margin:3px 0 0;letter-spacing:0.01em;">Shape your avatar with a colour vibe and personal icon</p>
+                        </div>
+                    </div>
+                    <button id="avatar-modal-close" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#64748b;cursor:pointer;">
+                        <i data-lucide="x" style="width:16px;height:16px;"></i>
+                    </button>
+                </div>
+                <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);margin:0 28px;flex-shrink:0;"></div>
+                <div style="display:flex;flex:1;overflow:hidden;min-height:0;">
+                    <!-- Preview column -->
+                    <div style="width:210px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px 20px;border-right:1px solid rgba(255,255,255,0.05);background:rgba(4,3,14,0.6);position:relative;">
+                        <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.012) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>
+                        <div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;position:relative;">Live Preview</div>
+                        <div style="position:relative;">
+                            <div style="position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,rgba(236,72,153,0.35),rgba(139,92,246,0.35),rgba(59,130,246,0.35),rgba(236,72,153,0.35));filter:blur(6px);opacity:0.7;"></div>
+                            <div id="modal-avatar-ring" class="w-24 h-24 rounded-full bg-gradient-to-tr ${av.gradient} flex items-center justify-center text-white border-2 border-white/10" style="position:relative;box-shadow:0 0 40px rgba(236,72,153,0.2);">
+                                ${previewInner}
+                            </div>
+                        </div>
+                        <div style="text-align:center;position:relative;">
+                            <p style="font-size:14px;font-weight:800;color:#fff;margin:0;">${state.currentUser.name || 'User'}</p>
+                            <p id="modal-preview-vibe" style="font-size:9px;font-weight:700;color:#f472b6;text-transform:uppercase;letter-spacing:0.12em;margin:6px 0 0;background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.2);padding:3px 10px;border-radius:20px;display:inline-block;">${av.name}</p>
+                        </div>
+                        <button id="avatar-modal-apply" style="width:100%;background:linear-gradient(135deg,#be185d,#7c3aed);color:#fff;font-weight:800;font-size:12px;padding:12px;border-radius:14px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:0 6px 24px rgba(190,24,93,0.4),inset 0 1px 0 rgba(255,255,255,0.15);letter-spacing:0.04em;">âœ¦ Apply Changes</button>
+                        <button id="avatar-modal-clear" style="width:100%;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);color:#475569;font-size:10px;padding:9px;border-radius:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif;">Ã— Clear Icon</button>
+                    </div>
+                    <!-- Options panel -->
+                    <div style="flex:1;overflow-y:auto;min-width:0;" class="scrollbar-thin">
+                        <div style="position:sticky;top:0;z-index:10;padding:16px 24px 12px;background:linear-gradient(to bottom,#0e0c1a 60%,transparent);backdrop-filter:blur(10px);">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:4px;">
+                                <button id="modal-tab-vibe" style="padding:9px 12px;border-radius:10px;background:linear-gradient(135deg,rgba(236,72,153,0.25),rgba(139,92,246,0.25));color:#f472b6;border:1px solid rgba(236,72,153,0.35);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.04em;">ðŸŽ¨ Colour Vibe</button>
+                                <button id="modal-tab-icon" style="padding:9px 12px;border-radius:10px;background:none;color:#475569;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;">ðŸª„ Avatar Icon</button>
+                            </div>
+                        </div>
+                        <div id="modal-panel-vibe" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 24px 24px;">
+                            ${vibeCards}
+                        </div>
+                        <div id="modal-panel-icon" style="display:none;padding:4px 24px 24px;">
+                            ${iconGrid}
+                        </div>
+                    </div>
+                </div>
+                <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.2),transparent);flex-shrink:0;"></div>
+            </div>
+        </div>`;
+    };
+
+
+    const openModal = () => {
+        pendingVibe = state.currentUser.avatar || 'nebula';
+        pendingIcon = state.currentUser.avatarIcon || null;
+        // Remove any existing modal
+        const existing = document.getElementById('avatar-modal');
+        if (existing) existing.remove();
+        // Inject into body
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = buildModalHTML();
+        const modalEl = wrapper.firstElementChild;
+        document.body.appendChild(modalEl);
+        document.body.style.overflow = 'hidden';
+        lucide.createIcons();
+        bindModalEvents();
+    };
+
+    const closeModal = () => {
+        const modalEl = document.getElementById('avatar-modal');
+        if (modalEl) modalEl.remove();
+        document.body.style.overflow = '';
+    };
+
+    const openBtn = document.getElementById('btn-open-avatar-modal');
+    if (openBtn) openBtn.addEventListener('click', openModal);
+
+    function bindModalEvents() {
+        const closeBtn = document.getElementById('avatar-modal-close');
+        const backdrop = document.getElementById('avatar-modal-backdrop');
+        const applyBtn = document.getElementById('avatar-modal-apply');
+        const clearBtn = document.getElementById('avatar-modal-clear');
+        const modalTabVibe = document.getElementById('modal-tab-vibe');
+        const modalTabIcon = document.getElementById('modal-tab-icon');
+        const modalPanelVibe = document.getElementById('modal-panel-vibe');
+        const modalPanelIcon = document.getElementById('modal-panel-icon');
+
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (backdrop) backdrop.addEventListener('click', closeModal);
+
+        // Tab switching
+        if (modalTabVibe && modalTabIcon) {
+            modalTabVibe.addEventListener('click', () => {
+                modalPanelVibe.style.display = 'grid';
+                modalPanelIcon.style.display = 'none';
+                modalTabVibe.style.cssText = 'flex:1;font-size:10px;font-weight:700;padding:6px;border-radius:8px;background:rgba(236,72,153,0.2);color:#f472b6;border:1px solid rgba(236,72,153,0.3);cursor:pointer;font-family:Space Grotesk,sans-serif;';
+                modalTabIcon.style.cssText = 'flex:1;font-size:10px;font-weight:700;padding:6px;border-radius:8px;background:none;color:#64748b;border:none;cursor:pointer;font-family:Space Grotesk,sans-serif;';
+            });
+            modalTabIcon.addEventListener('click', () => {
+                modalPanelVibe.style.display = 'none';
+                modalPanelIcon.style.display = 'block';
+                modalTabIcon.style.cssText = 'flex:1;font-size:10px;font-weight:700;padding:6px;border-radius:8px;background:rgba(236,72,153,0.2);color:#f472b6;border:1px solid rgba(236,72,153,0.3);cursor:pointer;font-family:Space Grotesk,sans-serif;';
+                modalTabVibe.style.cssText = 'flex:1;font-size:10px;font-weight:700;padding:6px;border-radius:8px;background:none;color:#64748b;border:none;cursor:pointer;font-family:Space Grotesk,sans-serif;';
+            });
+        }
+
+        // Update preview
+        const updatePreview = () => {
+            const ring = document.getElementById('modal-avatar-ring');
+            if (!ring) return;
+            const vibe = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
+            ring.className = `w-24 h-24 rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-white shadow-[0_0_40px_rgba(236,72,153,0.3)] border-2 border-white/10`;
+            ring.innerHTML = pendingIcon
+                ? `<i data-lucide="${pendingIcon}" class="w-11 h-11"></i>`
+                : `<span class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
+            lucide.createIcons({ nodes: [ring] });
+            const vibeLabel = document.getElementById('modal-preview-vibe');
+            if (vibeLabel) vibeLabel.textContent = vibe.name;
+        };
+
+        // Vibe buttons
+        document.querySelectorAll('.modal-vibe-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                pendingVibe = btn.getAttribute('data-vibe');
+                updatePreview();
+                document.querySelectorAll('.modal-vibe-btn').forEach(b => {
+                    const isNow = b.getAttribute('data-vibe') === pendingVibe;
+                    b.style.border = `1px solid ${isNow ? 'rgba(236,72,153,0.6)' : 'rgba(255,255,255,0.08)'}`;
+                    b.style.background = isNow ? 'rgba(236,72,153,0.1)' : 'rgba(255,255,255,0.02)';
+                });
+            });
+        });
+
+        // Icon buttons
+        document.querySelectorAll('.modal-icon-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                pendingIcon = btn.getAttribute('data-icon');
+                updatePreview();
+                document.querySelectorAll('.modal-icon-btn').forEach(b => {
+                    const isNow = b.getAttribute('data-icon') === pendingIcon;
+                    b.style.border = `1px solid ${isNow ? 'rgba(236,72,153,0.7)' : 'rgba(255,255,255,0.08)'}`;
+                    b.style.background = isNow ? 'rgba(236,72,153,0.18)' : 'rgba(255,255,255,0.02)';
+                    b.style.boxShadow = isNow ? '0 0 12px rgba(236,72,153,0.35)' : 'none';
+                    b.style.transform = isNow ? 'scale(1.06)' : 'scale(1)';
+                    // Lucide replaces <i> with <svg> — target both
+                    const iconEl = b.querySelector('svg') || b.querySelector('i');
+                    if (iconEl) iconEl.style.color = isNow ? '#f472b6' : '#64748b';
+                    const labelEl = b.querySelector('span');
+                    if (labelEl) labelEl.style.color = isNow ? '#f472b6' : '#64748b';
+                });
+            });
+        });
+
+        // Clear icon
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                pendingIcon = null;
+                updatePreview();
+                document.querySelectorAll('.modal-icon-btn').forEach(b => {
+                    b.style.border = '1px solid rgba(255,255,255,0.08)';
+                    b.style.background = 'rgba(255,255,255,0.02)';
+                });
+            });
+        }
+
+        // Apply
+        if (applyBtn) {
+            applyBtn.addEventListener('click', () => {
+                state.currentUser.avatar = pendingVibe;
+                state.currentUser.avatarIcon = pendingIcon;
+                saveStateToStorage();
+                // Sync account avatar card
+                const ring = document.getElementById('account-avatar-ring');
+                if (ring) {
+                    const vibe = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
+                    ring.className = `w-20 h-20 rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl border-2 border-white/10`;
+                    ring.innerHTML = pendingIcon
+                        ? `<i data-lucide="${pendingIcon}" class="w-9 h-9"></i>`
+                        : `<span id="account-large-avatar-char" class="text-3xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
+                    lucide.createIcons({ nodes: [ring] });
+                }
+                syncAvatarUI();
+                closeModal();
+            });
+        }
+    }
+
 
     if (inputProfileName) {
         inputProfileName.addEventListener('blur', saveProfile);
@@ -1613,7 +1993,23 @@ function bindAccountEventListeners() {
             state.preferences.theme = themeChoice;
             applyTheme(themeChoice);
             saveStateToStorage();
-            renderAccountTab();
+            // Update highlight states in-place without full re-render
+            document.querySelectorAll('.theme-select-btn').forEach(b => {
+                const isNow = b.getAttribute('data-theme') === themeChoice;
+                const colors = THEMES[themeChoice];
+                if (isNow) {
+                    b.className = b.className
+                        .replace('border-glassBorder/40', 'border-white/40')
+                        .replace('bg-glassBg/30', 'bg-white/5');
+                    b.style.border = '1px solid rgba(255,255,255,0.4)';
+                    b.style.background = 'rgba(255,255,255,0.06)';
+                    b.style.boxShadow = `0 0 30px ${colors.brandHex}40, 0 0 0 1px rgba(255,255,255,0.15)`;
+                } else {
+                    b.style.border = '1px solid rgba(255,255,255,0.06)';
+                    b.style.background = 'rgba(255,255,255,0.02)';
+                    b.style.boxShadow = 'none';
+                }
+            });
         });
     });
 
