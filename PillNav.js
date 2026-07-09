@@ -37,10 +37,10 @@ class PillNav {
       '--pill-bg': this.pillColor,
       '--hover-text': this.hoveredPillTextColor,
       '--pill-text': this.pillTextColor,
-      '--nav-h': '52px',
-      '--logo': '44px',
-      '--pill-pad-x': '24px',
-      '--pill-gap': '4px'
+      '--nav-h': '60px',
+      '--logo': '48px',
+      '--pill-pad-x': '28px',
+      '--pill-gap': '8px'
     };
 
     // Apply styles to container
@@ -92,7 +92,7 @@ class PillNav {
 
     // Nav Items (Middle)
     const navItems = document.createElement('div');
-    navItems.className = 'relative items-center rounded-full hidden md:flex ml-2';
+    navItems.className = 'relative items-center rounded-full hidden md:flex ml-4';
     navItems.style.height = 'var(--nav-h)';
     navItems.style.background = 'var(--base, #000)';
 

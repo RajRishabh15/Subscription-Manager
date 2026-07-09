@@ -587,7 +587,20 @@ function startScanning(phone, email) {
 }
 
 // ==========================================
-// RENDERERS: TAB 1 - HOME VIEW (PINK-BLUE THEME)
+// HELPER: CURRENCY SYMBOL
+// ==========================================
+function getCurrencySymbol() {
+    const cur = state.preferences.currency || 'INR';
+    switch (cur) {
+        case 'USD': return '$';
+        case 'EUR': return '€';
+        case 'GBP': return '£';
+        default: return '₹';
+    }
+}
+
+// ==========================================
+// RENDERERS: TAB 1 - HOME OVERVIEW
 // ==========================================
 function renderHomeTab() {
     const container = document.getElementById('tab-content-home');
@@ -694,7 +707,7 @@ function renderHomeTab() {
                     </div>
                 </div>
                 <div>
-                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">₹${monthlySpend.toLocaleString('en-IN')}</div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${getCurrencySymbol()}${monthlySpend.toLocaleString('en-IN')}</div>
                     <div class="text-[11px] text-textMuted mt-1 font-sans">Includes ${activeCount} active plans</div>
                 </div>
             </div>
@@ -804,7 +817,7 @@ function generateSVGDonutChart(categoriesData, total) {
             </svg>
             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span class="text-textMuted text-[9px] font-bold uppercase tracking-widest font-space">Monthly Spend</span>
-                <span class="text-xl font-extrabold text-cardTitle font-space mt-1">₹${Math.round(total).toLocaleString('en-IN')}</span>
+                <span class="text-xl font-extrabold text-cardTitle font-space mt-1">${getCurrencySymbol()}${Math.round(total).toLocaleString('en-IN')}</span>
             </div>
         </div>
     `;
@@ -910,7 +923,7 @@ function renderManageTab() {
                         <!-- Bottom Row: Price & Date -->
                         <div class="flex items-end justify-between mt-auto mb-4">
                             <div>
-                                <div class="text-2xl font-bold text-cardTitle font-sans tracking-tight leading-none mb-1">₹${sub.cost}</div>
+                                <div class="text-2xl font-bold text-cardTitle font-sans tracking-tight leading-none mb-1">${getCurrencySymbol()}${sub.cost}</div>
                                 <div class="text-[10px] text-slate-500 font-sans">/ ${sub.cycle}</div>
                             </div>
                             <div class="text-right">
@@ -1013,7 +1026,7 @@ window.openSubscriptionDetails = function(subId) {
                     </div>
                     <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
                         <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Cost</p>
-                        <p class="text-cardTitle font-bold font-sans text-sm">₹${sub.cost}</p>
+                        <p class="text-cardTitle font-bold font-sans text-sm">${getCurrencySymbol()}${sub.cost}</p>
                     </div>
                     <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
                         <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Next Renewal</p>
@@ -1514,17 +1527,18 @@ function renderAccountTab() {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-glassBorder/50">
                             <!-- Currency -->
                             <div class="space-y-3">
-                                <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest font-space">Global Currency Standard</label>
-                                <div class="relative group/select">
-                                    <select id="pref-currency-select" class="w-full bg-[#13111a]/80 border border-glassBorder hover:border-brand-500/50 focus:border-brand-500 focus:ring-1 focus:ring-brand-500/50 rounded-2xl py-3.5 px-4 text-sm text-cardTitle focus:outline-none transition-all appearance-none cursor-pointer">
-                                        <option value="INR" ${state.preferences.currency === 'INR' ? 'selected' : ''}>INR (₹) - Indian Rupee</option>
-                                        <option value="USD" ${state.preferences.currency === 'USD' ? 'selected' : ''}>USD ($) - US Dollar</option>
-                                        <option value="EUR" ${state.preferences.currency === 'EUR' ? 'selected' : ''}>EUR (€) - Euro</option>
-                                        <option value="GBP" ${state.preferences.currency === 'GBP' ? 'selected' : ''}>GBP (£) - British Pound</option>
-                                    </select>
-                                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-textMuted group-hover/select:text-brand-400 transition-colors">
-                                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                                    </div>
+                                <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest font-space mb-2">Global Currency Standard</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    ${['INR', 'USD', 'EUR', 'GBP'].map(c => {
+                                        const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
+                                        const isSel = state.preferences.currency === c;
+                                        return `
+                                            <button data-currency="${c}" class="currency-btn flex items-center justify-between px-4 py-3.5 rounded-2xl border transition-all ${isSel ? 'bg-brand-500/10 border-brand-500 text-brand-400 shadow-[0_0_15px_rgba(236,72,153,0.15)]' : 'bg-[#13111a]/80 border-glassBorder text-textMuted hover:border-brand-500/40 hover:bg-[#1a1723] hover:text-cardTitle'}">
+                                                <span class="font-sans font-bold text-xs">${c}</span>
+                                                <span class="font-space font-black opacity-80 text-lg">${symbols[c]}</span>
+                                            </button>
+                                        `;
+                                    }).join('')}
                                 </div>
                             </div>
                             
@@ -2014,13 +2028,26 @@ function bindAccountEventListeners() {
     });
 
     // 7. Preferences currency change
-    const selectCurrency = document.getElementById('pref-currency-select');
-    if (selectCurrency) {
-        selectCurrency.addEventListener('change', (e) => {
-            state.preferences.currency = e.target.value;
-            saveStateToStorage();
+    const currencyBtns = document.querySelectorAll('.currency-btn');
+    currencyBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const newCur = e.currentTarget.getAttribute('data-currency');
+            if (newCur !== state.preferences.currency) {
+                state.preferences.currency = newCur;
+                saveStateToStorage();
+                
+                // Re-render UI to update currency symbols across app
+                if(state.activeTab === 'home') renderHomeTab();
+                else if(state.activeTab === 'manage') renderManageTab();
+                else if(state.activeTab === 'account') {
+                    renderAccountTab();
+                    bindAccountEventListeners();
+                }
+                
+                lucide.createIcons();
+            }
         });
-    }
+    });
 
     // 8. Preference alerts checkboxes
     const chkBilling = document.getElementById('chk-billing-alerts');
@@ -2329,7 +2356,7 @@ function completeCancellationState() {
         newMonthlyTotal += s.cycle === 'monthly' ? cost : cost / 12;
     });
     
-    document.getElementById('success-new-cost').innerText = `₹${Math.round(newMonthlyTotal).toLocaleString('en-IN')}/mo`;
+    document.getElementById('success-new-cost').innerText = `${getCurrencySymbol()}${Math.round(newMonthlyTotal).toLocaleString('en-IN')}/mo`;
     document.getElementById('cancel-step-success').classList.remove('hidden');
     
     lucide.createIcons();
