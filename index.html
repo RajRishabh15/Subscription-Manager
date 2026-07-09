@@ -68,6 +68,22 @@
     
     <!-- Three.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Prevent Login Flash -->
+    <script>
+        try {
+            const saved = localStorage.getItem('subsentry_state');
+            if (saved && JSON.parse(saved).isLoggedIn) {
+                document.documentElement.classList.add('is-logged-in');
+            }
+        } catch(e) {}
+    </script>
+    <style>
+        html.is-logged-in #scan-view, 
+        html.is-logged-in #login-glitch-bg { 
+            display: none !important; 
+        }
+    </style>
 </head>
 
 <body
