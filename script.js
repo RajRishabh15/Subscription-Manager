@@ -587,15 +587,24 @@ function startScanning(phone, email) {
 }
 
 // ==========================================
-// HELPER: CURRENCY SYMBOL
+// HELPER: CURRENCY FORMATTER
 // ==========================================
-function getCurrencySymbol() {
+function formatCurrency(amountInINR) {
     const cur = state.preferences.currency || 'INR';
+    let converted = parseFloat(amountInINR) || 0;
+    
+    // Exchange rates (approximate base: 1 USD = ~83 INR)
     switch (cur) {
-        case 'USD': return '$';
-        case 'EUR': return '€';
-        case 'GBP': return '£';
-        default: return '₹';
+        case 'USD': converted = converted / 83.5; break;
+        case 'EUR': converted = converted / 90.2; break;
+        case 'GBP': converted = converted / 105.8; break;
+    }
+    
+    if (cur === 'INR') {
+        return '₹' + Math.round(converted).toLocaleString('en-IN');
+    } else {
+        const symbols = { USD: '$', EUR: '€', GBP: '£' };
+        return symbols[cur] + converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 }
 
@@ -707,7 +716,7 @@ function renderHomeTab() {
                     </div>
                 </div>
                 <div>
-                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${getCurrencySymbol()}${monthlySpend.toLocaleString('en-IN')}</div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${formatCurrency(monthlySpend)}</div>
                     <div class="text-[11px] text-textMuted mt-1 font-sans">Includes ${activeCount} active plans</div>
                 </div>
             </div>
@@ -817,7 +826,7 @@ function generateSVGDonutChart(categoriesData, total) {
             </svg>
             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span class="text-textMuted text-[9px] font-bold uppercase tracking-widest font-space">Monthly Spend</span>
-                <span class="text-xl font-extrabold text-cardTitle font-space mt-1">${getCurrencySymbol()}${Math.round(total).toLocaleString('en-IN')}</span>
+                <span class="text-xl font-extrabold text-cardTitle font-space mt-1">${formatCurrency(total)}</span>
             </div>
         </div>
     `;
@@ -923,7 +932,7 @@ function renderManageTab() {
                         <!-- Bottom Row: Price & Date -->
                         <div class="flex items-end justify-between mt-auto mb-4">
                             <div>
-                                <div class="text-2xl font-bold text-cardTitle font-sans tracking-tight leading-none mb-1">${getCurrencySymbol()}${sub.cost}</div>
+                                <div class="text-2xl font-bold text-cardTitle font-sans tracking-tight leading-none mb-1">${formatCurrency(sub.cost)}</div>
                                 <div class="text-[10px] text-slate-500 font-sans">/ ${sub.cycle}</div>
                             </div>
                             <div class="text-right">
@@ -1026,7 +1035,7 @@ window.openSubscriptionDetails = function(subId) {
                     </div>
                     <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
                         <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Cost</p>
-                        <p class="text-cardTitle font-bold font-sans text-sm">${getCurrencySymbol()}${sub.cost}</p>
+                        <p class="text-cardTitle font-bold font-sans text-sm">${formatCurrency(sub.cost)}</p>
                     </div>
                     <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
                         <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Next Renewal</p>
@@ -2356,7 +2365,7 @@ function completeCancellationState() {
         newMonthlyTotal += s.cycle === 'monthly' ? cost : cost / 12;
     });
     
-    document.getElementById('success-new-cost').innerText = `${getCurrencySymbol()}${Math.round(newMonthlyTotal).toLocaleString('en-IN')}/mo`;
+    document.getElementById('success-new-cost').innerText = `${formatCurrency(newMonthlyTotal)}/mo`;
     document.getElementById('cancel-step-success').classList.remove('hidden');
     
     lucide.createIcons();
