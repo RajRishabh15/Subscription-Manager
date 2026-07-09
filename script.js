@@ -1238,7 +1238,7 @@ function renderAccountTab() {
                     <div class="text-center pb-6 border-b border-glassBorder relative z-10">
                         <div class="relative w-20 h-20 mx-auto mb-4">
                             <div class="w-20 h-20 rounded-full bg-gradient-to-tr ${activeAvatarVibe.gradient} flex items-center justify-center text-cardTitle text-3xl font-black font-space shadow-2xl border-2 ${activeAvatarVibe.gradient.split(' ').pop()}">
-                                <span>${(state.currentUser.name || 'U')[0].toUpperCase()}</span>
+                                <span id="account-large-avatar-char">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>
                             </div>
                             <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-cardSubBg border border-glassBorder flex items-center justify-center text-brand-400">
                                 <i data-lucide="${activeAvatarVibe.icon}" class="w-3.5 h-3.5 animate-pulse"></i>
@@ -1480,11 +1480,19 @@ function bindAccountEventListeners() {
     if (inputProfileName) {
         inputProfileName.addEventListener('blur', saveProfile);
         inputProfileName.addEventListener('input', (e) => {
-            const h3 = e.target.closest('.liquid-glass-card').querySelector('h3');
-            if (h3) h3.innerText = e.target.value.trim() || 'Rishabh Raj';
-            // Sync user avatar indicator character
-            const avatarChar = document.getElementById('user-avatar');
-            if (avatarChar) avatarChar.innerText = (e.target.value.trim() || 'U')[0].toUpperCase();
+            const h3 = e.target.closest('.bg-glassBg').querySelector('h3');
+            const newName = e.target.value.trim() || 'User';
+            const firstChar = newName[0].toUpperCase();
+            
+            if (h3) h3.innerText = newName;
+            
+            // Sync user large avatar character in Account tab
+            const avatarChar = document.getElementById('account-large-avatar-char');
+            if (avatarChar) avatarChar.innerText = firstChar;
+            
+            // Sync PillNav small avatar character
+            const pillnavAvatar = document.getElementById('pillnav-logo-avatar');
+            if (pillnavAvatar) pillnavAvatar.innerText = firstChar;
         });
     }
     if (inputProfilePhone) inputProfilePhone.addEventListener('blur', saveProfile);
