@@ -208,17 +208,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Check query params for simulated mock Gmail redirect
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('mock_login') === 'gmail') {
+        const mockEmail = urlParams.get('mock_email') || 'mock.user@gmail.com';
+        const mockName = urlParams.get('mock_name') || '';
         const newUrl = window.location.origin + window.location.pathname;
         window.history.replaceState({}, document.title, newUrl);
         if (savedAuthMode === 'signup') {
-            showRegisterSetup('', 'mock.user@gmail.com');
+            showRegisterSetup(mockName, mockEmail);
         } else {
             const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
-            const isRegistered = registeredUsers.some(u => u.email === 'mock.user@gmail.com');
+            const isRegistered = registeredUsers.some(u => u.email === mockEmail);
             if (isRegistered) {
-                startScanning(null, 'mock.user@gmail.com');
+                startScanning(null, mockEmail);
             } else {
-                alert("This Gmail account is not registered. Please switch to Sign Up mode to register first.");
+                alert(`The account ${mockEmail} is not registered. Please switch to Sign Up mode to register first.`);
                 initAppView();
             }
         }
@@ -2471,13 +2473,19 @@ async function signInWithGmail() {
             alert(`Failed to contact Supabase for Google OAuth: ${err.message}`);
         }
     } else {
-        // Simulated mock redirect
-        window.location.href = window.location.origin + window.location.pathname + '?mock_login=gmail';
+        // Simulated mock redirect to our Google Auth mock page
+        let basePath = window.location.pathname;
+        if (basePath.endsWith('index.html')) {
+            basePath = basePath.replace('index.html', '');
+        } else if (!basePath.endsWith('/')) {
+            basePath += '/';
+        }
+        window.location.href = window.location.origin + basePath + 'google-auth.html?redirect_uri=' + encodeURIComponent(window.location.pathname) + '&auth_mode=' + encodeURIComponent(authMode);
     }
 }
 
 // Show Profile Registration Setup screen
-function showRegisterSetup(phone, email) {
+function showRegisterSetup(name, email) {
     // Hide scan form panel
     const formPanel = document.getElementById('scan-form-panel');
     if (formPanel) formPanel.classList.add('hidden');
@@ -2488,7 +2496,7 @@ function showRegisterSetup(phone, email) {
 
     // Reset name field
     const nameInput = document.getElementById('register-name');
-    if (nameInput) nameInput.value = '';
+    if (nameInput) nameInput.value = name || '';
 
     // Save target email in state
     state.currentUser.email = email || 'mock.user@gmail.com';

@@ -88,11 +88,9 @@ class PillNav {
       if (this.onTabClick) this.onTabClick('account');
     });
 
-    nav.appendChild(logoLink);
-
     // Nav Items (Middle)
     const navItems = document.createElement('div');
-    navItems.className = 'relative items-center rounded-full hidden md:flex ml-4';
+    navItems.className = 'relative items-center rounded-full hidden md:flex mr-4';
     navItems.style.height = 'var(--nav-h)';
     navItems.style.background = 'var(--base, #000)';
 
@@ -165,8 +163,7 @@ class PillNav {
     });
 
     navItems.appendChild(ul);
-    nav.appendChild(navItems);
-
+    
     // Hamburger button for mobile menu
     const hamburger = document.createElement('button');
     hamburger.className = 'md:hidden rounded-full border-0 flex flex-col items-center justify-center gap-1 cursor-pointer p-0 relative focus:outline-none';
@@ -186,7 +183,11 @@ class PillNav {
 
     hamburger.appendChild(line1);
     hamburger.appendChild(line2);
+    
+    // Append in the new order: Hamburger -> NavItems -> LogoLink
     nav.appendChild(hamburger);
+    nav.appendChild(navItems);
+    nav.appendChild(logoLink);
 
     outerDiv.appendChild(nav);
 
