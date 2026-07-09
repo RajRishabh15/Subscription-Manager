@@ -883,7 +883,7 @@ function renderManageTab() {
                 const gradLine = isActive ? 'from-purple-500 via-indigo-500 to-emerald-500' : 'from-orange-500 to-red-500';
 
                 return `
-                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[20px] p-6 relative group hover:border-glassBorder/80 transition-colors flex flex-col justify-between overflow-hidden min-h-[220px]">
+                    <div onclick="openSubscriptionDetails('${sub.id}')" class="bg-[#0f0e13] border border-glassBorder rounded-[20px] p-6 relative group hover:border-glassBorder/80 hover:bg-[#15131a] transition-all cursor-pointer flex flex-col justify-between overflow-hidden min-h-[220px]">
                         
                         <!-- Top Row: Icon & Status -->
                         <div class="flex justify-between items-start mb-6">
@@ -937,8 +937,14 @@ function renderManageTab() {
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             manageSearchQuery = e.target.value;
+            const start = e.target.selectionStart;
+            const end = e.target.selectionEnd;
             renderManageTab();
-            document.getElementById('manage-search').focus();
+            const newSearchInput = document.getElementById('manage-search');
+            if (newSearchInput) {
+                newSearchInput.focus();
+                newSearchInput.setSelectionRange(start, end);
+            }
         });
     }
 }
@@ -958,6 +964,92 @@ function toggleSubscriptionAlert(id) {
         lucide.createIcons();
     }
 }
+
+// Open Subscription Details Modal
+window.openSubscriptionDetails = function(subId) {
+    const sub = state.subscriptions.find(s => s.id === subId);
+    if (!sub) return;
+
+    // Create modal overlay
+    const modal = document.createElement('div');
+    modal.id = 'sub-detail-modal';
+    modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md opacity-0 transition-opacity duration-300 p-4';
+    
+    const template = MOCK_PROVIDER_DATA[sub.providerKey] || { lucideIcon: 'credit-card', manualSteps: ['No detailed steps available.'] };
+
+    modal.innerHTML = `
+        <div class="bg-[#0a0a0f] border border-[#222] rounded-[32px] w-full max-w-lg shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative overflow-hidden transform scale-95 transition-transform duration-300">
+            <!-- Top Gradient Accent -->
+            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-brand-500 to-indigo-500 opacity-60"></div>
+            
+            <div class="p-8">
+                <!-- Header -->
+                <div class="flex justify-between items-start mb-8">
+                    <div class="flex items-center space-x-5">
+                        <div class="w-16 h-16 rounded-[20px] bg-[#13111a] border border-[#222] flex items-center justify-center flex-shrink-0 shadow-inner">
+                            <i data-lucide="${template.lucideIcon}" class="w-8 h-8 text-brand-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-extrabold text-cardTitle font-sans tracking-tight mb-1">${sub.name}</h2>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-space">${sub.category}</span>
+                        </div>
+                    </div>
+                    <button onclick="closeSubscriptionDetails()" class="p-2 text-slate-500 hover:text-cardTitle transition-colors bg-[#13111a] border border-[#222] rounded-full hover:bg-[#1a1723]">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                
+                <!-- Details Grid -->
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Billing Cycle</p>
+                        <p class="text-cardTitle font-bold font-sans text-sm">${sub.cycle.charAt(0).toUpperCase() + sub.cycle.slice(1)}</p>
+                    </div>
+                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Cost</p>
+                        <p class="text-cardTitle font-bold font-sans text-sm">₹${sub.cost}</p>
+                    </div>
+                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Next Renewal</p>
+                        <p class="text-cardTitle font-bold font-sans text-sm">${new Date(sub.nextRenewal).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                    </div>
+                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Payment Method</p>
+                        <p class="text-cardTitle font-bold font-sans text-sm truncate">${sub.payment}</p>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex space-x-4">
+                    <button class="flex-1 bg-[#13111a] hover:bg-[#1a1723] text-cardTitle border border-[#222] font-semibold text-sm py-4 rounded-2xl transition-all shadow-inner font-sans">
+                        Modify Plan
+                    </button>
+                    <button class="flex-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold text-sm py-4 rounded-2xl transition-all shadow-inner font-sans">
+                        Cancel Subscription
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    lucide.createIcons();
+    
+    // Animate in
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modal.firstElementChild.classList.remove('scale-95');
+    }, 10);
+};
+
+window.closeSubscriptionDetails = function() {
+    const modal = document.getElementById('sub-detail-modal');
+    if (modal) {
+        modal.classList.add('opacity-0');
+        modal.firstElementChild.classList.add('scale-95');
+        setTimeout(() => modal.remove(), 300);
+    }
+};
 
 // ==========================================
 // THEMES & AVATAR VIBES preset configurations
