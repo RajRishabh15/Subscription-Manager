@@ -2128,112 +2128,145 @@ function startDiagnosticLogging() {
     }, 4500);
 }
 
-function triggerAccountReset() {
-    if (confirm("Are you sure you want to disconnect? This will clear local configuration logs.")) {
-        // Reset intervals
-        if (diagnosticInterval) {
-            clearInterval(diagnosticInterval);
-            diagnosticInterval = null;
-        }
-        if (isSupabaseConfigured) {
-            supabaseClient.auth.signOut().catch(e => console.error("Sign out error:", e));
-        }
-        localStorage.removeItem('subsentry_state');
-        state = {
-            isLoggedIn: false,
-            currentUser: {
-                name: 'Rishabh Raj',
-                phone: '',
-                email: '',
-                avatar: 'nebula',
-                linkedCredentials: []
-            },
-            subscriptions: [],
-            activeTab: 'home',
-            preferences: {
-                theme: 'cosmic',
-                currency: 'INR',
-                billingAlerts: true,
-                smsAlerts: false,
-                monthlyReports: true
-            },
-            billingCard: {
-                number: '4321 0000 0000 9876',
-                name: 'RISHABH RAJ',
-                expiry: '12/29',
-                cvv: '***',
-                provider: 'visa'
-            },
-            diagnostics: {
-                scansRun: 14,
-                apiConnected: 5,
-                lastScanTime: new Date().toLocaleString()
+// ==========================================
+// MODERN LOGOUT / DELETE SCREEN OVERLAY
+// ==========================================
+function showModernLogoutOverlay(type) {
+    const isDelete = type === 'delete';
+    const overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 z-[10000] flex items-center justify-center bg-[#04020a]/90 backdrop-blur-xl transition-opacity duration-300 opacity-0';
+    
+    const title = isDelete ? 'Delete Account' : 'Disconnect Session';
+    const msg = isDelete ? 'This will permanently wipe all your subscription settings, billing cards, and linked scanner directories from this browser. This action cannot be undone.' : 'Are you sure you want to disconnect? This will securely clear your local configuration logs and end your session.';
+    const btnText = isDelete ? 'Yes, Purge Data' : 'Yes, Disconnect';
+    
+    const bgClass = isDelete ? 'bg-red-500 hover:bg-red-600 shadow-[0_0_20px_rgba(239,68,68,0.3)]' : 'bg-purple-500 hover:bg-purple-600 shadow-[0_0_20px_rgba(168,85,247,0.3)]';
+    const textClass = isDelete ? 'text-red-500' : 'text-purple-400';
+    const borderClass = isDelete ? 'border-red-500/20' : 'border-purple-500/20';
+    const iconBgClass = isDelete ? 'bg-red-500/10' : 'bg-purple-500/10';
+    const spinnerClass = isDelete ? 'border-red-500' : 'border-purple-500';
+    
+    overlay.innerHTML = `
+        <div class="bg-[#0b0a10] border border-[#222] rounded-[32px] p-8 max-w-sm w-full mx-4 shadow-[0_30px_80px_rgba(0,0,0,0.8)] transform scale-95 transition-transform duration-300" id="logout-modal-box">
+            <div class="w-16 h-16 rounded-full ${iconBgClass} flex items-center justify-center border ${borderClass} mb-6 mx-auto">
+                <i data-lucide="${isDelete ? 'user-x' : 'log-out'}" class="w-8 h-8 ${textClass}"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white text-center font-space mb-3">${title}</h3>
+            <p class="text-sm text-slate-400 text-center font-sans mb-8 leading-relaxed">${msg}</p>
+            <div class="space-y-3">
+                <button id="btn-confirm-action" class="w-full ${bgClass} text-white font-bold font-sans py-3.5 rounded-xl transition-all">${btnText}</button>
+                <button id="btn-cancel-action" class="w-full bg-transparent border border-[#333] hover:border-slate-500 text-slate-300 font-bold font-sans py-3.5 rounded-xl transition-all">Cancel</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    lucide.createIcons({ nodes: [overlay] });
+    
+    setTimeout(() => {
+        overlay.classList.remove('opacity-0');
+        document.getElementById('logout-modal-box').classList.remove('scale-95');
+    }, 10);
+    
+    const closeOverlay = () => {
+        overlay.classList.add('opacity-0');
+        document.getElementById('logout-modal-box').classList.add('scale-95');
+        setTimeout(() => overlay.remove(), 300);
+    };
+    
+    document.getElementById('btn-cancel-action').addEventListener('click', closeOverlay);
+    
+    document.getElementById('btn-confirm-action').addEventListener('click', () => {
+        const box = document.getElementById('logout-modal-box');
+        box.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-6">
+                <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full border-t-2 border-b-2 ${spinnerClass} animate-spin"></div>
+                    <div class="absolute inset-2 rounded-full border-l-2 border-r-2 border-white/20 animate-[spin_1.5s_reverse_infinite]"></div>
+                    <i data-lucide="${isDelete ? 'trash-2' : 'shield-check'}" class="w-8 h-8 ${textClass}"></i>
+                </div>
+                <h3 class="text-lg font-bold ${textClass} uppercase tracking-widest font-space mb-2">${isDelete ? 'Purging Data...' : 'Disconnecting...'}</h3>
+                <div class="h-5 overflow-hidden w-full relative text-center">
+                    <div id="action-logs" class="text-[10px] text-slate-500 font-mono tracking-wider absolute w-full transition-transform duration-300"></div>
+                </div>
+            </div>
+        `;
+        lucide.createIcons({ nodes: [box] });
+        
+        const logs = isDelete ? [
+            "Erasing local credentials...",
+            "Destroying session tokens...",
+            "Wiping subscription cache...",
+            "Account permanently deleted."
+        ] : [
+            "Terminating secure session...",
+            "Clearing memory state...",
+            "Revoking access keys...",
+            "Successfully disconnected."
+        ];
+        
+        const logsContainer = document.getElementById('action-logs');
+        let logIndex = 0;
+        const logInterval = setInterval(() => {
+            if (logIndex < logs.length) {
+                logsContainer.innerHTML += `<div>> ${logs[logIndex]}</div>`;
+                logsContainer.style.transform = `translateY(-${logIndex * 20}px)`;
+                logIndex++;
             }
-        };
-        initAppView();
-        lucide.createIcons();
-    }
+        }, 500);
+        
+        setTimeout(() => {
+            clearInterval(logInterval);
+            closeOverlay();
+            setTimeout(() => {
+                if (diagnosticInterval) {
+                    clearInterval(diagnosticInterval);
+                    diagnosticInterval = null;
+                }
+                if (isSupabaseConfigured) {
+                    supabaseClient.auth.signOut().catch(e => console.error("Sign out error:", e));
+                }
+                
+                if (isDelete) {
+                    const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
+                    const phoneToWipe = state.currentUser.phone;
+                    const emailToWipe = state.currentUser.email;
+                    const updatedUsers = registeredUsers.filter(u => {
+                        const cleanUPhone = u.phone ? u.phone.replace(/[^0-9]/g, '') : '';
+                        const cleanStatePhone = phoneToWipe ? phoneToWipe.replace(/[^0-9]/g, '') : '';
+                        const matchPhone = cleanStatePhone && cleanUPhone === cleanStatePhone;
+                        const matchEmail = emailToWipe && u.email === emailToWipe;
+                        return !(matchPhone || matchEmail);
+                    });
+                    localStorage.setItem('subsentry_registered_users', JSON.stringify(updatedUsers));
+                }
+                
+                localStorage.removeItem('subsentry_state');
+                document.documentElement.classList.remove('is-logged-in'); 
+                
+                state = {
+                    isLoggedIn: false,
+                    currentUser: { name: 'User', phone: '', email: '', avatar: 'nebula', linkedCredentials: [] },
+                    subscriptions: [],
+                    activeTab: 'home',
+                    preferences: { theme: 'cosmic', currency: 'INR', billingAlerts: true, smsAlerts: false, monthlyReports: true },
+                    billingCard: { number: '', name: '', expiry: '', cvv: '', provider: 'visa' },
+                    diagnostics: { scansRun: 0, apiConnected: 0, lastScanTime: '' }
+                };
+                
+                initAppView();
+                lucide.createIcons();
+            }, 300);
+        }, 2200);
+    });
+}
+
+function triggerAccountReset() {
+    showModernLogoutOverlay('logout');
 }
 
 function triggerDeleteAccount() {
-    if (confirm("⚠️ WARNING: Are you sure you want to permanently delete your account? This will wipe all subscription settings, billing cards, and linked scanner directories from this browser. This action cannot be undone.")) {
-        // Reset intervals
-        if (diagnosticInterval) {
-            clearInterval(diagnosticInterval);
-            diagnosticInterval = null;
-        }
-        if (isSupabaseConfigured) {
-            supabaseClient.auth.signOut().catch(e => console.error("Sign out error:", e));
-        }
-        // Wipe user registration from system lists
-        const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
-        const phoneToWipe = state.currentUser.phone;
-        const emailToWipe = state.currentUser.email;
-        const updatedUsers = registeredUsers.filter(u => {
-            const cleanUPhone = u.phone ? u.phone.replace(/[^0-9]/g, '') : '';
-            const cleanStatePhone = phoneToWipe ? phoneToWipe.replace(/[^0-9]/g, '') : '';
-            const matchPhone = cleanStatePhone && cleanUPhone === cleanStatePhone;
-            const matchEmail = emailToWipe && u.email === emailToWipe;
-            return !(matchPhone || matchEmail);
-        });
-        localStorage.setItem('subsentry_registered_users', JSON.stringify(updatedUsers));
-
-        localStorage.removeItem('subsentry_state');
-        state = {
-            isLoggedIn: false,
-            currentUser: {
-                name: 'Rishabh Raj',
-                phone: '',
-                email: '',
-                avatar: 'nebula',
-                linkedCredentials: []
-            },
-            subscriptions: [],
-            activeTab: 'home',
-            preferences: {
-                theme: 'cosmic',
-                currency: 'INR',
-                billingAlerts: true,
-                smsAlerts: false,
-                monthlyReports: true
-            },
-            billingCard: {
-                number: '4321 0000 0000 9876',
-                name: 'RISHABH RAJ',
-                expiry: '12/29',
-                cvv: '***',
-                provider: 'visa'
-            },
-            diagnostics: {
-                scansRun: 14,
-                apiConnected: 5,
-                lastScanTime: new Date().toLocaleString()
-            }
-        };
-        alert("Your account has been deleted and all local data has been wiped.");
-        initAppView();
-        lucide.createIcons();
-    }
+    showModernLogoutOverlay('delete');
 }
 
 // ==========================================
@@ -2534,17 +2567,37 @@ function setupEventListeners() {
         });
     }
 
-    // Avatar selection in registration
-    const registerAvatarBtns = document.querySelectorAll('.register-avatar-btn');
-    registerAvatarBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            registerAvatarBtns.forEach(b => {
-                b.className = "register-avatar-btn w-10 h-10 rounded-full border border-glassBorder flex items-center justify-center text-cardTitle opacity-70 hover:opacity-100";
+    // Render and Bind Avatar selection in registration
+    const registerAvatarRow = document.getElementById('register-avatar-row');
+    if (registerAvatarRow) {
+        const vibeKeys = Object.keys(AVATAR_VIBES);
+        registerAvatarRow.innerHTML = vibeKeys.map(key => {
+            const v = AVATAR_VIBES[key];
+            const isSel = selectedRegisterAvatar === key;
+            const extraClasses = isSel ? 'border-brand-500 scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse' : 'border-glassBorder opacity-70 hover:opacity-100';
+            return `
+                <button type="button" class="register-avatar-btn flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-tr ${v.gradient} border ${extraClasses} flex items-center justify-center text-white transition-all snap-center" data-avatar="${key}">
+                    <i data-lucide="${v.icon}" class="w-5 h-5"></i>
+                </button>
+            `;
+        }).join('');
+        lucide.createIcons();
+
+        const registerAvatarBtns = document.querySelectorAll('.register-avatar-btn');
+        registerAvatarBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const clickedAvatar = btn.getAttribute('data-avatar');
+                selectedRegisterAvatar = clickedAvatar;
+                // Re-render
+                registerAvatarBtns.forEach(b => {
+                    const avatar = b.getAttribute('data-avatar');
+                    const isSel = avatar === clickedAvatar;
+                    const v = AVATAR_VIBES[avatar];
+                    b.className = `register-avatar-btn flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-tr ${v.gradient} flex items-center justify-center text-white transition-all border snap-center ${isSel ? 'border-brand-500 scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse' : 'border-glassBorder opacity-70 hover:opacity-100'}`;
+                });
             });
-            btn.className = "register-avatar-btn w-10 h-10 rounded-full border border-brand-500 flex items-center justify-center text-cardTitle scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse";
-            selectedRegisterAvatar = btn.getAttribute('data-avatar');
         });
-    });
+    }
 
     document.querySelectorAll('[data-tab]').forEach(btn => {
         btn.addEventListener('click', () => {
