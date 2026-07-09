@@ -1174,18 +1174,22 @@ function renderAccountTab() {
                     </div>
 
                     <!-- Avatar Vibe selector -->
-                    <div class="py-4 border-b border-glassBorder relative z-10">
-                        <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-3 font-space text-center">Select Profile Vibe</label>
-                        <div class="grid grid-cols-4 gap-2">
+                    <div class="py-6 border-b border-glassBorder relative z-10">
+                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-4 font-space text-center">Select Profile Vibe</label>
+                        <div class="grid grid-cols-2 gap-4">
                             ${Object.keys(AVATAR_VIBES).map(key => {
                                 const active = curAvatar === key;
                                 const v = AVATAR_VIBES[key];
                                 return `
-                                    <button class="avatar-opt-btn flex flex-col items-center p-1.5 rounded-xl border ${active ? 'border-brand-500 bg-brand-500/10' : 'border-glassBorder bg-glassBg'} hover:border-brand-500/30 transition-all focus:outline-none" data-avatar="${key}">
-                                        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr ${v.gradient} flex items-center justify-center text-cardTitle">
-                                            <i data-lucide="${v.icon}" class="w-3.5 h-3.5"></i>
+                                    <button class="avatar-opt-btn group relative flex flex-col items-center p-4 rounded-2xl border ${active ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_20px_rgba(236,72,153,0.15)]' : 'border-glassBorder bg-glassBg hover:border-brand-500/40 hover:bg-white/5'} transition-all duration-300 focus:outline-none overflow-hidden" data-avatar="${key}">
+                                        <!-- Animated background glow on hover/active -->
+                                        <div class="absolute inset-0 opacity-0 ${active ? 'opacity-20' : 'group-hover:opacity-10'} bg-gradient-to-br ${v.gradient} transition-opacity duration-300"></div>
+                                        
+                                        <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr ${v.gradient} flex items-center justify-center text-cardTitle mb-3 shadow-lg ${active ? 'scale-110 ring-2 ring-brand-500 ring-offset-2 ring-offset-[#0f0e13]' : 'group-hover:scale-105 group-hover:-translate-y-1'} transition-all duration-300">
+                                            <i data-lucide="${v.icon}" class="w-5 h-5 ${active ? 'animate-pulse' : ''}"></i>
                                         </div>
-                                        <span class="text-[7px] text-textMuted mt-1 font-space">${v.name}</span>
+                                        <span class="relative text-xs ${active ? 'text-brand-400 font-bold' : 'text-slate-400 font-medium'} tracking-wide font-sans">${v.name}</span>
+                                        ${active ? '<div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(236,72,153,0.8)]"></div>' : ''}
                                     </button>
                                 `;
                             }).join('')}
@@ -1260,80 +1264,6 @@ function renderAccountTab() {
                     </div>
                 </div>
 
-                <!-- Billing Card Manager with visual credit card -->
-                <div class="liquid-glass-card p-6">
-                    <div class="flex items-center space-x-3 mb-6">
-                        <div class="p-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl">
-                            <i data-lucide="credit-card" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-bold text-cardTitle font-space">Primary Billing Card</h3>
-                            <p class="text-[10px] text-textMuted font-sans">Emulated credit card details parsed for subscription auto-debit payments.</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                        <!-- Glass Credit Card Render -->
-                        <div class="glass-credit-card interactive-tilt relative p-6 flex flex-col justify-between overflow-hidden">
-                            <!-- Inset spot glows -->
-                            <div class="glass-card-bg-gradient"></div>
-                            <div class="glass-card-bg-gradient-secondary"></div>
-                            
-                            <!-- Card Brand header -->
-                            <div class="flex justify-between items-start z-10">
-                                <div class="glass-card-chip"></div>
-                                <div id="card-vendor-icon" class="text-cardTitle opacity-85">
-                                    <span class="font-space text-[10px] font-black tracking-widest bg-white/10 px-2 py-0.5 rounded border border-glassBorder">${state.billingCard.provider.toUpperCase()}</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Card Number -->
-                            <div class="z-10 mt-6">
-                                <div id="card-preview-number" class="embossed-text text-sm sm:text-base md:text-sm lg:text-base font-mono text-center tracking-widest text-cardTitle/95">
-                                    ${state.billingCard.number}
-                                </div>
-                            </div>
-                            
-                            <!-- Card Name and Expiry -->
-                            <div class="flex justify-between items-end z-10 mt-6 font-sans">
-                                <div>
-                                    <div class="text-[7px] text-textMuted font-bold uppercase tracking-widest font-space mb-0.5">Card Holder</div>
-                                    <div id="card-preview-name" class="text-[10px] font-semibold text-cardTitle/90 uppercase tracking-wider font-space truncate max-w-[130px]">
-                                        ${state.billingCard.name}
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-[7px] text-textMuted font-bold uppercase tracking-widest font-space mb-0.5">Expires</div>
-                                    <div id="card-preview-expiry" class="text-[10px] font-semibold text-cardTitle/90 font-mono">
-                                        ${state.billingCard.expiry}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card form settings -->
-                        <form id="billing-card-edit-form" class="space-y-3.5">
-                            <div>
-                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Card Holder</label>
-                                <input type="text" id="card-input-name" value="${state.billingCard.name}" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Card Number</label>
-                                <input type="text" id="card-input-number" value="${state.billingCard.number}" placeholder="4321 0000 0000 9876" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle focus:outline-none">
-                            </div>
-                            <div class="grid grid-cols-2 gap-3.5">
-                                <div>
-                                    <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Expiry Date</label>
-                                    <input type="text" id="card-input-expiry" value="${state.billingCard.expiry}" placeholder="MM/YY" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle focus:outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">CVV</label>
-                                    <input type="password" id="card-input-cvv" value="${state.billingCard.cvv}" placeholder="123" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle focus:outline-none">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
 
                 <!-- Theme Customizer & System Settings -->
                 <div class="liquid-glass-card p-6">
@@ -1943,8 +1873,8 @@ function switchAuthMode(mode) {
         if (toggleBtn) toggleBtn.innerText = "Log In";
         if (gmailBtnText) gmailBtnText.innerText = "Sign Up with Google";
     } else {
-        if (toggleLabel) toggleLabel.innerText = "Don't have an account?";
-        if (toggleBtn) toggleBtn.innerText = "Sign Up";
+        if (toggleLabel) toggleLabel.innerText = "New to AIOManager?";
+        if (toggleBtn) toggleBtn.innerText = "Create Account";
         if (gmailBtnText) gmailBtnText.innerText = "Continue with Google";
     }
 }

@@ -160,26 +160,27 @@
                 <!-- Right half: the actual Login form card -->
                 <div class="lg:col-span-5 flex justify-center lg:justify-end">
                     <div
-                        class="w-full max-w-md bg-glassBg border border-glassBorder backdrop-blur-2xl rounded-[32px] p-8 shadow-[0_25px_60px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-500 hover:border-brand-500/15">
-                        <!-- Glowing Cosmic Pink Top Border -->
+                        class="w-full max-w-md bg-[#0a0a0f] border border-[#222] rounded-[32px] p-10 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden transition-all duration-500 hover:border-[#333]">
+                        
+                        <!-- Top Accent Line -->
                         <div
-                            class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-500 to-transparent">
+                            class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-500 to-transparent opacity-50">
                         </div>
 
                         <!-- Logo & Heading -->
                         <div class="text-center mb-8">
                             <div
-                                class="w-16 h-16 mx-auto rounded-[20px] overflow-hidden border border-brand-500/20 shadow-[0_0_20px_rgba(236,72,153,0.2)] flex items-center justify-center p-1 bg-cardSubBg mb-4">
-                                <img src="favicon.png" class="w-full h-full object-cover rounded-[14px]"
+                                class="w-14 h-14 mx-auto rounded-2xl bg-[#13111a] border border-[#222] flex items-center justify-center p-2 mb-6 shadow-inner">
+                                <img src="favicon.png" class="w-full h-full object-cover rounded-xl"
                                     alt="AIOManager Logo">
                             </div>
                             <h1
-                                class="text-3xl sm:text-4xl font-normal serif-title italic text-cardTitle tracking-tight mb-2">
-                                AIOMANAGER <span
-                                    class="text-neon-glow font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cosmicBlue-400">ACCESS</span>
+                                class="text-3xl font-extrabold text-cardTitle tracking-tight mb-3 font-sans">
+                                Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-indigo-400">AIOManager</span>
                             </h1>
-                            <p class="text-textMuted text-xs font-sans">Authenticate directory credentials to search for
-                                active bills.</p>
+                            <p class="text-slate-400 text-sm font-sans px-4">
+                                Sign in to instantly discover and manage all your digital subscriptions in one secure place.
+                            </p>
                         </div>
 
 
@@ -189,34 +190,32 @@
                             <div class="space-y-4">
                                 <!-- Gmail input group -->
                                 <div id="email-input-group" class="transition-all duration-300">
-                                    <p class="text-xs text-textMuted mb-6 text-center leading-relaxed font-sans">
-                                        Sign in securely using your Google account to automatically import and manage your digital subscriptions.
-                                    </p>
                                     <button id="btn-gmail-login"
-                                        class="w-full bg-cardSubBg border border-glassBorder hover:border-brand-500/50 hover:bg-cardSubBg/80 text-cardTitle font-bold py-4 rounded-2xl transition-all shadow-[0_4px_20px_rgba(0,0,0,0.4)] flex items-center justify-center space-x-3 group">
-                                        <svg class="w-5 h-5 group-hover:scale-105 transition-transform" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-                                            <g transform="matrix(1, 0, 0, 1, 0, 0)">
-                                                <path d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.96,2.37 -2.04,3.1v2.58h3.3c1.93,-1.78 3.04,-4.4 3.04,-7.38c0,-0.68 -0.06,-1.33 -0.18,-1.98Z" fill="#4285F4" />
-                                                <path d="M12,20.62c2.43,0 4.47,-0.8 5.96,-2.18l-3.3,-2.58c-0.92,0.62 -2.1,0.98 -3.3,0.98c-2.34,0 -4.33,-1.58 -5.04,-3.7H1.94v2.52c1.49,2.97 4.57,5.02 8.06,5.02Z" fill="#34A853" />
-                                                <path d="M6.96,13.14c-0.18,-0.54 -0.28,-1.11 -0.28,-1.7c0,-0.59 0.1,-1.16 0.28,-1.7V7.22H1.94c-0.62,1.23 -0.98,2.62 -0.98,4.1c0,1.48 0.36,2.87 0.98,4.1l5.02,-2.52Z" fill="#FBBC05" />
-                                                <path d="M12,5.38c1.32,0 2.51,0.45 3.44,1.35l2.58,-2.58C16.46,2.78 14.43,2 12,2C8.51,2 5.43,4.05 3.94,7.02l5.02,2.52c0.71,-2.12 2.7,-3.7 5.04,-3.7Z" fill="#EA4335" />
-                                            </g>
-                                        </svg>
-                                        <span class="font-space tracking-wide">Continue with Google</span>
+                                        class="w-full bg-[#13111a] border border-[#222] hover:border-brand-500/40 hover:bg-[#1a1723] text-cardTitle font-semibold text-[15px] py-4 rounded-2xl transition-all shadow-inner flex items-center justify-center space-x-3 group">
+                                        <div class="bg-white p-1 rounded-full flex items-center justify-center w-6 h-6">
+                                            <svg class="w-full h-full group-hover:scale-110 transition-transform" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                                                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                                                <path fill="none" d="M0 0h48v48H0z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="font-sans tracking-wide">Continue with Google</span>
                                     </button>
                                 </div>
                             </div>
 
                             <div
-                                class="flex items-center justify-center space-x-2 text-[10px] text-textMuted border-t border-glassBorder pt-4">
-                                <i data-lucide="lock" class="w-4 h-4"></i>
-                                <span>Secure bank-grade scanning. No credentials shared.</span>
+                                class="flex items-center justify-center space-x-2 text-[11px] text-slate-500 font-sans mt-4">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+                                <span>Bank-grade encryption. We never store credentials.</span>
                             </div>
                             
                             <!-- Auth Mode Selector (Login vs SignUp) -->
-                            <div class="text-center text-xs text-textMuted mt-4 border-t border-glassBorder pt-4">
-                                <span id="auth-toggle-label">Don't have an account?</span>
-                                <button id="btn-toggle-auth-mode" class="text-brand-400 hover:text-brand-300 font-semibold transition-all ml-1">Sign Up</button>
+                            <div class="text-center text-sm text-slate-400 mt-6 border-t border-[#222] pt-6 font-sans">
+                                <span id="auth-toggle-label">New to AIOManager?</span>
+                                <button id="btn-toggle-auth-mode" class="text-brand-400 hover:text-brand-300 font-semibold transition-all ml-1">Create Account</button>
                             </div>
                         </div>
 
