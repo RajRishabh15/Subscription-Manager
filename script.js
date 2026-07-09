@@ -1696,15 +1696,15 @@ function bindAccountEventListeners() {
                             <p style="font-size:14px;font-weight:800;color:#fff;margin:0;">${state.currentUser.name || 'User'}</p>
                             <p id="modal-preview-vibe" style="font-size:9px;font-weight:700;color:#f472b6;text-transform:uppercase;letter-spacing:0.12em;margin:6px 0 0;background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.2);padding:3px 10px;border-radius:20px;display:inline-block;">${av.name}</p>
                         </div>
-                        <button id="avatar-modal-apply" style="width:100%;background:linear-gradient(135deg,#be185d,#7c3aed);color:#fff;font-weight:800;font-size:12px;padding:12px;border-radius:14px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:0 6px 24px rgba(190,24,93,0.4),inset 0 1px 0 rgba(255,255,255,0.15);letter-spacing:0.04em;">âœ¦ Apply Changes</button>
-                        <button id="avatar-modal-clear" style="width:100%;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);color:#475569;font-size:10px;padding:9px;border-radius:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif;">Ã— Clear Icon</button>
+                        <button id="avatar-modal-apply" style="width:100%;background:linear-gradient(135deg,#be185d,#7c3aed);color:#fff;font-weight:800;font-size:12px;padding:12px;border-radius:14px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:0 6px 24px rgba(190,24,93,0.4),inset 0 1px 0 rgba(255,255,255,0.15);letter-spacing:0.04em;">✦ Apply Changes</button>
+                        <button id="avatar-modal-clear" style="width:100%;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);color:#475569;font-size:10px;padding:9px;border-radius:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif;">× Clear Icon</button>
                     </div>
                     <!-- Options panel -->
                     <div style="flex:1;overflow-y:auto;min-width:0;" class="scrollbar-thin">
                         <div style="position:sticky;top:0;z-index:10;padding:16px 24px 12px;background:linear-gradient(to bottom,#0e0c1a 60%,transparent);backdrop-filter:blur(10px);">
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:4px;">
-                                <button id="modal-tab-vibe" style="padding:9px 12px;border-radius:10px;background:linear-gradient(135deg,rgba(236,72,153,0.25),rgba(139,92,246,0.25));color:#f472b6;border:1px solid rgba(236,72,153,0.35);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.04em;">ðŸŽ¨ Colour Vibe</button>
-                                <button id="modal-tab-icon" style="padding:9px 12px;border-radius:10px;background:none;color:#475569;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;">ðŸª„ Avatar Icon</button>
+                                <button id="modal-tab-vibe" style="padding:9px 12px;border-radius:10px;background:linear-gradient(135deg,rgba(236,72,153,0.25),rgba(139,92,246,0.25));color:#f472b6;border:1px solid rgba(236,72,153,0.35);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.04em;">🎨 Colour Vibe</button>
+                                <button id="modal-tab-icon" style="padding:9px 12px;border-radius:10px;background:none;color:#475569;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;">🪄 Avatar Icon</button>
                             </div>
                         </div>
                         <div id="modal-panel-vibe" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 24px 24px;">
