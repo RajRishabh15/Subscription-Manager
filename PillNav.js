@@ -106,7 +106,7 @@ class PillNav {
 
     // Nav Items (Middle)
     const navItems = document.createElement('div');
-    navItems.className = 'relative items-center rounded-full hidden md:flex mr-4';
+    navItems.className = 'relative items-center rounded-full hidden md:flex mr-12';
     navItems.style.height = 'var(--nav-h)';
     navItems.style.background = 'var(--base, #000)';
 
