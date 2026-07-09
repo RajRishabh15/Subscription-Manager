@@ -1358,80 +1358,89 @@ function renderAccountTab() {
 
 
                 <!-- Theme Customizer & System Settings -->
-                <div class="liquid-glass-card p-6">
-                    <div class="flex items-center space-x-3 mb-6">
-                        <div class="p-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl">
-                            <i data-lucide="palette" class="w-5 h-5"></i>
+                <div class="bg-glassBg/40 border border-glassBorder/60 backdrop-blur-3xl rounded-[32px] p-8 shadow-[0_15px_50px_rgba(0,0,0,0.4)] relative overflow-hidden group hover:border-brand-500/30 transition-all duration-500">
+                    <!-- Subtle Glow -->
+                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-brand-500/10 blur-[60px] rounded-full pointer-events-none transition-all group-hover:bg-brand-500/20"></div>
+                    
+                    <div class="flex items-center space-x-4 mb-8 relative z-10">
+                        <div class="p-3 bg-gradient-to-br from-brand-500/20 to-purple-500/20 border border-brand-500/30 text-brand-400 rounded-2xl shadow-[0_0_15px_rgba(236,72,153,0.15)] flex-shrink-0">
+                            <i data-lucide="palette" class="w-6 h-6"></i>
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-cardTitle font-space">Accent Vibe & Preferences</h3>
-                            <p class="text-[10px] text-textMuted font-sans">Modify cosmic colors, currencies, and notifications alerts protocols.</p>
+                            <h3 class="text-xl font-bold text-cardTitle font-space tracking-tight">Aesthetic Customization & Core Settings</h3>
+                            <p class="text-xs text-textMuted font-sans mt-1">Personalize visual themes, financial metrics, and intelligent alert protocols.</p>
                         </div>
                     </div>
 
-                    <div class="space-y-6">
+                    <div class="space-y-8 relative z-10">
                         <!-- Theme custom swatch lists -->
                         <div>
-                            <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-3.5 font-space">Cosmic Color Presets</label>
-                            <div class="flex flex-wrap gap-4 items-center">
+                            <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest mb-4 font-space">Neural Color Schemes</label>
+                            <div class="flex flex-wrap gap-5 items-center">
                                 ${Object.keys(THEMES).map(themeName => {
                                     const isSelected = state.preferences.theme === themeName;
                                     const colors = THEMES[themeName];
                                     let displayName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
-                                    if (themeName === 'cosmic') displayName = 'Cosmic Presets';
+                                    if (themeName === 'cosmic') displayName = 'Cosmic';
                                     
                                     return `
-                                        <button class="theme-select-btn flex flex-col items-center gap-1.5 focus:outline-none" data-theme="${themeName}">
-                                            <div style="background: linear-gradient(135deg, ${colors.brandHex}, ${colors.cosmicHex});" class="w-10 h-10 rounded-full border-2 ${isSelected ? 'border-white scale-110 shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'border-glassBorder opacity-70 hover:opacity-100'} transition-all flex items-center justify-center relative">
-                                                ${isSelected ? '<span class="absolute w-2.5 h-2.5 rounded-full bg-white"></span>' : ''}
+                                        <button class="theme-select-btn flex flex-col items-center gap-2 focus:outline-none group/btn" data-theme="${themeName}">
+                                            <div style="background: linear-gradient(135deg, ${colors.brandHex}, ${colors.cosmicHex});" class="w-12 h-12 rounded-full border-2 ${isSelected ? 'border-white scale-110 shadow-[0_0_25px_rgba(255,255,255,0.4)]' : 'border-glassBorder/50 opacity-60 group-hover/btn:opacity-100 group-hover/btn:scale-105 group-hover/btn:shadow-[0_0_15px_rgba(255,255,255,0.1)]'} transition-all duration-300 flex items-center justify-center relative">
+                                                ${isSelected ? '<span class="absolute w-3 h-3 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"></span>' : ''}
                                             </div>
-                                            <span class="text-[9px] ${isSelected ? 'text-cardTitle font-semibold' : 'text-textMuted'} font-space">${displayName}</span>
+                                            <span class="text-[10px] ${isSelected ? 'text-cardTitle font-bold tracking-wide' : 'text-textMuted group-hover/btn:text-slate-300'} font-space transition-colors">${displayName}</span>
                                         </button>
                                     `;
                                 }).join('')}
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-glassBorder">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-glassBorder/50">
                             <!-- Currency -->
-                            <div>
-                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Currency Unit</label>
-                                <select id="pref-currency-select" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2.5 px-3 text-xs text-cardTitle focus:outline-none">
-                                    <option value="INR" ${state.preferences.currency === 'INR' ? 'selected' : ''}>INR (₹) - Indian Rupee</option>
-                                    <option value="USD" ${state.preferences.currency === 'USD' ? 'selected' : ''}>USD ($) - US Dollar</option>
-                                    <option value="EUR" ${state.preferences.currency === 'EUR' ? 'selected' : ''}>EUR (€) - Euro</option>
-                                    <option value="GBP" ${state.preferences.currency === 'GBP' ? 'selected' : ''}>GBP (£) - British Pound</option>
-                                </select>
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest font-space">Global Currency Standard</label>
+                                <div class="relative group/select">
+                                    <select id="pref-currency-select" class="w-full bg-[#13111a]/80 border border-glassBorder hover:border-brand-500/50 focus:border-brand-500 focus:ring-1 focus:ring-brand-500/50 rounded-2xl py-3.5 px-4 text-sm text-cardTitle focus:outline-none transition-all appearance-none cursor-pointer">
+                                        <option value="INR" ${state.preferences.currency === 'INR' ? 'selected' : ''}>INR (₹) - Indian Rupee</option>
+                                        <option value="USD" ${state.preferences.currency === 'USD' ? 'selected' : ''}>USD ($) - US Dollar</option>
+                                        <option value="EUR" ${state.preferences.currency === 'EUR' ? 'selected' : ''}>EUR (€) - Euro</option>
+                                        <option value="GBP" ${state.preferences.currency === 'GBP' ? 'selected' : ''}>GBP (£) - British Pound</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-textMuted group-hover/select:text-brand-400 transition-colors">
+                                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
                             </div>
+                            
                             <!-- Notifications checkboxes -->
-                            <div class="space-y-4 font-sans text-xs">
-                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1 font-space">Notifications</label>
+                            <div class="space-y-5 font-sans">
+                                <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest font-space mb-2">Intelligent Alerts</label>
                                 
                                 <!-- Alert 1 -->
-                                <label class="flex items-center cursor-pointer select-none group">
+                                <label class="flex items-center cursor-pointer select-none group/toggle">
                                     <div class="relative flex-shrink-0">
                                         <input type="checkbox" id="chk-billing-alerts" ${state.preferences.billingAlerts ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-9 h-5 bg-inputBg border border-glassBorder rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                        <div class="w-11 h-6 bg-[#13111a] border border-glassBorder rounded-full transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-brand-500 peer-checked:to-purple-500 peer-checked:border-transparent peer-checked:shadow-[0_0_15px_rgba(236,72,153,0.4)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all after:duration-300 peer-checked:after:translate-x-5 peer-checked:after:border-white"></div>
                                     </div>
-                                    <span class="ml-3 text-cardTitle hover:text-cardTitle transition-all text-xxs font-space leading-tight">Critical billing renewal alerts (5 days warning)</span>
+                                    <span class="ml-4 text-textMuted group-hover/toggle:text-cardTitle transition-colors text-xs font-medium leading-tight">Priority Billing Renewal Warnings (5-Day Threshold)</span>
                                 </label>
 
                                 <!-- Alert 2 -->
-                                <label class="flex items-center cursor-pointer select-none group">
+                                <label class="flex items-center cursor-pointer select-none group/toggle">
                                     <div class="relative flex-shrink-0">
                                         <input type="checkbox" id="chk-sms-alerts" ${state.preferences.smsAlerts ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-9 h-5 bg-inputBg border border-glassBorder rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                        <div class="w-11 h-6 bg-[#13111a] border border-glassBorder rounded-full transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-brand-500 peer-checked:to-purple-500 peer-checked:border-transparent peer-checked:shadow-[0_0_15px_rgba(236,72,153,0.4)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all after:duration-300 peer-checked:after:translate-x-5 peer-checked:after:border-white"></div>
                                     </div>
-                                    <span class="ml-3 text-cardTitle hover:text-cardTitle transition-all text-xxs font-space leading-tight">Mobile SMS notifications on scan matching</span>
+                                    <span class="ml-4 text-textMuted group-hover/toggle:text-cardTitle transition-colors text-xs font-medium leading-tight">Real-time SMS Pulse on Subscription Matches</span>
                                 </label>
 
                                 <!-- Alert 3 -->
-                                <label class="flex items-center cursor-pointer select-none group">
+                                <label class="flex items-center cursor-pointer select-none group/toggle">
                                     <div class="relative flex-shrink-0">
                                         <input type="checkbox" id="chk-monthly-reports" ${state.preferences.monthlyReports ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-9 h-5 bg-inputBg border border-glassBorder rounded-full transition-all peer-checked:bg-gradient-to-r peer-checked:from-brand-600 peer-checked:to-cosmicBlue-600 peer-checked:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:after:translate-x-4"></div>
+                                        <div class="w-11 h-6 bg-[#13111a] border border-glassBorder rounded-full transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-brand-500 peer-checked:to-purple-500 peer-checked:border-transparent peer-checked:shadow-[0_0_15px_rgba(236,72,153,0.4)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all after:duration-300 peer-checked:after:translate-x-5 peer-checked:after:border-white"></div>
                                     </div>
-                                    <span class="ml-3 text-cardTitle hover:text-cardTitle transition-all text-xxs font-space leading-tight">Monthly spending and subscription summary reports</span>
+                                    <span class="ml-4 text-textMuted group-hover/toggle:text-cardTitle transition-colors text-xs font-medium leading-tight">Comprehensive Monthly Spend & Analytics Brief</span>
                                 </label>
                             </div>
                         </div>
