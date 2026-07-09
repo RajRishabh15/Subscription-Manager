@@ -306,7 +306,7 @@ function initAppView() {
         // Update user avatar elements
         syncAvatarUI();
         
-        switchTab(state.activeTab || 'home');
+        switchTab('home');
     } else {
         scanView.classList.remove('hidden');
         dashboardView.classList.add('hidden');
