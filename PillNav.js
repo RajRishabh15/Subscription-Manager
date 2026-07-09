@@ -56,7 +56,23 @@ class PillNav {
     nav.className = 'w-[90%] md:w-max flex items-center justify-between md:justify-start box-border p-[4px] rounded-full border border-glassBorder/10 backdrop-blur-md bg-black/10';
     nav.setAttribute('aria-label', 'Primary');
 
-    // Logo Button (Left) - Switches to Account tab
+    // Website Logo (Far Left)
+    const siteLogo = document.createElement('button');
+    siteLogo.className = 'rounded-full p-1 hidden md:inline-flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 border-0 mr-12 ml-0 flex-shrink-0';
+    siteLogo.style.width = 'var(--nav-h)';
+    siteLogo.style.height = 'var(--nav-h)';
+    siteLogo.style.background = 'var(--base, #000)';
+    
+    const siteLogoImgWrapper = document.createElement('div');
+    siteLogoImgWrapper.className = 'w-full h-full rounded-full flex items-center justify-center p-2 bg-[#0b0a10] border border-[#222] select-none shadow-inner';
+    siteLogoImgWrapper.innerHTML = `<img src="${this.logo}" class="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]" alt="${this.logoAlt}">`;
+    siteLogo.appendChild(siteLogoImgWrapper);
+
+    siteLogo.addEventListener('click', () => {
+        if (this.onTabClick) this.onTabClick('home');
+    });
+
+    // Logo Button (Right) - Switches to Account tab
     const logoLink = document.createElement('button');
     logoLink.className = 'rounded-full p-1 inline-flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 border-0';
     logoLink.style.width = 'var(--nav-h)';
@@ -184,7 +200,8 @@ class PillNav {
     hamburger.appendChild(line1);
     hamburger.appendChild(line2);
     
-    // Append in the new order: Hamburger -> NavItems -> LogoLink
+    // Append in the new order: SiteLogo -> Hamburger -> NavItems -> LogoLink
+    nav.appendChild(siteLogo);
     nav.appendChild(hamburger);
     nav.appendChild(navItems);
     nav.appendChild(logoLink);
