@@ -500,7 +500,7 @@ function startScanning(phone, email) {
     if (email) {
         state.currentUser.linkedCredentials.push({
             type: 'Email',
-            value: email,
+    value: email,
             dateAdded: new Date().toLocaleDateString()
         });
     }
@@ -509,7 +509,10 @@ function startScanning(phone, email) {
     const progressView = document.getElementById('login-progress-view');
     
     if (scanView) scanView.classList.add('hidden');
-    if (progressView) progressView.classList.remove('hidden');
+    if (progressView) {
+        progressView.classList.remove('hidden');
+        lucide.createIcons();
+    }
 
     const statusEl = document.getElementById('login-progress-status');
     const barEl = document.getElementById('login-progress-bar');
@@ -517,6 +520,16 @@ function startScanning(phone, email) {
 
     if (barEl) barEl.style.width = '0%';
     if (pctEl) pctEl.innerText = '0%';
+
+    // Initialize the terminal console
+    const terminalEl = document.getElementById('scraper-terminal');
+    if (terminalEl) {
+        terminalEl.innerHTML = `
+            <div class="text-slate-500">[SYSTEM] Initialization sequence initialized...</div>
+            <div class="text-slate-500">[SYSTEM] Decryption protocols ready. AES-256 enabled.</div>
+            <div class="text-slate-550">[SYSTEM] Scanning OTP gateways...</div>
+        `;
+    }
 
     const scanSteps = [
         { pct: 12, text: 'Opening secure connection to OTP servers...' },
@@ -530,9 +543,25 @@ function startScanning(phone, email) {
     ];
 
     let currentStep = 0;
+    
+    // Background matrix/raw debug scanner logs generator
+    let logInterval = setInterval(() => {
+        const rawLogs = [
+            `DEBUG: socket recv (28 bytes) from secure-api.aio-sync.io:443`,
+            `DEBUG: decrypting data frame 0x${Math.floor(Math.random()*16777215).toString(16).toUpperCase()}... OK`,
+            `DEBUG: DB_CACHE: sync sequence verified`,
+            `DEBUG: matching receipt regex filter /billing|invoice|receipt/i...`,
+            `DEBUG: handshake packet acknowledged (ack=${Math.floor(Math.random()*900000)})`,
+            `DEBUG: parsing HTML table data structure... OK`,
+            `DEBUG: connection speed: ${(4 + Math.random()*8).toFixed(1)} Mbps`
+        ];
+        const randomLog = rawLogs[Math.floor(Math.random() * rawLogs.length)];
+        appendTerminalLog(randomLog, 'raw');
+    }, 180);
 
     function runNextStep() {
         if (currentStep >= scanSteps.length) {
+            clearInterval(logInterval);
             setTimeout(() => {
                 state.subscriptions = [
                     {
@@ -596,6 +625,9 @@ function startScanning(phone, email) {
         if (barEl) barEl.style.width = `${step.pct}%`;
         if (pctEl) pctEl.innerText = `${step.pct}%`;
 
+        // Update holographic scan terminal logs dynamically
+        updateScanTerminal(currentStep, step.text);
+
         currentStep++;
         
         const delay = 800 + Math.random() * 800;
@@ -605,9 +637,64 @@ function startScanning(phone, email) {
     setTimeout(runNextStep, 500);
 }
 
+function appendTerminalLog(message, type = 'info') {
+    const terminal = document.getElementById('scraper-terminal');
+    if (!terminal) return;
+
+    const line = document.createElement('div');
+    const timeStr = new Date().toLocaleTimeString();
+    
+    let colorClass = 'text-slate-400';
+    if (type === 'auth') colorClass = 'text-pink-400 font-bold';
+    else if (type === 'success') colorClass = 'text-emerald-400 font-bold';
+    else if (type === 'sys') colorClass = 'text-cyan-400 font-medium';
+    else if (type === 'raw') colorClass = 'text-slate-600 text-[9px]';
+
+    line.className = `${colorClass} font-mono leading-relaxed`;
+    
+    if (type !== 'raw') {
+        line.innerHTML = `<span class="text-slate-600">[${timeStr}]</span> ${message}`;
+    } else {
+        line.innerText = `  ${message}`;
+    }
+
+    terminal.appendChild(line);
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
+function updateScanTerminal(stepIndex, stepText) {
+    if (stepIndex === 0) {
+        appendTerminalLog(">> [AUTH] Sending handshakes to secure OTP gateway...", "auth");
+        appendTerminalLog(">> [AUTH] Handshake response: 200 OK (handshake complete)", "sys");
+        appendTerminalLog(">> [AUTH] Decryption keys verified: AES-256 GCM initialized.", "sys");
+    } else if (stepIndex === 1) {
+        appendTerminalLog(">> [JIO] Requesting data mapping via Telecom API...", "auth");
+        appendTerminalLog(">> [JIO] Connected to node: jio-bill-server-west-04", "sys");
+        appendTerminalLog(">> [JIO] Found mobile billing trigger: INR 1,179 due on " + getFutureDate(12), "success");
+    } else if (stepIndex === 2) {
+        appendTerminalLog(">> [IMAP] Initializing deep scraper on linked mailboxes...", "auth");
+        appendTerminalLog(">> [IMAP] Scanning subject headers containing 'receipt', 'invoice', 'renewed'...", "sys");
+    } else if (stepIndex === 3) {
+        appendTerminalLog(">> [NETFLIX] Scraping member details for 'Netflix India'...", "auth");
+        appendTerminalLog(">> [NETFLIX] Parsing HTML invoice body...", "sys");
+        appendTerminalLog(">> [NETFLIX] Found subscription: Premium Plan, INR 199/mo, next renewal " + getFutureDate(3), "success");
+    } else if (stepIndex === 4) {
+        appendTerminalLog(">> [HOTSTAR] Checking transactional reminders for 'Hotstar' node...", "auth");
+        appendTerminalLog(">> [HOTSTAR] Identified matching UPI debit agreement: Disney+ Hotstar, INR 299/mo, next renewal " + getFutureDate(5), "success");
+    } else if (stepIndex === 5) {
+        appendTerminalLog(">> [PLAYSTORE] Resolving merchant tokens in Google Play Store...", "auth");
+        appendTerminalLog(">> [PLAYSTORE] Found active digital subscription: Spotify Premium, INR 119/mo", "success");
+    } else if (stepIndex === 6) {
+        appendTerminalLog(">> [SYSTEM] Aggregating upcoming bill alert calendar...", "sys");
+        appendTerminalLog(">> [SYSTEM] Setting up SMS push notification triggers...", "sys");
+    } else if (stepIndex === 7) {
+        appendTerminalLog(">> [SYSTEM] Finalizing secure profile cache sync...", "sys");
+        appendTerminalLog(">> [SYSTEM] Sync complete. Initializing dashboard view...", "success");
+    }
+}
+
 // ==========================================
 // CINEMATIC SCAN → DASHBOARD REVEAL ANIMATION
-// ==========================================
 function revealDashboardFromScan(progressView) {
     // Create full-screen overlay for the cinematic burst
     const burst = document.createElement('div');
@@ -1973,20 +2060,27 @@ function renderAccountTab() {
                                 const isSelected = state.preferences.theme === themeName;
                                 const colors = THEMES[themeName];
                                 const displayName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
+                                
+                                const borderStyle = isSelected 
+                                    ? `border-color: ${colors.brandHex}80; background: ${colors.brandHex}08; box-shadow: 0 0 24px ${colors.brandHex}20, inset 0 0 12px ${colors.brandHex}10;` 
+                                    : `border-color: rgba(255, 255, 255, 0.05); background: rgba(19, 17, 26, 0.6);`;
+                                    
                                 return `
-                                    <button class="theme-select-btn group relative flex flex-col items-center gap-3 p-4 rounded-2xl border transition-all duration-300 focus:outline-none overflow-hidden ${isSelected ? 'border-white/30 bg-white/5 shadow-[0_0_24px_rgba(255,255,255,0.06)]' : 'border-glassBorder/40 bg-[#13111a] hover:border-white/20 hover:bg-[#1a1723]'}" data-theme="${themeName}">
-                                        <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}, ${colors.brandHex})">
-                                            <div class="absolute inset-[3px] rounded-full bg-[#0a0910]"></div>
-                                            ${isSelected ? `<div class="absolute inset-0 rounded-full flex items-center justify-center"><span class="w-3 h-3 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)] z-10"></span></div>` : ''}
+                                    <button class="theme-select-btn group relative flex flex-col items-center gap-3.5 p-5 rounded-2xl border transition-all duration-300 focus:outline-none overflow-hidden hover:border-white/15" data-theme="${themeName}" style="${borderStyle}">
+                                        <!-- Glowing gradient sphere -->
+                                        <div class="relative w-16 h-16 rounded-full flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}, ${colors.brandHex}); box-shadow: 0 0 15px ${colors.brandHex}40;">
+                                            <div class="absolute inset-[4px] rounded-full bg-[#0a0910]/95 backdrop-blur-sm"></div>
+                                            ${isSelected ? `<div class="absolute inset-0 rounded-full flex items-center justify-center"><span class="w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,1)] z-10"></span></div>` : ''}
                                         </div>
-                                        <div class="text-center">
-                                            <div class="flex gap-1.5 justify-center mb-1">
-                                                <div class="w-4 h-1.5 rounded-full" style="background:${colors.brandHex}"></div>
-                                                <div class="w-4 h-1.5 rounded-full" style="background:${colors.cosmicHex}"></div>
+                                        <div class="text-center z-10">
+                                            <div class="flex gap-2 justify-center mb-2">
+                                                <div class="w-5 h-2 rounded-full transition-all" style="background:${colors.brandHex}; box-shadow: 0 0 10px ${colors.brandHex};"></div>
+                                                <div class="w-5 h-2 rounded-full transition-all" style="background:${colors.cosmicHex}; box-shadow: 0 0 10px ${colors.cosmicHex};"></div>
                                             </div>
-                                            <span class="text-[11px] font-bold ${isSelected ? 'text-white' : 'text-textMuted group-hover:text-slate-300'} font-space transition-colors">${displayName}</span>
+                                            <span class="text-xs font-bold ${isSelected ? 'text-white' : 'text-textMuted group-hover:text-slate-350'} font-space transition-colors">${displayName}</span>
                                         </div>
-                                        ${isSelected ? `<div class="absolute inset-0 rounded-2xl border border-white/15 pointer-events-none"></div>` : ''}
+                                        <!-- Ambient background card glow -->
+                                        <div class="absolute -bottom-12 -right-12 w-24 h-24 rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity pointer-events-none" style="background: ${colors.brandHex};"></div>
                                     </button>
                                 `;
                             }).join('')}
@@ -2589,23 +2683,10 @@ function bindAccountEventListeners() {
             state.preferences.theme = themeChoice;
             applyTheme(themeChoice);
             saveStateToStorage();
-            // Update highlight states in-place without full re-render
-            document.querySelectorAll('.theme-select-btn').forEach(b => {
-                const isNow = b.getAttribute('data-theme') === themeChoice;
-                const colors = THEMES[themeChoice];
-                if (isNow) {
-                    b.className = b.className
-                        .replace('border-glassBorder/40', 'border-white/40')
-                        .replace('bg-glassBg/30', 'bg-white/5');
-                    b.style.border = '1px solid rgba(255,255,255,0.4)';
-                    b.style.background = 'rgba(255,255,255,0.06)';
-                    b.style.boxShadow = `0 0 30px ${colors.brandHex}40, 0 0 0 1px rgba(255,255,255,0.15)`;
-                } else {
-                    b.style.border = '1px solid rgba(255,255,255,0.06)';
-                    b.style.background = 'rgba(255,255,255,0.02)';
-                    b.style.boxShadow = 'none';
-                }
-            });
+            
+            // Full clean re-render to update the glowing borders/shadows perfectly
+            renderAccountTab();
+            switchAccountTab('appearance');
         });
     });
 
