@@ -308,174 +308,131 @@
 
         <!-- 1.5. FULL PAGE DISCOVERY SCAN VIEW (Shown during scanning process) -->
         <section id="login-progress-view"
-            class="hidden fixed inset-0 z-50 flex flex-col justify-between bg-[#04020a] p-6 sm:p-12 md:p-16">
-            <!-- PROGRESS GLITCH BACKGROUND -->
-            <div id="progress-glitch-bg" class="fixed inset-0 pointer-events-none z-0 bg-black"></div>
+            class="hidden fixed inset-0 z-50 flex flex-col justify-between bg-[#04020a] p-6 sm:p-12 md:p-16 overflow-y-auto">
+            <!-- Background futuristic mesh grid -->
+            <div class="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))] opacity-40"></div>
+            <div class="fixed inset-0 pointer-events-none z-0 bg-[linear-gradient(rgba(255,255,255,0.005)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.005)_1px,transparent_1px)] bg-[size:32px_32px]"></div>
 
             <!-- Top Header Branding -->
-            <header class="flex justify-between items-center z-10 relative">
+            <header class="flex justify-between items-center z-10 relative mb-8">
                 <div class="flex items-center space-x-2.5">
-                    <div
-                        class="p-1.5 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.15)]">
+                    <div class="p-1.5 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.15)]">
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
                     <span class="text-lg font-bold font-space text-cardTitle tracking-tight">AIOManager Sync</span>
                 </div>
-                <div
-                    class="text-[9px] font-bold text-slate-550 uppercase tracking-widest font-space bg-white/5 border border-glassBorder px-3 py-1 rounded-full">
-                    Directory Mapping active
+                <div class="text-[9px] font-bold text-slate-455 uppercase tracking-widest font-space bg-white/5 border border-glassBorder px-3 py-1 rounded-full">
+                    Deep Scraper Active
                 </div>
             </header>
 
-            <!-- Center Sync Console Section -->
-            <div class="flex-grow flex flex-col items-center justify-center py-6 z-10 relative">
-                <div class="w-full max-w-3xl px-6 flex flex-col items-center justify-center min-h-[380px] relative overflow-hidden">
+            <!-- Main Interactive Full Page Content Grid -->
+            <div class="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center z-10 relative max-w-7xl mx-auto w-full">
+                
+                <!-- LEFT: Futuristic Interactive Dashboard Mock (lg:col-span-7) -->
+                <div class="lg:col-span-7 w-full bg-[#0a0913]/40 border border-glassBorder/60 rounded-[32px] p-6 md:p-8 shadow-2xl backdrop-blur-md relative overflow-hidden flex flex-col gap-6">
+                    <div class="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-brand-500 via-cosmicBlue-400 to-purple-500 opacity-60"></div>
                     
-                    <!-- PHASE 1: UNIFIED SPEND ANALYTICS (0% - 35%) -->
-                    <div id="phase-container-feat1" class="w-full flex flex-col items-center gap-7 transition-all duration-500">
-                        <!-- Chart Onboarding Showcase -->
-                        <div class="relative w-72 h-44 bg-glassBg border border-glassBorder/70 rounded-2xl p-5 flex items-center justify-between shadow-2xl overflow-hidden">
-                            <!-- Small grid lines in background -->
-                            <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:16px_16px]"></div>
-                            
-                            <!-- Left: Interactive visual circle chart -->
-                            <div class="relative w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 z-10" style="background: conic-gradient(from 0deg, #ec4899 0%, #a78bfa 55%, transparent 55%, transparent 100%);">
-                                <div class="absolute inset-[8px] rounded-full bg-[#0a0910] flex flex-col items-center justify-center">
-                                    <span class="text-xs font-black text-white font-space">60%</span>
-                                    <span class="text-[7px] text-slate-500 uppercase tracking-widest font-mono">Netflix</span>
-                                </div>
-                            </div>
-
-                            <!-- Right: Stat values mapping -->
-                            <div class="flex flex-col gap-2.5 z-10 text-left w-32">
-                                <div class="bg-white/5 border border-glassBorder px-2.5 py-1.5 rounded-xl">
-                                    <div class="text-[7px] text-slate-500 uppercase font-space font-bold">Monthly Budget</div>
-                                    <div class="text-xs font-bold text-white font-space">₹1,796 <span class="text-[7px] text-emerald-450 font-normal">Active</span></div>
-                                </div>
-                                <div class="bg-white/5 border border-glassBorder px-2.5 py-1.5 rounded-xl">
-                                    <div class="text-[7px] text-slate-500 uppercase font-space font-bold">Categories</div>
-                                    <div class="text-[9px] font-semibold text-brand-300 font-space flex items-center gap-1">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span> Entertainment
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- App Mock Header -->
+                    <div class="flex justify-between items-center border-b border-glassBorder/40 pb-4">
+                        <div class="flex gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/40"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/40"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/40"></span>
                         </div>
-
-                        <div class="text-center">
-                            <h4 class="text-xs font-semibold text-brand-400 font-space tracking-widest uppercase mb-1.5">FEATURE 01: UNIFIED SPEND ANALYTICS</h4>
-                            <p class="text-[10px] text-textMuted max-w-sm mx-auto leading-relaxed">Aggregate and visualize all your software subscriptions, telecom services, and utility bills in an interactive, responsive central dashboard.</p>
-                        </div>
+                        <span class="text-[9px] font-mono text-slate-500 uppercase">AIOManager // Preview v1.2</span>
                     </div>
 
-                    <!-- PHASE 2: AUTOMATED SCANNERS & SYNC (35% - 75%) -->
-                    <div id="phase-container-feat2" class="w-full hidden flex-col items-center gap-7 transition-all duration-500 opacity-0 scale-95">
-                        <!-- Scraper Showcase Graphic -->
-                        <div class="relative w-80 h-44 flex items-center justify-center bg-glassBg border border-glassBorder/70 rounded-2xl p-5 shadow-2xl overflow-hidden">
-                            <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:16px_16px]"></div>
-                            
-                            <!-- Central Scraper Core -->
-                            <div class="relative w-22 h-22 rounded-full bg-indigo-500/5 border border-indigo-500/30 flex flex-col items-center justify-center shadow-[0_0_35px_rgba(99,102,241,0.15)] z-20">
-                                <i data-lucide="scan-eye" class="w-8 h-8 text-indigo-400 animate-pulse"></i>
-                                <span class="text-[7px] text-indigo-400 font-bold font-space mt-1">SCRAPER</span>
+                    <!-- Chart & Analytics Mock -->
+                    <div class="bg-black/40 border border-glassBorder/40 rounded-2xl p-5 relative overflow-hidden">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-400 uppercase font-space tracking-wider">Spend Overview</h3>
+                                <div class="text-2xl font-black text-white font-space mt-1" id="mock-dashboard-cost">₹0</div>
                             </div>
+                            <span class="text-[8px] font-mono text-emerald-450 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">SYNCING LIVE</span>
+                        </div>
 
-                            <!-- Left: Source input -->
-                            <div class="absolute left-6 w-14 h-14 rounded-2xl bg-white/5 border border-glassBorder flex flex-col items-center justify-center animate-pulse z-30 shadow-lg">
-                                <i data-lucide="mail" class="w-6 h-6 text-cyan-400"></i>
-                                <span class="text-[6px] text-slate-400 mt-1 font-space">E-RECEIPTS</span>
-                            </div>
-
-                            <!-- Right: Target output -->
-                            <div class="absolute right-6 w-14 h-14 rounded-2xl bg-white/5 border border-glassBorder flex flex-col items-center justify-center animate-pulse z-30 shadow-lg" style="animation-delay: 0.5s;">
-                                <i data-lucide="smartphone" class="w-6 h-6 text-brand-400"></i>
-                                <span class="text-[6px] text-slate-400 mt-1 font-space">SMS ALERTS</span>
-                            </div>
-
-                            <!-- Connecting glow beams / lines -->
-                            <svg class="absolute inset-0 w-full h-full pointer-events-none z-10" style="filter: drop-shadow(0 0 2px rgba(99,102,241,0.5));">
-                                <line x1="22%" y1="50%" x2="50%" y2="50%" stroke="#22d3ee" stroke-dasharray="4 4" class="animate-pulse"/>
-                                <line x1="78%" y1="50%" x2="50%" y2="50%" stroke="#ec4899" stroke-dasharray="4 4" class="animate-pulse" style="animation-delay: 0.5s;"/>
+                        <!-- Sparkline Line Graph (SVG) -->
+                        <div class="h-28 w-full mt-4">
+                            <svg class="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chart-glow" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#ec4899" stop-opacity="0.25"/>
+                                        <stop offset="100%" stop-color="#ec4899" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                                <path id="mock-chart-path" d="M 0 30 Q 15 25 30 30 T 60 30 T 90 30" fill="none" stroke="#ec4899" stroke-width="1" class="transition-all duration-500"/>
+                                <path id="mock-chart-area" d="M 0 30 Q 15 25 30 30 T 60 30 T 90 30 L 100 30 L 0 30 Z" fill="url(#chart-glow)" class="transition-all duration-500"/>
                             </svg>
                         </div>
+                    </div>
 
-                        <div class="text-center">
-                            <h4 class="text-xs font-semibold text-indigo-400 font-space tracking-widest uppercase mb-1.5">FEATURE 02: AUTOMATED BILL DETECTOR</h4>
-                            <p class="text-[10px] text-textMuted max-w-sm mx-auto leading-relaxed">No manual entry needed. The sync engine scans transaction reminders, OTP gateways, and invoices securely without exposing credentials.</p>
+                    <!-- Mini cards matching matched services -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-[#0f0e1a]/60 border border-glassBorder/40 p-4 rounded-2xl flex items-center gap-3 transition-all duration-500 opacity-20 filter blur-[2px]" id="mock-card-netflix">
+                            <div class="p-2.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl">
+                                <i data-lucide="tv-2" class="w-5 h-5"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-[10px] font-bold text-white font-space">Netflix</div>
+                                <div class="text-[9px] text-slate-500 font-mono mt-0.5">₹199/mo</div>
+                            </div>
+                        </div>
+                        <div class="bg-[#0f0e1a]/60 border border-glassBorder/40 p-4 rounded-2xl flex items-center gap-3 transition-all duration-500 opacity-20 filter blur-[2px]" id="mock-card-jio">
+                            <div class="p-2.5 bg-blue-500/10 text-blue-500 border border-blue-500/20 rounded-xl">
+                                <i data-lucide="phone-call" class="w-5 h-5"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-[10px] font-bold text-white font-space">Jio Fibre</div>
+                                <div class="text-[9px] text-slate-500 font-mono mt-0.5">₹1,179/mo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Active Onboarding Feature Info (lg:col-span-5) -->
+                <div class="lg:col-span-5 w-full flex flex-col justify-center text-left gap-8">
+                    
+                    <!-- Feature Slide Indicators -->
+                    <div class="flex gap-2">
+                        <span id="slide-dot-1" class="w-6 h-1.5 rounded-full bg-brand-500 transition-all duration-300"></span>
+                        <span id="slide-dot-2" class="w-2 h-1.5 rounded-full bg-white/10 transition-all duration-300"></span>
+                        <span id="slide-dot-3" class="w-2 h-1.5 rounded-full bg-white/10 transition-all duration-300"></span>
+                    </div>
+
+                    <!-- Feature Info Text (Updates based on Phase) -->
+                    <div class="min-h-[160px] flex flex-col justify-center">
+                        <div id="feature-slide-content" class="transition-all duration-300">
+                            <span class="text-[10px] font-black text-brand-400 uppercase tracking-widest font-space block mb-2" id="feature-tag">Feature 01</span>
+                            <h2 class="text-3xl font-black text-white tracking-tight leading-tight mb-4 font-space" id="feature-title">Unified Spend Analytics</h2>
+                            <p class="text-textMuted text-sm leading-relaxed" id="feature-desc">Aggregate and visualize all your software subscriptions, telecom services, and utility bills in an interactive, responsive central dashboard.</p>
                         </div>
                     </div>
 
-                    <!-- PHASE 3: RENEWALS & CARD DEBITS (75% - 100%) -->
-                    <div id="phase-container-feat3" class="w-full hidden flex-col items-center gap-7 transition-all duration-500 opacity-0 scale-95">
-                        <!-- Renewal Alert Showcase -->
-                        <div class="relative w-80 h-44 flex items-center justify-between bg-glassBg border border-glassBorder/70 rounded-2xl p-5 shadow-2xl overflow-hidden">
-                            <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:16px_16px]"></div>
-                            
-                            <!-- Left: Pulsing Bell -->
-                            <div class="w-20 h-20 rounded-2xl bg-amber-500/5 border border-amber-500/20 flex flex-col items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.15)] z-20">
-                                <i data-lucide="bell" class="w-8 h-8 text-amber-400 animate-bounce"></i>
-                                <span class="text-[7px] text-amber-400 font-bold font-space mt-1">DUE SOON</span>
-                            </div>
-
-                            <!-- Right: Credit Card Swiper visual -->
-                            <div class="w-36 h-22 rounded-xl bg-gradient-to-br from-purple-900/60 to-indigo-900/60 border border-purple-500/30 p-3 shadow-lg z-20 relative flex flex-col justify-between text-left">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-[8px] font-black font-space text-white tracking-widest">VISA</span>
-                                    <span class="text-[6px] text-slate-400">Debit card</span>
-                                </div>
-                                <div class="text-[9px] font-mono text-slate-300">**** **** **** 4321</div>
-                                <div class="flex justify-between items-end">
-                                    <div class="text-[6px] text-slate-500">EXPIRED</div>
-                                    <div class="text-[9px] font-bold text-emerald-450 font-space">ACTIVE</div>
-                                </div>
-                            </div>
+                    <!-- Glowing Progress & Stats directly integrated -->
+                    <div class="bg-[#0b0a13] border border-glassBorder/70 rounded-2xl p-5 flex flex-col gap-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[9px] font-bold text-slate-450 uppercase tracking-wider font-space block" id="login-progress-status">Syncing credentials...</span>
+                            <span class="text-lg font-black text-white font-space text-neon-glow" id="login-progress-pct">0%</span>
                         </div>
-
-                        <div class="text-center">
-                            <h4 class="text-xs font-semibold text-amber-400 font-space tracking-widest uppercase mb-1.5">FEATURE 03: SMART RENEWAL ALERTS</h4>
-                            <p class="text-[10px] text-textMuted max-w-sm mx-auto leading-relaxed">Receive alert alerts before your billing cards get debited. Configure custom warning intervals and prevent unapproved subscriptions.</p>
+                        
+                        <!-- Sleek full-width progress bar -->
+                        <div class="w-full bg-[#05040a] border border-glassBorder rounded-full h-2.5 p-0.5 overflow-hidden">
+                            <div id="login-progress-bar"
+                                class="bg-gradient-to-r from-brand-500 via-cosmicBlue-400 to-purple-500 h-full rounded-full w-0 transition-all duration-500">
+                            </div>
                         </div>
                     </div>
 
                 </div>
+
             </div>
 
-            <!-- Bottom Footer: Floating Progress Pill -->
-            <footer class="w-full max-w-3xl mx-auto z-10 relative">
-                <div
-                    class="bg-cardSubBg/50 border border-glassBorder backdrop-blur-2xl p-4 sm:p-5 rounded-full flex flex-col sm:flex-row items-center justify-between gap-4 shadow-[0_15px_40px_rgba(0,0,0,0.7)] hover:border-brand-500/10 transition-all">
-
-                    <!-- Left: Pulsating status text -->
-                    <div class="flex items-center space-x-3.5 pl-2">
-                        <span class="relative flex h-2.5 w-2.5">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
-                        </span>
-                        <div class="text-left">
-                            <span id="login-progress-status"
-                                class="text-xxs font-medium text-slate-450 uppercase tracking-wider font-space block">Connecting
-                                to OTP servers...</span>
-                        </div>
-                    </div>
-
-                    <!-- Right: Progress bar & percentage counter -->
-                    <div class="flex items-center space-x-4 w-full sm:w-auto flex-grow sm:flex-grow-0 justify-end">
-                        <!-- Sleek gradient progress bar -->
-                        <div
-                            class="w-full sm:w-48 bg-cardSubBg border border-glassBorder rounded-full h-2.5 p-0.5 overflow-hidden">
-                            <div id="login-progress-bar"
-                                class="bg-gradient-to-r from-brand-500 via-cosmicBlue-400 to-purple-500 h-full rounded-full w-0 transition-all duration-300">
-                            </div>
-                        </div>
-
-                        <!-- Glowing percentage -->
-                        <div class="text-right pr-2">
-                            <span id="login-progress-pct"
-                                class="text-lg font-black text-cardTitle font-space text-neon-glow">0%</span>
-                        </div>
-                    </div>
-
-                </div>
+            <!-- Bottom Footer branding -->
+            <footer class="w-full max-w-7xl mx-auto z-10 relative flex justify-between items-center mt-8 border-t border-glassBorder/20 pt-6 text-[10px] font-mono text-slate-500">
+                <span>© 2026 AIOManager Inc.</span>
+                <span>SECURE END-TO-END AES-256 SYNC</span>
             </footer>
         </section>
 
