@@ -1749,10 +1749,15 @@ function syncAvatarUI() {
         largeEmailEl.innerText = state.currentUser.email || '—';
     }
 
-    // 3. Update left profile card character bubble (if there is no icon set)
-    const largeCharEl = document.getElementById('account-large-avatar-char');
-    if (largeCharEl && !state.currentUser.avatarIcon) {
-        largeCharEl.innerText = (state.currentUser.name || 'U')[0].toUpperCase();
+    // 3. Update left profile card avatar ring inner content
+    const ring = document.getElementById('account-avatar-ring');
+    if (ring) {
+        const vibe = AVATAR_VIBES[state.currentUser.avatar || 'nebula'] || AVATAR_VIBES.nebula;
+        ring.className = `absolute inset-[3px] rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl`;
+        ring.innerHTML = state.currentUser.avatarIcon
+            ? `<i id="account-large-avatar-icon" data-lucide="${state.currentUser.avatarIcon}" class="w-11 h-11"></i>`
+            : `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
+        lucide.createIcons({ nodes: [ring] });
     }
 }
 
@@ -1785,7 +1790,7 @@ function renderAccountTab() {
         <div class="mb-8 flex items-end justify-between">
             <div>
                 <h1 class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-purple-400 to-indigo-400 font-space tracking-wide mb-1">Account</h1>
-                <p class="text-sm text-textMuted font-sans">Your identity, preferences &amp; connected sources</p>
+                <p class="text-base sm:text-lg font-space font-medium text-slate-400 tracking-wide mt-1.5">Manage profile details, visual vibes, and connected data sources.</p>
             </div>
             <div id="account-save-indicator" class="hidden items-center gap-2 text-xs text-emerald-400 font-space font-bold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
                 <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Saved
@@ -2501,10 +2506,10 @@ window.switchAccountTab = function(tabId) {
                 const ring = document.getElementById('account-avatar-ring');
                 if (ring) {
                     const vibe = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
-                    ring.className = `w-20 h-20 rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl border-2 border-white/10`;
+                    ring.className = `absolute inset-[3px] rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl`;
                     ring.innerHTML = pendingIcon
-                        ? `<i data-lucide="${pendingIcon}" class="w-9 h-9"></i>`
-                        : `<span id="account-large-avatar-char" class="text-3xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
+                        ? `<i id="account-large-avatar-icon" data-lucide="${pendingIcon}" class="w-11 h-11"></i>`
+                        : `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
                     lucide.createIcons({ nodes: [ring] });
                 }
                 
