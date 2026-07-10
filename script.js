@@ -927,114 +927,122 @@ function renderHomeTab() {
                 </div>
             </div>
 
-        </div>
-
-        <!-- Main Dashboard Column Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-start">
+         <!-- Main Dashboard Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8 items-start">
             
-            <!-- LEFT: Analytics & Optimization (lg:col-span-7) -->
-            <div class="lg:col-span-7 space-y-6">
-                
-                <!-- Category Breakdown Card -->
-                <div class="bg-glassBg border border-glassBorder rounded-[28px] p-6 relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
-                    
-                    <!-- SVG Donut Chart side -->
-                    <div class="flex-shrink-0">
-                        ${generateSVGDonutChart(categoriesData, totalCategorized)}
+            <!-- LEFT: Spend Category Breakdown (lg:col-span-5) -->
+            <div class="lg:col-span-5 bg-[#0b0a13]/40 border border-glassBorder/60 rounded-[28px] p-6 shadow-xl backdrop-blur-md relative overflow-hidden flex flex-col gap-6 hover:border-brand-500/25 transition-all duration-500">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="p-2 bg-brand-500/10 border border-brand-500/25 rounded-xl text-brand-400">
+                        <i data-lucide="pie-chart" class="w-4 h-4"></i>
                     </div>
-                    
-                    <!-- Categories list details -->
-                    <div class="flex-grow w-full space-y-3.5 text-left">
-                        <h3 class="text-xs font-bold text-textMuted uppercase tracking-widest font-space border-b border-glassBorder/30 pb-2">Category distribution</h3>
-                        <div class="grid grid-cols-1 gap-2.5 max-h-[160px] overflow-y-auto pr-1">
-                            ${categoriesList.length > 0 ? categoriesList.map(cat => {
-                                const colors = {
-                                    'Entertainment': 'bg-pink-500',
-                                    'Telecom & Fiber': 'bg-cyan-400',
-                                    'Music': 'bg-purple-500',
-                                    'Utilities': 'bg-emerald-450',
-                                    'Shopping': 'bg-rose-500',
-                                    'Other': 'bg-slate-400'
-                                };
-                                return `
-                                    <div class="flex items-center justify-between text-xs font-sans">
-                                        <div class="flex items-center space-x-2.5">
-                                            <span class="w-2.5 h-2.5 rounded-full ${colors[cat.category] || 'bg-slate-400'}"></span>
-                                            <span class="font-medium text-slate-300">${cat.category}</span>
-                                        </div>
-                                        <div class="flex items-center space-x-3 font-mono text-right">
-                                            <span class="text-slate-400">${cat.percentage}%</span>
-                                            <span class="font-bold text-cardTitle">${formatCurrency(cat.value)}</span>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('') : `<div class="text-xs text-textMuted">No active categories found.</div>`}
-                        </div>
-                    </div>
+                    <h3 class="text-xs font-bold text-textMuted uppercase tracking-widest font-space">Category Spend</h3>
                 </div>
 
-                <!-- Optimization Suggestion Card -->
-                <div class="bg-[#0f0e13]/60 border border-glassBorder/80 rounded-[28px] p-6 text-left relative overflow-hidden flex gap-5 items-center">
-                    <div class="p-3 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-2xl flex-shrink-0">
-                        <i data-lucide="lightbulb" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-textMuted uppercase tracking-widest font-space mb-1">Optimization Recommendation</h4>
-                        <p class="text-xs text-slate-300 leading-relaxed font-sans">${optimizationTips}</p>
-                    </div>
+                <!-- Donut Chart Canvas wrapper -->
+                <div class="flex items-center justify-center py-2">
+                    ${generateSVGDonutChart(categoriesData, totalCategorized)}
                 </div>
 
-            </div>
-
-            <!-- RIGHT: Priority Due Billing Stream (lg:col-span-5) -->
-            <div class="lg:col-span-5 bg-glassBg border border-glassBorder rounded-[28px] p-6 flex flex-col gap-5 text-left">
-                <div class="flex items-center justify-between border-b border-glassBorder/30 pb-3">
-                    <h3 class="text-xs font-bold text-textMuted uppercase tracking-widest font-space">Upcoming Billing Stream</h3>
-                    <span class="text-[9px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20 uppercase tracking-widest">Live Flow</span>
-                </div>
-
-                <div class="space-y-3.5 max-h-[300px] overflow-y-auto pr-1">
-                    ${upcomingBills.length > 0 ? upcomingBills.map(bill => {
+                <!-- Color legend maps -->
+                <div class="grid grid-cols-1 gap-2.5 max-h-[180px] overflow-y-auto pr-1">
+                    ${categoriesList.length > 0 ? categoriesList.map(cat => {
                         const colors = {
-                            'netflix': { bg: 'bg-red-500/10', text: 'text-red-500', border: 'border-red-500/20', icon: 'tv-2' },
-                            'jio': { bg: 'bg-blue-500/10', text: 'text-blue-500', border: 'border-blue-500/20', icon: 'phone' },
-                            'hotstar': { bg: 'bg-cyan-500/10', text: 'text-cyan-455', border: 'border-cyan-500/20', icon: 'play' },
-                            'spotify': { bg: 'bg-emerald-500/10', text: 'text-emerald-450', border: 'border-emerald-500/20', icon: 'music' }
+                            'Entertainment': 'bg-pink-400',
+                            'Telecom & Fiber': 'bg-cyan-400',
+                            'Music': 'bg-purple-400',
+                            'Utilities': 'bg-emerald-450',
+                            'Shopping': 'bg-rose-405',
+                            'Other': 'bg-slate-400'
                         };
-                        const brand = colors[bill.providerKey] || { bg: 'bg-indigo-500/10', text: 'text-indigo-400', border: 'border-indigo-500/20', icon: 'credit-card' };
-                        
-                        let remainingBadge = '';
-                        if (bill.daysRemaining === 0) {
-                            remainingBadge = `<span class="text-[9px] font-bold font-space bg-red-500/20 text-red-500 border border-red-500/30 px-2 py-0.5 rounded-full animate-pulse">DUE TODAY</span>`;
-                        } else if (bill.daysRemaining === 1) {
-                            remainingBadge = `<span class="text-[9px] font-bold font-space bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full">TOMORROW</span>`;
-                        } else if (bill.daysRemaining <= 5) {
-                            remainingBadge = `<span class="text-[9px] font-bold font-space bg-amber-500/15 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full">IN ${bill.daysRemaining} DAYS</span>`;
-                        } else {
-                            remainingBadge = `<span class="text-[9px] font-medium font-sans bg-slate-500/10 text-slate-400 border border-glassBorder px-2 py-0.5 rounded-full">IN ${bill.daysRemaining} DAYS</span>`;
-                        }
-
                         return `
-                            <div class="bg-[#0f0e13]/40 border border-glassBorder/60 hover:border-brand-500/15 p-3.5 rounded-2xl flex items-center justify-between gap-3 transition-colors cursor-pointer" onclick="switchTab('manage')">
-                                <div class="flex items-center gap-3.5">
-                                    <div class="w-10 h-10 rounded-xl ${brand.bg} ${brand.text} ${brand.border} border flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="${brand.icon}" class="w-5 h-5"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-xs font-bold text-cardTitle font-space">${bill.name}</div>
-                                        <div class="text-[10px] text-textMuted font-mono mt-0.5">${formatCurrency(bill.cost)} / ${bill.cycle}</div>
-                                    </div>
+                            <div class="flex items-center justify-between text-xs font-sans p-2.5 bg-white/5 border border-glassBorder/40 rounded-xl hover:border-brand-500/20 transition-all">
+                                <div class="flex items-center space-x-2.5 truncate">
+                                    <span class="w-2.5 h-2.5 rounded-full ${colors[cat.category] || 'bg-slate-400'}"></span>
+                                    <span class="font-medium text-slate-350 truncate">${cat.category}</span>
                                 </div>
-                                <div class="text-right flex flex-col items-end gap-1 flex-shrink-0">
-                                    ${remainingBadge}
-                                    <span class="text-[8px] font-mono text-slate-500 uppercase tracking-widest">${bill.payment}</span>
+                                <div class="flex items-center space-x-3 font-space text-right">
+                                    <span class="text-slate-450 text-[10px]">${cat.percentage}%</span>
+                                    <span class="font-bold text-white">${formatCurrency(cat.value)}</span>
                                 </div>
                             </div>
                         `;
-                    }).join('') : `<div class="text-xs text-textMuted py-8 text-center">No active renewals pending.</div>`}
+                    }).join('') : `<div class="text-xs text-textMuted py-4 text-center">No active categories found.</div>`}
                 </div>
             </div>
 
+            <!-- RIGHT: Next Renewals Timeline & Optimizations (lg:col-span-7) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Upcoming Timeline Card -->
+                <div class="bg-[#0b0a13]/40 border border-glassBorder/60 rounded-[28px] p-6 shadow-xl backdrop-blur-md hover:border-cyan-500/25 transition-all duration-500">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-2">
+                            <div class="p-2 bg-cyan-500/10 border border-cyan-500/25 rounded-xl text-cyan-400">
+                                <i data-lucide="clock" class="w-4 h-4"></i>
+                            </div>
+                            <h3 class="text-xs font-bold text-textMuted uppercase tracking-widest font-space">Upcoming Billing Stream</h3>
+                        </div>
+                        <span class="text-[9px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20 uppercase tracking-widest">Live Flow</span>
+                    </div>
+
+                    <div class="space-y-3.5 max-h-[300px] overflow-y-auto pr-1">
+                        ${upcomingBills.length > 0 ? upcomingBills.map(bill => {
+                            const colors = {
+                                'netflix': { bg: 'bg-red-500/10', text: 'text-red-500', border: 'border-red-500/20', icon: 'tv-2' },
+                                'jio': { bg: 'bg-blue-500/10', text: 'text-blue-500', border: 'border-blue-500/20', icon: 'phone' },
+                                'hotstar': { bg: 'bg-cyan-500/10', text: 'text-cyan-455', border: 'border-cyan-500/20', icon: 'play' },
+                                'spotify': { bg: 'bg-emerald-500/10', text: 'text-emerald-450', border: 'border-emerald-500/20', icon: 'music' }
+                            };
+                            const brand = colors[bill.providerKey] || { bg: 'bg-indigo-500/10', text: 'text-indigo-400', border: 'border-indigo-500/20', icon: 'credit-card' };
+                            
+                            let remainingBadge = '';
+                            if (bill.daysRemaining === 0) {
+                                remainingBadge = `<span class="text-[9px] font-bold font-space bg-red-500/20 text-red-500 border border-red-500/30 px-2 py-0.5 rounded-full animate-pulse">DUE TODAY</span>`;
+                            } else if (bill.daysRemaining === 1) {
+                                remainingBadge = `<span class="text-[9px] font-bold font-space bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full">TOMORROW</span>`;
+                            } else if (bill.daysRemaining <= 5) {
+                                remainingBadge = `<span class="text-[9px] font-bold font-space bg-amber-500/15 text-amber-405 border border-amber-500/20 px-2 py-0.5 rounded-full">IN ${bill.daysRemaining} DAYS</span>`;
+                            } else {
+                                remainingBadge = `<span class="text-[9px] font-medium font-sans bg-slate-500/10 text-slate-400 border border-glassBorder px-2 py-0.5 rounded-full">IN ${bill.daysRemaining} DAYS</span>`;
+                            }
+
+                            return `
+                                <div class="bg-black/30 border border-glassBorder/40 hover:border-brand-500/20 hover:bg-[#13111a]/40 p-3.5 rounded-2xl flex items-center justify-between gap-3 transition-all cursor-pointer" onclick="switchTab('manage')">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-10 h-10 rounded-xl ${brand.bg} ${brand.text} ${brand.border} border flex items-center justify-center flex-shrink-0">
+                                            <i data-lucide="${brand.icon}" class="w-5 h-5"></i>
+                                        </div>
+                                        <div class="text-left">
+                                            <div class="text-xs font-bold text-cardTitle font-space">${bill.name}</div>
+                                            <div class="text-[10px] text-textMuted font-mono mt-0.5">${formatCurrency(bill.cost)} / ${bill.cycle}</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right flex flex-col items-end gap-1 flex-shrink-0">
+                                        ${remainingBadge}
+                                        <span class="text-[8px] font-mono text-slate-500 uppercase tracking-widest">${bill.payment}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('') : `<div class="text-xs text-textMuted py-8 text-center">No active renewals pending.</div>`}
+                    </div>
+                </div>
+
+                <!-- Optimizations tips / Health HUD -->
+                <div class="bg-gradient-to-br from-[#12101e]/60 to-[#0a0910] border border-glassBorder/60 rounded-[28px] p-6 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-center gap-6 hover:border-brand-500/20 transition-all duration-500">
+                    <div class="relative w-20 h-20 rounded-full border-4 border-dashed border-brand-500/30 flex items-center justify-center animate-spin" style="animation-duration:15s;">
+                        <div class="w-14 h-14 rounded-full bg-[#0a0910] flex flex-col items-center justify-center animate-spin" style="animation-duration:8s; animation-direction:reverse;">
+                            <span class="text-[13px] font-black text-brand-400 font-space tracking-tighter">${healthScore}%</span>
+                            <span class="text-[5px] text-slate-500 font-mono uppercase tracking-wider">Health</span>
+                        </div>
+                    </div>
+                    <div class="text-left flex-grow flex-shrink space-y-2">
+                        <h4 class="text-xs font-extrabold text-cardTitle font-space uppercase tracking-wider">Optimization Engine</h4>
+                        <p class="text-[11px] text-textMuted leading-relaxed font-sans">${optimizationTips}</p>
+                    </div>
+                </div>
+
+            </div>
         </div>
     `;
 
