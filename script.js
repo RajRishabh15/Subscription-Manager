@@ -1759,12 +1759,6 @@ function syncAvatarUI() {
             : `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
         lucide.createIcons({ nodes: [ring] });
     }
-
-    // 4. Update Account tab header subtext
-    const headerSubEl = document.getElementById('account-header-sub');
-    if (headerSubEl) {
-        headerSubEl.innerHTML = `${state.currentUser.name || 'User'} &nbsp;•&nbsp; ${state.currentUser.email || '—'}`;
-    }
 }
 
 // ==========================================
@@ -1795,8 +1789,8 @@ function renderAccountTab() {
         <!-- Page Header -->
         <div class="mb-8 flex items-end justify-between">
             <div>
-                <h1 class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-purple-400 to-indigo-400 font-space tracking-wide mb-1">Account</h1>
-                <p class="text-sm text-textMuted font-sans mt-1" id="account-header-sub">${state.currentUser.name || 'User'} &nbsp;•&nbsp; ${state.currentUser.email || '—'}</p>
+                <h1 class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 font-space tracking-wide mb-1">Account</h1>
+                <p class="text-sm text-textMuted font-sans mt-1">Profile &amp; Settings</p>
             </div>
             <div id="account-save-indicator" class="hidden items-center gap-2 text-xs text-emerald-400 font-space font-bold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
                 <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Saved
