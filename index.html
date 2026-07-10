@@ -65,7 +65,7 @@
 
     <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <!-- Three.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -76,16 +76,17 @@
             if (saved && JSON.parse(saved).isLoggedIn) {
                 document.documentElement.classList.add('is-logged-in');
             }
-        } catch(e) {}
+        } catch (e) { }
     </script>
     <style>
         body {
             background-color: #04020a;
             color: #f1f5f9;
         }
-        html.is-logged-in #scan-view, 
-        html.is-logged-in #login-glitch-bg { 
-            display: none !important; 
+
+        html.is-logged-in #scan-view,
+        html.is-logged-in #login-glitch-bg {
+            display: none !important;
         }
     </style>
 </head>
@@ -97,7 +98,7 @@
 
     <!-- LOGIN GLITCH BACKGROUND -->
     <div id="login-glitch-bg" class="fixed inset-0 pointer-events-none -z-10 bg-black opacity-25 overflow-hidden"></div>
-    
+
     <!-- DASHBOARD PIXEL SNOW BACKGROUND -->
     <div id="dashboard-snow-bg" class="fixed inset-0 pointer-events-none -z-10 hidden overflow-hidden opacity-30"></div>
 
@@ -181,7 +182,7 @@
                 <div class="lg:col-span-5 flex justify-center lg:justify-end">
                     <div
                         class="w-full max-w-md bg-[#0a0a0f] border border-[#222] rounded-[32px] p-10 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative overflow-hidden transition-all duration-500 hover:border-[#333]">
-                        
+
                         <!-- Top Accent Line -->
                         <div
                             class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-500 to-transparent opacity-50">
@@ -194,12 +195,13 @@
                                 <img src="favicon.png" class="w-full h-full object-cover rounded-xl"
                                     alt="AIOManager Logo">
                             </div>
-                            <h1
-                                class="text-3xl font-extrabold text-cardTitle tracking-tight mb-3 font-sans">
-                                Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-indigo-400">AIOManager</span>
+                            <h1 class="text-3xl font-extrabold text-cardTitle tracking-tight mb-3 font-sans">
+                                Welcome to <span
+                                    class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-indigo-400">AIOManager</span>
                             </h1>
                             <p class="text-slate-400 text-sm font-sans px-4">
-                                Sign in to instantly discover and manage all your digital subscriptions in one secure place.
+                                Sign in to instantly discover and manage all your digital subscriptions in one secure
+                                place.
                             </p>
                         </div>
 
@@ -213,11 +215,20 @@
                                     <button id="btn-gmail-login"
                                         class="w-full bg-[#13111a] border border-[#222] hover:border-brand-500/40 hover:bg-[#1a1723] text-cardTitle font-semibold text-[15px] py-4 rounded-2xl transition-all shadow-inner flex items-center justify-center space-x-3 group">
                                         <div class="bg-white p-1 rounded-full flex items-center justify-center w-6 h-6">
-                                            <svg class="w-full h-full group-hover:scale-110 transition-transform" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                                                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                                                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                                                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                                            <svg class="w-full h-full group-hover:scale-110 transition-transform"
+                                                viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill="#EA4335"
+                                                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z">
+                                                </path>
+                                                <path fill="#4285F4"
+                                                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z">
+                                                </path>
+                                                <path fill="#FBBC05"
+                                                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z">
+                                                </path>
+                                                <path fill="#34A853"
+                                                    d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z">
+                                                </path>
                                                 <path fill="none" d="M0 0h48v48H0z"></path>
                                             </svg>
                                         </div>
@@ -231,19 +242,23 @@
                                 <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
                                 <span>Bank-grade encryption. We never store credentials.</span>
                             </div>
-                            
+
                             <!-- Auth Mode Selector (Login vs SignUp) -->
                             <div class="text-center text-sm text-slate-400 mt-6 border-t border-[#222] pt-6 font-sans">
                                 <span id="auth-toggle-label">New to AIOManager?</span>
-                                <button id="btn-toggle-auth-mode" class="text-brand-400 hover:text-brand-300 font-semibold transition-all ml-1">Create Account</button>
+                                <button id="btn-toggle-auth-mode"
+                                    class="text-brand-400 hover:text-brand-300 font-semibold transition-all ml-1">Create
+                                    Account</button>
                             </div>
                         </div>
 
                         <!-- REGISTRATION PROFILE SETUP FORM (hidden by default) -->
                         <div id="register-setup-panel" class="hidden space-y-6">
                             <!-- Back Button -->
-                            <button id="btn-register-back" class="flex items-center space-x-2 text-xs text-textMuted hover:text-cardTitle transition-all font-space group">
-                                <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
+                            <button id="btn-register-back"
+                                class="flex items-center space-x-2 text-xs text-textMuted hover:text-cardTitle transition-all font-space group">
+                                <i data-lucide="arrow-left"
+                                    class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
                                 <span>Back to Authentication</span>
                             </button>
 
@@ -257,16 +272,24 @@
                             <div class="space-y-4">
                                 <!-- Full name -->
                                 <div>
-                                    <label for="register-name" class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Full Name</label>
+                                    <label for="register-name"
+                                        class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Full
+                                        Name</label>
                                     <input type="text" id="register-name" placeholder="John Doe"
                                         class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 px-4 text-cardTitle placeholder-slate-650 focus:outline-none transition-all">
                                 </div>
 
                                 <!-- Avatar selection -->
                                 <div>
-                                    <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Select Aesthetic Vibe</label>
-                                    <div class="flex gap-3 overflow-x-auto pb-4 pt-2 scrollbar-none snap-x" id="register-avatar-row">
-                                        <!-- Rendered dynamically by script.js -->
+                                    <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Aesthetic Vibe & Icon</label>
+                                    <div class="flex items-center space-x-4 mb-2">
+                                        <div id="register-avatar-preview" class="w-14 h-14 rounded-full bg-gradient-to-tr from-brand-600 to-cosmicBlue-600 border border-white/10 flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                                            <span class="text-xl font-black font-space">U</span>
+                                        </div>
+                                        <button id="btn-open-register-avatar-modal" type="button" class="flex-1 bg-gradient-to-r from-brand-500/20 to-purple-500/20 border border-brand-500/40 hover:border-brand-500/70 hover:from-brand-500/30 hover:to-purple-500/30 text-brand-400 font-semibold text-xs py-3.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-space group">
+                                            <i data-lucide="palette" class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
+                                            <span>Customise Avatar</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -308,23 +331,33 @@
             <div class="flex-grow flex items-center justify-center py-8 z-10 relative">
                 <div class="w-full max-w-5xl px-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                        
+
                         <!-- Feature 1: Spend Analytics -->
-                        <div class="bg-glassBg border border-glassBorder rounded-3xl p-8 flex flex-col justify-center text-center">
-                            <div class="w-16 h-16 mx-auto bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-2xl flex items-center justify-center mb-6">
+                        <div
+                            class="bg-glassBg border border-glassBorder rounded-3xl p-8 flex flex-col justify-center text-center">
+                            <div
+                                class="w-16 h-16 mx-auto bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-2xl flex items-center justify-center mb-6">
                                 <i data-lucide="pie-chart" class="w-8 h-8"></i>
                             </div>
-                            <h2 class="text-2xl font-bold text-cardTitle font-sans tracking-tight mb-3">Unified Spend Analytics</h2>
-                            <p class="text-textMuted text-sm leading-relaxed max-w-sm mx-auto">See your entire software, telecom, and utility spending mapped into interactive visualization charts with clear percentage breakdowns.</p>
+                            <h2 class="text-2xl font-bold text-cardTitle font-sans tracking-tight mb-3">Unified Spend
+                                Analytics</h2>
+                            <p class="text-textMuted text-sm leading-relaxed max-w-sm mx-auto">See your entire software,
+                                telecom, and utility spending mapped into interactive visualization charts with clear
+                                percentage breakdowns.</p>
                         </div>
 
                         <!-- Feature 2: Automated Sync -->
-                        <div class="bg-glassBg border border-glassBorder rounded-3xl p-8 flex flex-col justify-center text-center">
-                            <div class="w-16 h-16 mx-auto bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-2xl flex items-center justify-center mb-6">
+                        <div
+                            class="bg-glassBg border border-glassBorder rounded-3xl p-8 flex flex-col justify-center text-center">
+                            <div
+                                class="w-16 h-16 mx-auto bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-2xl flex items-center justify-center mb-6">
                                 <i data-lucide="refresh-ccw" class="w-8 h-8"></i>
                             </div>
-                            <h2 class="text-2xl font-bold text-cardTitle font-sans tracking-tight mb-3">Automated Directory Sync</h2>
-                            <p class="text-textMuted text-sm leading-relaxed max-w-sm mx-auto">Connect your emails and phone numbers. The system securely aggregates transaction reminders and subscriptions automatically.</p>
+                            <h2 class="text-2xl font-bold text-cardTitle font-sans tracking-tight mb-3">Automated
+                                Directory Sync</h2>
+                            <p class="text-textMuted text-sm leading-relaxed max-w-sm mx-auto">Connect your emails and
+                                phone numbers. The system securely aggregates transaction reminders and subscriptions
+                                automatically.</p>
                         </div>
 
                     </div>
@@ -582,7 +615,8 @@
                             <i data-lucide="book-open" class="w-5.5 h-5.5"></i>
                         </div>
                         <div class="flex-grow">
-                            <div class="text-xs font-bold text-cardTitle font-space tracking-wide">View Manual Cancellation
+                            <div class="text-xs font-bold text-cardTitle font-space tracking-wide">View Manual
+                                Cancellation
                                 Steps</div>
                             <div class="text-[10px] text-textMuted mt-1 font-sans">Get step-by-step instructions on how
                                 to cancel this service manually.</div>

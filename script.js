@@ -1604,21 +1604,6 @@ function renderAccountTab() {
     applyCardTiltEffect();
 }
 
-function bindAccountEventListeners() {
-    // 1. Profile editable fields real-time sync
-    const inputProfileName = document.getElementById('profile-input-name');
-    const inputProfilePhone = document.getElementById('profile-input-phone');
-    const inputProfileEmail = document.getElementById('profile-input-email');
-    
-    const saveProfile = () => {
-        state.currentUser.name = inputProfileName.value.trim() || 'Rishabh Raj';
-        state.currentUser.phone = inputProfilePhone.value.trim();
-        state.currentUser.email = inputProfileEmail.value.trim();
-        saveStateToStorage();
-        syncAvatarUI();
-    };
-
-    // ---- AVATAR CUSTOMISE MODAL ----
     let pendingVibe = state.currentUser.avatar || 'nebula';
     let pendingIcon = state.currentUser.avatarIcon || null;
 
@@ -1768,8 +1753,11 @@ function bindAccountEventListeners() {
         document.body.style.overflow = '';
     };
 
-    const openBtn = document.getElementById('btn-open-avatar-modal');
-    if (openBtn) openBtn.addEventListener('click', openModal);
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('#btn-open-avatar-modal') || e.target.closest('#btn-open-register-avatar-modal')) {
+            openModal();
+        }
+    });
 
     function bindModalEvents() {
         const closeBtn = document.getElementById('avatar-modal-close');
@@ -1875,6 +1863,21 @@ function bindAccountEventListeners() {
                         : `<span id="account-large-avatar-char" class="text-3xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
                     lucide.createIcons({ nodes: [ring] });
                 }
+                
+                // Sync register avatar preview
+                const regRing = document.getElementById('register-avatar-preview');
+                if (regRing) {
+                    const vibe = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
+                    regRing.className = `w-14 h-14 rounded-full bg-gradient-to-tr ${vibe.gradient} border border-white/10 flex items-center justify-center text-white shadow-lg flex-shrink-0`;
+                    regRing.innerHTML = pendingIcon
+                        ? `<i data-lucide="${pendingIcon}" class="w-7 h-7 text-white"></i>`
+                        : `<span class="text-xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
+                    lucide.createIcons({ nodes: [regRing] });
+                    if (typeof selectedRegisterAvatar !== 'undefined') {
+                        selectedRegisterAvatar = pendingVibe;
+                    }
+                }
+
                 syncAvatarUI();
                 closeModal();
             });
@@ -1882,6 +1885,21 @@ function bindAccountEventListeners() {
     }
 
 
+function bindAccountEventListeners() {
+    // 1. Profile editable fields real-time sync
+    const inputProfileName = document.getElementById('profile-input-name');
+    const inputProfilePhone = document.getElementById('profile-input-phone');
+    const inputProfileEmail = document.getElementById('profile-input-email');
+    
+    const saveProfile = () => {
+        state.currentUser.name = inputProfileName.value.trim() || 'Rishabh Raj';
+        state.currentUser.phone = inputProfilePhone.value.trim();
+        state.currentUser.email = inputProfileEmail.value.trim();
+        saveStateToStorage();
+        syncAvatarUI();
+    };
+
+    // ---- AVATAR CUSTOMISE MODAL ----
     if (inputProfileName) {
         inputProfileName.addEventListener('blur', saveProfile);
         inputProfileName.addEventListener('input', (e) => {
@@ -2575,37 +2593,7 @@ function setupEventListeners() {
         });
     }
 
-    // Render and Bind Avatar selection in registration
-    const registerAvatarRow = document.getElementById('register-avatar-row');
-    if (registerAvatarRow) {
-        const vibeKeys = Object.keys(AVATAR_VIBES);
-        registerAvatarRow.innerHTML = vibeKeys.map(key => {
-            const v = AVATAR_VIBES[key];
-            const isSel = selectedRegisterAvatar === key;
-            const extraClasses = isSel ? 'border-brand-500 scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse' : 'border-glassBorder opacity-70 hover:opacity-100';
-            return `
-                <button type="button" class="register-avatar-btn flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-tr ${v.gradient} border ${extraClasses} flex items-center justify-center text-white transition-all snap-center" data-avatar="${key}">
-                    <i data-lucide="${v.icon}" class="w-5 h-5"></i>
-                </button>
-            `;
-        }).join('');
-        lucide.createIcons();
-
-        const registerAvatarBtns = document.querySelectorAll('.register-avatar-btn');
-        registerAvatarBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const clickedAvatar = btn.getAttribute('data-avatar');
-                selectedRegisterAvatar = clickedAvatar;
-                // Re-render
-                registerAvatarBtns.forEach(b => {
-                    const avatar = b.getAttribute('data-avatar');
-                    const isSel = avatar === clickedAvatar;
-                    const v = AVATAR_VIBES[avatar];
-                    b.className = `register-avatar-btn flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-tr ${v.gradient} flex items-center justify-center text-white transition-all border snap-center ${isSel ? 'border-brand-500 scale-110 shadow-[0_0_10px_rgba(236,72,153,0.4)] animate-pulse' : 'border-glassBorder opacity-70 hover:opacity-100'}`;
-                });
-            });
-        });
-    }
+    // Legacy registerAvatarRow removed
 
     document.querySelectorAll('[data-tab]').forEach(btn => {
         btn.addEventListener('click', () => {
