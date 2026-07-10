@@ -64,12 +64,12 @@ class PillNav {
     siteLogo.style.background = 'var(--base, #000)';
     
     const siteLogoImgWrapper = document.createElement('div');
-    siteLogoImgWrapper.className = 'w-full h-full rounded-full flex items-center justify-center p-2 bg-[#0b0a10] border border-[#222] select-none shadow-inner';
-    siteLogoImgWrapper.innerHTML = `<img src="${this.logo}" class="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]" alt="${this.logoAlt}">`;
+    siteLogoImgWrapper.className = 'w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-[#0b0a10] border border-[#222] select-none shadow-inner';
+    siteLogoImgWrapper.innerHTML = `<img src="${this.logo}" class="w-full h-full object-cover rounded-full" style="filter: brightness(1.15) drop-shadow(0 0 6px rgba(255,255,255,0.15));" alt="${this.logoAlt}">`;
     siteLogo.appendChild(siteLogoImgWrapper);
 
     siteLogo.addEventListener('click', () => {
-        if (this.onTabClick) this.onTabClick('home');
+        if (this.onTabClick) this.onTabClick('scan');
     });
 
     // Logo Button (Right) - Switches to Account tab

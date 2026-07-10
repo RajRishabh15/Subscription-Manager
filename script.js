@@ -422,7 +422,16 @@ function renderPillNav() {
         pillTextColor: '#000000',
         hoveredPillTextColor: '#ffffff',
         onTabClick: (tabName) => {
-            switchTab(tabName);
+            if (tabName === 'scan') {
+                // AIO site icon = re-scan mailbox for new subscriptions
+                if (state.isLoggedIn && state.currentUser.email) {
+                    startScanning(state.currentUser.phone || null, state.currentUser.email);
+                } else {
+                    switchTab('home');
+                }
+            } else {
+                switchTab(tabName);
+            }
         },
         initialLoadAnimation: false
     });
@@ -576,8 +585,8 @@ function startScanning(phone, email) {
                 state.activeTab = 'home';
                 saveStateToStorage();
                 
-                if (progressView) progressView.classList.add('hidden');
-                initAppView();
+                // Dramatic reveal transition
+                revealDashboardFromScan(progressView);
             }, 800);
             return;
         }
@@ -594,6 +603,73 @@ function startScanning(phone, email) {
     }
 
     setTimeout(runNextStep, 500);
+}
+
+// ==========================================
+// CINEMATIC SCAN → DASHBOARD REVEAL ANIMATION
+// ==========================================
+function revealDashboardFromScan(progressView) {
+    // Create full-screen overlay for the cinematic burst
+    const burst = document.createElement('div');
+    burst.style.cssText = 'position:fixed;inset:0;z-index:99999;pointer-events:none;display:flex;align-items:center;justify-content:center;background:transparent;';
+
+    // Central glow orb
+    const orb = document.createElement('div');
+    orb.style.cssText = 'width:0px;height:0px;border-radius:50%;background:radial-gradient(circle,rgba(236,72,153,0.95) 0%,rgba(139,92,246,0.7) 40%,rgba(59,130,246,0.3) 70%,transparent 100%);box-shadow:0 0 120px 60px rgba(236,72,153,0.5),0 0 300px 150px rgba(139,92,246,0.3);flex-shrink:0;';
+    burst.appendChild(orb);
+
+    // Particle ring
+    const particleCount = 16;
+    const particles = [];
+    const colors = ['#f472b6','#a78bfa','#60a5fa','#34d399','#fbbf24'];
+    for (let i = 0; i < particleCount; i++) {
+        const p = document.createElement('div');
+        p.style.cssText = `position:absolute;width:${4 + Math.random()*6}px;height:${4 + Math.random()*6}px;border-radius:50%;background:${colors[i % colors.length]};box-shadow:0 0 8px 2px ${colors[i % colors.length]};top:50%;left:50%;transform:translate(-50%,-50%);opacity:0;`;
+        burst.appendChild(p);
+        particles.push(p);
+    }
+
+    document.body.appendChild(burst);
+
+    const tl = gsap.timeline({
+        onComplete: () => {
+            if (progressView) progressView.classList.add('hidden');
+            initAppView();
+
+            requestAnimationFrame(() => {
+                // Stagger-animate home cards up
+                const cards = document.querySelectorAll('#tab-content-home > *, #tab-content-home .bg-glassBg');
+                if (cards.length > 0) {
+                    gsap.fromTo(cards,
+                        { opacity: 0, y: 40, scale: 0.94 },
+                        { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'power3.out', stagger: 0.07, clearProps: 'all' }
+                    );
+                }
+                // Nav pill drops in from top
+                const navContainer = document.getElementById('nav-container');
+                if (navContainer) {
+                    gsap.fromTo(navContainer,
+                        { y: -70, opacity: 0 },
+                        { y: 0, opacity: 1, duration: 0.65, ease: 'back.out(1.5)', delay: 0.08 }
+                    );
+                }
+                // Clean up burst overlay
+                gsap.to(burst, { opacity: 0, duration: 0.35, delay: 0.1, onComplete: () => burst.remove() });
+            });
+        }
+    });
+
+    // Orb blooms outward
+    tl.to(orb, { width: '130vw', height: '130vw', opacity: 0.85, duration: 0.5, ease: 'expo.out' })
+    // Particles explode out
+    .to(particles, { opacity: 1, duration: 0.08, stagger: 0.015 }, '<0.1')
+    .to(particles, {
+        x: (i) => Math.cos((i / particleCount) * Math.PI * 2) * (200 + Math.random() * 160),
+        y: (i) => Math.sin((i / particleCount) * Math.PI * 2) * (200 + Math.random() * 160),
+        opacity: 0, scale: 0.2, duration: 0.75, ease: 'power2.out', stagger: 0.02
+    }, '<')
+    // Orb punches inward and vanishes
+    .to(orb, { width: '0px', height: '0px', opacity: 0, duration: 0.38, ease: 'power3.in' }, '<0.12');
 }
 
 // ==========================================
@@ -852,30 +928,77 @@ function renderManageTab() {
     const container = document.getElementById('tab-content-manage');
     if (!container) return;
 
+    // Ensure status filter var exists
+    if (typeof window.manageStatusFilter === 'undefined') window.manageStatusFilter = 'All';
+    if (typeof window.manageSortBy === 'undefined') window.manageSortBy = 'name';
+
     let filteredSubs = state.subscriptions.filter(sub => {
         const matchesSearch = sub.name.toLowerCase().includes(manageSearchQuery.toLowerCase());
         const matchesCategory = manageCategoryFilter === 'All' || sub.category === manageCategoryFilter;
-        return matchesSearch && matchesCategory;
+        const subStatus = sub.status || 'active';
+        const matchesStatus = window.manageStatusFilter === 'All'
+            || (window.manageStatusFilter === 'Active' && subStatus === 'active')
+            || (window.manageStatusFilter === 'Paused' && subStatus === 'paused')
+            || (window.manageStatusFilter === 'Cancelled' && subStatus === 'cancelled')
+            || (window.manageStatusFilter === 'Trial' && subStatus === 'trial');
+        return matchesSearch && matchesCategory && matchesStatus;
+    });
+
+    // Sort
+    filteredSubs = [...filteredSubs].sort((a, b) => {
+        if (window.manageSortBy === 'name') return a.name.localeCompare(b.name);
+        if (window.manageSortBy === 'cost_asc') return (parseFloat(a.cost)||0) - (parseFloat(b.cost)||0);
+        if (window.manageSortBy === 'cost_desc') return (parseFloat(b.cost)||0) - (parseFloat(a.cost)||0);
+        if (window.manageSortBy === 'renewal') return new Date(a.nextRenewal) - new Date(b.nextRenewal);
+        return 0;
     });
 
     const categoriesList = ['All', 'Entertainment', 'Telecom & Fiber', 'Music', 'Utilities', 'Shopping', 'Other'];
+    const statusTabs = ['All', 'Active', 'Paused', 'Trial', 'Cancelled'];
+    const sortOptions = [
+        { val: 'name', label: 'Name A–Z' },
+        { val: 'cost_asc', label: 'Cost: Low → High' },
+        { val: 'cost_desc', label: 'Cost: High → Low' },
+        { val: 'renewal', label: 'Next Renewal' }
+    ];
+
+    const totalActive = state.subscriptions.filter(s => !s.status || s.status === 'active').length;
+    const totalMonthly = state.subscriptions
+        .filter(s => !s.status || s.status === 'active')
+        .reduce((acc, s) => acc + (s.cycle === 'monthly' ? parseFloat(s.cost)||0 : (parseFloat(s.cost)||0)/12), 0);
 
     let html = `
         <!-- Header -->
-        <div class="mb-8 flex justify-between items-start">
+        <div class="mb-6 flex justify-between items-start flex-wrap gap-4">
             <div>
-                <h1 class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 font-space tracking-wide mb-2">Manage</h1>
-                <p class="text-sm text-textMuted font-sans">${state.subscriptions.length} subscriptions found</p>
+                <h1 class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 font-space tracking-wide mb-1">Manage</h1>
+                <p class="text-sm text-textMuted font-sans">${totalActive} active &nbsp;·&nbsp; ${formatCurrency(totalMonthly)}<span class="text-xs">/mo</span></p>
             </div>
-            <button class="bg-[#13111a] border border-glassBorder text-textMuted px-4 py-2 rounded-xl text-xs flex items-center space-x-2 font-sans hover:bg-[#1a1723]">
-                <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
-                <span>Name</span>
-                <i data-lucide="chevron-down" class="w-3 h-3 ml-1"></i>
-            </button>
+            <!-- Sort Dropdown -->
+            <div class="relative">
+                <button id="manage-sort-btn" onclick="toggleManageSortMenu()" class="bg-[#13111a] border border-glassBorder text-textMuted px-4 py-2 rounded-xl text-xs flex items-center space-x-2 font-sans hover:bg-[#1a1723] hover:border-brand-500/40 transition-all">
+                    <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+                    <span id="manage-sort-label">${sortOptions.find(o=>o.val===window.manageSortBy)?.label || 'Name A–Z'}</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3 ml-1 transition-transform" id="manage-sort-chevron"></i>
+                </button>
+                <div id="manage-sort-menu" class="hidden absolute right-0 top-full mt-2 w-48 bg-[#0f0e13] border border-[#222] rounded-2xl shadow-2xl z-50 overflow-hidden py-1">
+                    ${sortOptions.map(o => `
+                        <button onclick="setManageSort('${o.val}')" class="w-full text-left px-4 py-2.5 text-xs font-medium transition-colors ${window.manageSortBy===o.val ? 'text-brand-400 bg-brand-500/10' : 'text-textMuted hover:text-cardTitle hover:bg-[#1a1723]'} font-sans">
+                            ${window.manageSortBy===o.val ? '✓ ' : ''}${o.label}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
         </div>
 
+        <!-- Add Subscription Button -->
+        <button onclick="openAddSubModal()" class="w-full mb-6 flex items-center justify-center space-x-2 border border-dashed border-brand-500/40 hover:border-brand-500 bg-brand-500/5 hover:bg-brand-500/10 text-brand-400 font-semibold text-sm py-3.5 rounded-2xl transition-all group font-space">
+            <i data-lucide="plus-circle" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+            <span>Add New Subscription</span>
+        </button>
+
         <!-- Search bar -->
-        <div class="relative w-full mb-6">
+        <div class="relative w-full mb-5">
             <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-textMuted">
                 <i data-lucide="search" class="w-4 h-4"></i>
             </span>
@@ -883,93 +1006,117 @@ function renderManageTab() {
                 class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-cardTitle focus:outline-none placeholder-slate-500 font-sans shadow-inner">
         </div>
 
-        <!-- Category Pills Filter -->
+        <!-- Category Pills -->
         <div class="flex items-center space-x-2 overflow-x-auto w-full scrollbar-none mb-4 pb-1">
             ${categoriesList.map(cat => {
                 const isSelected = cat === manageCategoryFilter;
-                return `
-                    <button onclick="setManageCategory('${cat}')" class="px-5 py-2 rounded-full text-[11px] font-medium whitespace-nowrap transition-all border font-sans ${
-                        isSelected 
-                        ? 'bg-brand-500/20 border-brand-500 text-cardTitle' 
-                        : 'bg-[#13111a] border-glassBorder text-textMuted hover:text-cardTitle hover:bg-[#1a1723]'
-                    }">
-                        ${cat}
-                    </button>
-                `;
+                return `<button onclick="setManageCategory('${cat}')" class="px-5 py-2 rounded-full text-[11px] font-medium whitespace-nowrap transition-all border font-sans ${isSelected ? 'bg-brand-500/20 border-brand-500 text-cardTitle' : 'bg-[#13111a] border-glassBorder text-textMuted hover:text-cardTitle hover:bg-[#1a1723]'}">${cat}</button>`;
             }).join('')}
         </div>
 
-        <!-- Status Filter -->
-        <div class="flex items-center space-x-4 mb-8 text-[11px] font-medium font-sans">
-            <button class="px-4 py-1.5 rounded-full bg-teal-500/20 text-teal-400">All</button>
-            <button class="text-textMuted hover:text-cardTitle transition-colors px-2">Active</button>
-            <button class="text-textMuted hover:text-cardTitle transition-colors px-2">Trial</button>
-            <button class="text-textMuted hover:text-cardTitle transition-colors px-2">Cancelled</button>
+        <!-- Status Filter Tabs -->
+        <div class="flex items-center space-x-1 mb-8 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-fit">
+            ${statusTabs.map(s => {
+                const isActive = s === window.manageStatusFilter;
+                const countForTab = s === 'All' ? state.subscriptions.length
+                    : state.subscriptions.filter(sub => {
+                        const st = sub.status || 'active';
+                        return st === s.toLowerCase();
+                    }).length;
+                return `<button onclick="setManageStatus('${s}')" class="px-4 py-1.5 rounded-xl text-[11px] font-semibold transition-all font-sans ${isActive ? 'bg-brand-500/25 text-brand-300 shadow-inner border border-brand-500/40' : 'text-textMuted hover:text-cardTitle'}">
+                    ${s} ${countForTab > 0 ? `<span class="ml-1 opacity-60 text-[9px]">${countForTab}</span>` : ''}
+                </button>`;
+            }).join('')}
         </div>
 
-        <!-- Subscriptions Grid List -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            ${filteredSubs.length > 0 ? filteredSubs.map((sub, index) => {
-                const template = MOCK_PROVIDER_DATA[sub.providerKey] || {
-                    lucideIcon: 'credit-card',
+        <!-- Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            ${filteredSubs.length > 0 ? filteredSubs.map((sub) => {
+                const template = MOCK_PROVIDER_DATA[sub.providerKey] || { lucideIcon: 'credit-card' };
+                const status = sub.status || 'active';
+                const statusStyles = {
+                    active:    { pill: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/25', text: 'ACTIVE',    line: 'from-purple-500 via-indigo-500 to-emerald-500' },
+                    paused:    { pill: 'text-amber-400 bg-amber-500/10 border-amber-500/25',       text: 'PAUSED',    line: 'from-amber-500 to-orange-500' },
+                    trial:     { pill: 'text-sky-400 bg-sky-500/10 border-sky-500/25',             text: 'TRIAL',     line: 'from-sky-500 to-cyan-500' },
+                    cancelled: { pill: 'text-red-400 bg-red-500/10 border-red-500/25',             text: 'CANCELLED', line: 'from-red-500 to-rose-700' }
                 };
-                
-                // Mock statuses for visual variety based on index
-                const isActive = index % 3 !== 2; 
-                const statusColor = isActive ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-red-400 bg-red-500/10 border-red-500/20';
-                const statusText = isActive ? 'ACTIVE' : 'CANCELLED';
-                const gradLine = isActive ? 'from-purple-500 via-indigo-500 to-emerald-500' : 'from-orange-500 to-red-500';
+                const st = statusStyles[status] || statusStyles.active;
+
+                const daysUntil = Math.ceil((new Date(sub.nextRenewal) - new Date()) / (1000*60*60*24));
+                const urgentRenewal = daysUntil >= 0 && daysUntil <= 7;
 
                 return `
-                    <div onclick="openSubscriptionDetails('${sub.id}')" class="bg-[#0f0e13] border border-glassBorder rounded-[20px] p-6 relative group hover:border-glassBorder/80 hover:bg-[#15131a] transition-all cursor-pointer flex flex-col justify-between overflow-hidden min-h-[220px]">
+                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[20px] p-5 relative group hover:border-brand-500/30 hover:bg-[#13111a] transition-all cursor-pointer flex flex-col justify-between overflow-hidden min-h-[200px] manage-card"
+                        onclick="openSubscriptionDetails('${sub.id}')">
                         
-                        <!-- Top Row: Icon & Status -->
-                        <div class="flex justify-between items-start mb-6">
+                        <!-- Top Row -->
+                        <div class="flex justify-between items-start mb-4">
                             <div class="w-10 h-10 rounded-[14px] bg-[#1a1723] flex items-center justify-center flex-shrink-0 shadow-inner">
                                 <i data-lucide="${template.lucideIcon}" class="w-5 h-5 text-brand-400"></i>
                             </div>
-                            <span class="px-3 py-1 rounded-full text-[9px] font-bold tracking-widest uppercase border ${statusColor} font-sans">
-                                ${statusText}
-                            </span>
+                            <span class="px-3 py-1 rounded-full text-[9px] font-bold tracking-widest uppercase border ${st.pill} font-sans">${st.text}</span>
                         </div>
 
-                        <!-- Middle Row: Name & Category -->
-                        <div class="mb-8">
-                            <h4 class="font-bold text-cardTitle text-lg font-sans tracking-tight mb-1">${sub.name}</h4>
+                        <!-- Name & Category -->
+                        <div class="mb-4 flex-1">
+                            <h4 class="font-bold text-cardTitle text-base font-sans tracking-tight mb-0.5">${sub.name}</h4>
                             <p class="text-[11px] text-slate-500 font-sans">${sub.category}</p>
                         </div>
 
-                        <!-- Bottom Row: Price & Date -->
-                        <div class="flex items-end justify-between mt-auto mb-4">
+                        <!-- Price & Renewal -->
+                        <div class="flex items-end justify-between mb-5">
                             <div>
-                                <div class="text-2xl font-bold text-cardTitle font-sans tracking-tight leading-none mb-1">${formatCurrency(sub.cost)}</div>
+                                <div class="text-xl font-bold text-cardTitle font-sans tracking-tight leading-none">${formatCurrency(sub.cost)}</div>
                                 <div class="text-[10px] text-slate-500 font-sans">/ ${sub.cycle}</div>
                             </div>
                             <div class="text-right">
-                                <div class="text-[10px] text-slate-500 font-sans mb-1">${sub.payment.toLowerCase().includes('card') ? 'via card' : 'via email'}</div>
-                                <div class="text-xs text-slate-300 font-medium font-sans">${new Date(sub.nextRenewal).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+                                <div class="text-[10px] ${urgentRenewal ? 'text-amber-400 font-bold' : 'text-slate-500'} font-sans mb-0.5">
+                                    ${urgentRenewal ? `⚠ ${daysUntil}d left` : `renews ${new Date(sub.nextRenewal).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
+                                </div>
+                                <div class="text-[10px] text-slate-500 font-sans">${sub.payment.toLowerCase().includes('card') ? 'via card' : 'via email'}</div>
                             </div>
                         </div>
 
-                        <!-- Bottom Gradient Progress Line -->
-                        <div class="absolute bottom-6 left-6 right-6 h-[3px] bg-[#1a1723] rounded-full overflow-hidden">
-                            <div class="h-full w-2/3 bg-gradient-to-r ${gradLine} rounded-full"></div>
+                        <!-- Action Buttons - visible on hover -->
+                        <div class="absolute inset-x-0 bottom-0 flex opacity-0 group-hover:opacity-100 transition-all duration-200 rounded-b-[20px] overflow-hidden" onclick="event.stopPropagation()">
+                            ${status !== 'cancelled' ? `
+                                <button onclick="editSubscription('${sub.id}')" title="Edit" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-brand-500/20 text-textMuted hover:text-brand-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-[#222]">
+                                    <i data-lucide="pencil" class="w-3 h-3"></i> Edit
+                                </button>
+                                <button onclick="toggleSubPause('${sub.id}')" title="${status === 'paused' ? 'Resume' : 'Pause'}" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-amber-500/20 text-textMuted hover:text-amber-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-l border-[#222]">
+                                    <i data-lucide="${status === 'paused' ? 'play' : 'pause'}" class="w-3 h-3"></i> ${status === 'paused' ? 'Resume' : 'Pause'}
+                                </button>
+                                <button onclick="cancelSubscription('${sub.id}')" title="Cancel" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-red-500/20 text-textMuted hover:text-red-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-l border-[#222]">
+                                    <i data-lucide="x-circle" class="w-3 h-3"></i> Cancel
+                                </button>
+                            ` : `
+                                <button onclick="reactivateSubscription('${sub.id}')" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-emerald-500/20 text-textMuted hover:text-emerald-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-[#222]">
+                                    <i data-lucide="refresh-cw" class="w-3 h-3"></i> Reactivate
+                                </button>
+                                <button onclick="deleteSubscription('${sub.id}')" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-red-500/20 text-textMuted hover:text-red-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-l border-[#222]">
+                                    <i data-lucide="trash-2" class="w-3 h-3"></i> Delete
+                                </button>
+                            `}
                         </div>
+
+                        <!-- Bottom Gradient Line -->
+                        <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r ${st.line} opacity-40 group-hover:opacity-80 transition-opacity"></div>
                     </div>
                 `;
             }).join('') : `
                 <div class="col-span-full bg-[#13111a] border border-dashed border-glassBorder rounded-3xl p-12 text-center">
                     <div class="p-4 bg-[#1a1723] border border-glassBorder text-textMuted rounded-full w-14 h-14 mx-auto mb-4 flex items-center justify-center">
-                        <i data-lucide="credit-card" class="w-6 h-6"></i>
+                        <i data-lucide="search-x" class="w-6 h-6"></i>
                     </div>
-                    <h4 class="text-cardTitle font-bold text-base font-space">No Active Subscriptions</h4>
-                    <p class="text-textMuted text-xs mt-1 mb-6 font-sans">No integrations match your search parameters.</p>
+                    <h4 class="text-cardTitle font-bold text-base font-space">No Subscriptions Found</h4>
+                    <p class="text-textMuted text-xs mt-1 mb-6 font-sans">Try adjusting your filters or search query.</p>
                 </div>
             `}
         </div>
     `;
 
     container.innerHTML = html;
+    lucide.createIcons();
 
     const searchInput = document.getElementById('manage-search');
     if (searchInput) {
@@ -978,14 +1125,45 @@ function renderManageTab() {
             const start = e.target.selectionStart;
             const end = e.target.selectionEnd;
             renderManageTab();
-            const newSearchInput = document.getElementById('manage-search');
-            if (newSearchInput) {
-                newSearchInput.focus();
-                newSearchInput.setSelectionRange(start, end);
-            }
+            const ni = document.getElementById('manage-search');
+            if (ni) { ni.focus(); ni.setSelectionRange(start, end); }
         });
     }
+
+    // Close sort menu on outside click
+    document.addEventListener('click', function closeSortMenu(e) {
+        const menu = document.getElementById('manage-sort-menu');
+        const btn = document.getElementById('manage-sort-btn');
+        if (menu && !menu.contains(e.target) && btn && !btn.contains(e.target)) {
+            menu.classList.add('hidden');
+            document.removeEventListener('click', closeSortMenu);
+        }
+    });
 }
+
+window.toggleManageSortMenu = function() {
+    const menu = document.getElementById('manage-sort-menu');
+    const chevron = document.getElementById('manage-sort-chevron');
+    if (menu) {
+        const isOpen = !menu.classList.contains('hidden');
+        menu.classList.toggle('hidden');
+        if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+    }
+};
+
+window.setManageSort = function(val) {
+    window.manageSortBy = val;
+    const menu = document.getElementById('manage-sort-menu');
+    if (menu) menu.classList.add('hidden');
+    renderManageTab();
+    lucide.createIcons();
+};
+
+window.setManageStatus = function(status) {
+    window.manageStatusFilter = status;
+    renderManageTab();
+    lucide.createIcons();
+};
 
 function setManageCategory(cat) {
     manageCategoryFilter = cat;
@@ -1003,91 +1181,231 @@ function toggleSubscriptionAlert(id) {
     }
 }
 
-// Open Subscription Details Modal
+window.toggleSubPause = function(id) {
+    const sub = state.subscriptions.find(s => s.id === id);
+    if (!sub) return;
+    sub.status = sub.status === 'paused' ? 'active' : 'paused';
+    saveStateToStorage();
+    renderManageTab();
+    lucide.createIcons();
+};
+
+window.cancelSubscription = function(id) {
+    const sub = state.subscriptions.find(s => s.id === id);
+    if (!sub) return;
+    if (!confirm(`Cancel "${sub.name}"? You can reactivate it later.`)) return;
+    sub.status = 'cancelled';
+    saveStateToStorage();
+    renderManageTab();
+    lucide.createIcons();
+};
+
+window.reactivateSubscription = function(id) {
+    const sub = state.subscriptions.find(s => s.id === id);
+    if (!sub) return;
+    sub.status = 'active';
+    saveStateToStorage();
+    renderManageTab();
+    lucide.createIcons();
+};
+
+window.deleteSubscription = function(id) {
+    const sub = state.subscriptions.find(s => s.id === id);
+    if (!sub) return;
+    if (!confirm(`Permanently delete "${sub.name}"?`)) return;
+    state.subscriptions = state.subscriptions.filter(s => s.id !== id);
+    saveStateToStorage();
+    renderManageTab();
+    lucide.createIcons();
+};
+
+// Edit Subscription Modal
+window.editSubscription = function(id) {
+    const sub = state.subscriptions.find(s => s.id === id);
+    if (!sub) return;
+
+    const existing = document.getElementById('edit-sub-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'edit-sub-modal';
+    modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md p-4';
+    modal.style.opacity = '0';
+    modal.innerHTML = `
+        <div id="edit-sub-card" style="transform:scale(0.9)" class="bg-[#0a0a0f] border border-[#222] rounded-[28px] w-full max-w-md shadow-[0_30px_80px_rgba(0,0,0,0.9)] relative overflow-hidden transition-all">
+            <div class="h-[2px] bg-gradient-to-r from-brand-500 to-indigo-500"></div>
+            <div class="p-7">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-extrabold text-cardTitle font-space">Edit Subscription</h2>
+                    <button onclick="closeEditModal()" class="p-2 text-slate-500 hover:text-cardTitle bg-[#13111a] border border-[#222] rounded-full transition-colors">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Name</label>
+                        <input id="edit-sub-name" type="text" value="${sub.name}" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Cost (₹)</label>
+                            <input id="edit-sub-cost" type="number" value="${sub.cost}" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Billing</label>
+                            <select id="edit-sub-cycle" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                                <option value="monthly" ${sub.cycle==='monthly'?'selected':''}>Monthly</option>
+                                <option value="yearly" ${sub.cycle==='yearly'?'selected':''}>Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Next Renewal</label>
+                        <input id="edit-sub-renewal" type="date" value="${sub.nextRenewal}" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Category</label>
+                        <select id="edit-sub-category" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                            ${['Entertainment','Telecom & Fiber','Music','Utilities','Shopping','Other'].map(c => `<option value="${c}" ${sub.category===c?'selected':''}>${c}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Status</label>
+                        <select id="edit-sub-status" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                            <option value="active" ${(!sub.status||sub.status==='active')?'selected':''}>Active</option>
+                            <option value="paused" ${sub.status==='paused'?'selected':''}>Paused</option>
+                            <option value="trial" ${sub.status==='trial'?'selected':''}>Trial</option>
+                            <option value="cancelled" ${sub.status==='cancelled'?'selected':''}>Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 mt-7">
+                    <button onclick="closeEditModal()" class="flex-1 bg-[#13111a] hover:bg-[#1a1723] text-textMuted border border-[#222] font-semibold text-sm py-3.5 rounded-2xl transition-all font-sans">Cancel</button>
+                    <button onclick="saveEditedSubscription('${sub.id}')" class="flex-1 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-sm py-3.5 rounded-2xl transition-all shadow-[0_4px_20px_rgba(236,72,153,0.3)] font-space">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    lucide.createIcons();
+
+    gsap.to(modal, { opacity: 1, duration: 0.2, ease: 'power2.out' });
+    gsap.to('#edit-sub-card', { scale: 1, duration: 0.35, ease: 'back.out(1.4)' });
+};
+
+window.closeEditModal = function() {
+    const modal = document.getElementById('edit-sub-modal');
+    if (!modal) return;
+    gsap.to('#edit-sub-card', { scale: 0.9, opacity: 0, duration: 0.2, ease: 'power2.in' });
+    gsap.to(modal, { opacity: 0, duration: 0.25, ease: 'power2.in', onComplete: () => modal.remove() });
+};
+
+window.saveEditedSubscription = function(id) {
+    const sub = state.subscriptions.find(s => s.id === id);
+    if (!sub) return;
+    sub.name     = document.getElementById('edit-sub-name').value.trim() || sub.name;
+    sub.cost     = parseFloat(document.getElementById('edit-sub-cost').value) || sub.cost;
+    sub.cycle    = document.getElementById('edit-sub-cycle').value;
+    sub.nextRenewal = document.getElementById('edit-sub-renewal').value || sub.nextRenewal;
+    sub.category = document.getElementById('edit-sub-category').value;
+    sub.status   = document.getElementById('edit-sub-status').value;
+    saveStateToStorage();
+    closeEditModal();
+    setTimeout(() => { renderManageTab(); lucide.createIcons(); }, 280);
+};
+
+// Open Subscription Details (read-only expanded view)
 window.openSubscriptionDetails = function(subId) {
     const sub = state.subscriptions.find(s => s.id === subId);
     if (!sub) return;
+    const template = MOCK_PROVIDER_DATA[sub.providerKey] || { lucideIcon: 'credit-card', manualSteps: ['No steps available.'] };
+    const status = sub.status || 'active';
+    const statusStyles = {
+        active:    'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+        paused:    'text-amber-400 bg-amber-500/10 border-amber-500/20',
+        trial:     'text-sky-400 bg-sky-500/10 border-sky-500/20',
+        cancelled: 'text-red-400 bg-red-500/10 border-red-500/20'
+    };
 
-    // Create modal overlay
+    const existing = document.getElementById('sub-detail-modal');
+    if (existing) existing.remove();
+
     const modal = document.createElement('div');
     modal.id = 'sub-detail-modal';
-    modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md opacity-0 transition-opacity duration-300 p-4';
-    
-    const template = MOCK_PROVIDER_DATA[sub.providerKey] || { lucideIcon: 'credit-card', manualSteps: ['No detailed steps available.'] };
+    modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md p-4';
+    modal.style.opacity = '0';
 
     modal.innerHTML = `
-        <div class="bg-[#0a0a0f] border border-[#222] rounded-[32px] w-full max-w-lg shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative overflow-hidden transform scale-95 transition-transform duration-300">
-            <!-- Top Gradient Accent -->
-            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-brand-500 to-indigo-500 opacity-60"></div>
-            
+        <div id="sub-detail-card" style="transform:scale(0.92)" class="bg-[#0a0a0f] border border-[#222] rounded-[32px] w-full max-w-lg shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-brand-500 to-indigo-500 opacity-70"></div>
             <div class="p-8">
-                <!-- Header -->
-                <div class="flex justify-between items-start mb-8">
+                <div class="flex justify-between items-start mb-7">
                     <div class="flex items-center space-x-5">
                         <div class="w-16 h-16 rounded-[20px] bg-[#13111a] border border-[#222] flex items-center justify-center flex-shrink-0 shadow-inner">
                             <i data-lucide="${template.lucideIcon}" class="w-8 h-8 text-brand-400"></i>
                         </div>
                         <div>
-                            <h2 class="text-3xl font-extrabold text-cardTitle font-sans tracking-tight mb-1">${sub.name}</h2>
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-space">${sub.category}</span>
+                            <h2 class="text-2xl font-extrabold text-cardTitle font-sans tracking-tight mb-1">${sub.name}</h2>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase ${statusStyles[status]} border font-space">${status.toUpperCase()}</span>
                         </div>
                     </div>
                     <button onclick="closeSubscriptionDetails()" class="p-2 text-slate-500 hover:text-cardTitle transition-colors bg-[#13111a] border border-[#222] rounded-full hover:bg-[#1a1723]">
                         <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
                 </div>
-                
-                <!-- Details Grid -->
-                <div class="grid grid-cols-2 gap-4 mb-8">
-                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Billing Cycle</p>
-                        <p class="text-cardTitle font-bold font-sans text-sm">${sub.cycle.charAt(0).toUpperCase() + sub.cycle.slice(1)}</p>
+
+                <div class="grid grid-cols-2 gap-3 mb-7">
+                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222]">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1">Cost</p>
+                        <p class="text-cardTitle font-bold font-sans">${formatCurrency(sub.cost)} <span class="text-[10px] text-slate-500">/ ${sub.cycle}</span></p>
                     </div>
-                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Cost</p>
-                        <p class="text-cardTitle font-bold font-sans text-sm">${formatCurrency(sub.cost)}</p>
+                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222]">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1">Billing</p>
+                        <p class="text-cardTitle font-bold font-sans text-sm capitalize">${sub.cycle}</p>
                     </div>
-                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Next Renewal</p>
+                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222]">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1">Next Renewal</p>
                         <p class="text-cardTitle font-bold font-sans text-sm">${new Date(sub.nextRenewal).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                     </div>
-                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222] shadow-inner">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1.5">Payment Method</p>
+                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222]">
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1">Payment</p>
                         <p class="text-cardTitle font-bold font-sans text-sm truncate">${sub.payment}</p>
                     </div>
                 </div>
-                
-                <!-- Action Buttons -->
-                <div class="flex space-x-4">
-                    <button class="flex-1 bg-[#13111a] hover:bg-[#1a1723] text-cardTitle border border-[#222] font-semibold text-sm py-4 rounded-2xl transition-all shadow-inner font-sans">
-                        Modify Plan
+
+                <div class="flex space-x-3">
+                    <button onclick="closeSubscriptionDetails(); editSubscription('${sub.id}')" class="flex-1 bg-[#13111a] hover:bg-brand-500/10 text-cardTitle border border-[#222] hover:border-brand-500/40 font-semibold text-sm py-3.5 rounded-2xl transition-all font-sans flex items-center justify-center gap-2">
+                        <i data-lucide="pencil" class="w-4 h-4"></i> Edit
                     </button>
-                    <button class="flex-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold text-sm py-4 rounded-2xl transition-all shadow-inner font-sans">
-                        Cancel Subscription
-                    </button>
+                    ${status !== 'cancelled' ? `
+                    <button onclick="closeSubscriptionDetails(); cancelSubscription('${sub.id}')" class="flex-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-bold text-sm py-3.5 rounded-2xl transition-all font-sans flex items-center justify-center gap-2">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i> Cancel Sub
+                    </button>` : `
+                    <button onclick="closeSubscriptionDetails(); reactivateSubscription('${sub.id}')" class="flex-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold text-sm py-3.5 rounded-2xl transition-all font-sans flex items-center justify-center gap-2">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Reactivate
+                    </button>`}
                 </div>
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
     lucide.createIcons();
-    
-    // Animate in
-    setTimeout(() => {
-        modal.classList.remove('opacity-0');
-        modal.firstElementChild.classList.remove('scale-95');
-    }, 10);
+    gsap.to(modal, { opacity: 1, duration: 0.2, ease: 'power2.out' });
+    gsap.to('#sub-detail-card', { scale: 1, duration: 0.35, ease: 'back.out(1.4)' });
 };
 
 window.closeSubscriptionDetails = function() {
     const modal = document.getElementById('sub-detail-modal');
-    if (modal) {
-        modal.classList.add('opacity-0');
-        modal.firstElementChild.classList.add('scale-95');
-        setTimeout(() => modal.remove(), 300);
-    }
+    if (!modal) return;
+    gsap.to('#sub-detail-card', { scale: 0.9, opacity: 0, duration: 0.2, ease: 'power2.in' });
+    gsap.to(modal, { opacity: 0, duration: 0.25, ease: 'power2.in', onComplete: () => modal.remove() });
 };
+
+
 
 // ==========================================
 // THEMES & AVATAR VIBES preset configurations
@@ -1753,12 +2071,38 @@ function renderAccountTab() {
         document.body.style.overflow = 'hidden';
         lucide.createIcons();
         bindModalEvents();
+
+        // --- Open animation ---
+        const backdrop = modalEl.querySelector('#avatar-modal-backdrop');
+        const card = modalEl.querySelector('[style*="max-width:780px"]') || modalEl.children[1];
+
+        // Start states
+        gsap.set(modalEl, { opacity: 0 });
+        if (backdrop) gsap.set(backdrop, { opacity: 0 });
+        if (card) gsap.set(card, { scale: 0.88, y: 24, opacity: 0 });
+
+        const tl = gsap.timeline();
+        tl.to(modalEl, { opacity: 1, duration: 0.2, ease: 'power2.out' })
+          .to(backdrop, { opacity: 1, duration: 0.3, ease: 'power2.out' }, '<')
+          .to(card, { scale: 1, y: 0, opacity: 1, duration: 0.4, ease: 'back.out(1.4)' }, '<0.05');
     };
 
     const closeModal = () => {
         const modalEl = document.getElementById('avatar-modal');
-        if (modalEl) modalEl.remove();
-        document.body.style.overflow = '';
+        if (!modalEl) return;
+        const backdrop = modalEl.querySelector('#avatar-modal-backdrop');
+        const card = modalEl.querySelector('[style*="max-width:780px"]') || modalEl.children[1];
+
+        // --- Close animation ---
+        const tl = gsap.timeline({
+            onComplete: () => {
+                modalEl.remove();
+                document.body.style.overflow = '';
+            }
+        });
+        if (card) tl.to(card, { scale: 0.9, y: 20, opacity: 0, duration: 0.25, ease: 'power2.in' });
+        if (backdrop) tl.to(backdrop, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '<0.05');
+        tl.to(modalEl, { opacity: 0, duration: 0.2, ease: 'power2.in' }, '<');
     };
 
     document.addEventListener('click', (e) => {
