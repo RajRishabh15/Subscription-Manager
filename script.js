@@ -507,13 +507,17 @@ function startScanning(phone, email) {
 
     const scanView = document.getElementById('scan-view');
     const progressView = document.getElementById('login-progress-view');
-        if (scanView) scanView.classList.add('hidden');
+    const statusEl = document.getElementById('login-progress-status');
+    const barEl = document.getElementById('login-progress-bar');
+    const pctEl = document.getElementById('login-progress-pct');
+    const detailEl = document.getElementById('scan-terminal-detail');
+
+    if (scanView) scanView.classList.add('hidden');
     if (progressView) {
         progressView.classList.remove('hidden');
         lucide.createIcons();
-        // Reset status message
-        const statusEl = document.getElementById('login-progress-status');
-        const detailEl = document.getElementById('scan-terminal-detail');
+        
+        // Reset status messages
         if (statusEl) statusEl.innerText = 'STABILIZING QUANTUM GRID VECTORS...';
         if (detailEl) detailEl.innerText = 'MATRIX SEQUENCE_0x4F8A // CALIBRATING SYSTEM CORE';
 
@@ -528,9 +532,6 @@ function startScanning(phone, email) {
             if (speedEl) speedEl.innerText = `${(4.8 + Math.random() * 4).toFixed(1)} Gb/s`;
         }, 350);
     }
-
-    const barEl = document.getElementById('login-progress-bar');
-    const pctEl = document.getElementById('login-progress-pct');
 
     if (barEl) barEl.style.width = '0%';
     if (pctEl) pctEl.innerText = '0%';
