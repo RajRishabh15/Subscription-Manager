@@ -511,49 +511,24 @@ function startScanning(phone, email) {
     if (progressView) {
         progressView.classList.remove('hidden');
         lucide.createIcons();
-        // Reset Mock Dashboard elements
-        const mockNetflix = document.getElementById('mock-card-netflix');
-        const mockJio = document.getElementById('mock-card-jio');
-        if (mockNetflix) {
-            mockNetflix.style.opacity = '0.2';
-            mockNetflix.style.filter = 'blur(2px)';
-        }
-        if (mockJio) {
-            mockJio.style.opacity = '0.2';
-            mockJio.style.filter = 'blur(2px)';
-        }
+        // Reset status message
+        const statusEl = document.getElementById('login-progress-status');
+        const detailEl = document.getElementById('scan-terminal-detail');
+        if (statusEl) statusEl.innerText = 'STABILIZING QUANTUM GRID VECTORS...';
+        if (detailEl) detailEl.innerText = 'MATRIX SEQUENCE_0x4F8A // CALIBRATING SYSTEM CORE';
 
-        // Reset SVG path/area chart baselines
-        const chartPath = document.getElementById('mock-chart-path');
-        const chartArea = document.getElementById('mock-chart-area');
-        if (chartPath) chartPath.setAttribute('d', 'M 0 30 Q 15 30 30 30 T 60 30 T 100 30');
-        if (chartArea) chartArea.setAttribute('d', 'M 0 30 Q 15 30 30 30 T 60 30 T 100 30 L 100 30 L 0 30 Z');
-
-        // Reset mock cost display
-        const costEl = document.getElementById('mock-dashboard-cost');
-        if (costEl) costEl.innerText = 'â‚¹0';
-
-        // Reset Onboarding Slide text and dots
-        const slideTag = document.getElementById('feature-tag');
-        const slideTitle = document.getElementById('feature-title');
-        const slideDesc = document.getElementById('feature-desc');
-        if (slideTag) slideTag.innerText = 'Feature 01';
-        if (slideTitle) slideTitle.innerText = 'Unified Spend Analytics';
-        if (slideDesc) slideDesc.innerText = 'Aggregate and visualize all your software subscriptions, telecom services, and utility bills in an interactive, responsive central dashboard.';
-        
-        [1, 2, 3].forEach(idx => {
-            const dot = document.getElementById(`slide-dot-${idx}`);
-            if (dot) {
-                if (idx === 1) {
-                    dot.className = 'w-6 h-1.5 rounded-full bg-brand-500 transition-all duration-300';
-                } else {
-                    dot.className = 'w-2 h-1.5 rounded-full bg-white/10 transition-all duration-300';
-                }
-            }
-        });
+        // Setup dynamic telemetry loop
+        if (progressView.telemetryInterval) clearInterval(progressView.telemetryInterval);
+        progressView.telemetryInterval = setInterval(() => {
+            const loadEl = document.getElementById('telemetry-load');
+            const latencyEl = document.getElementById('telemetry-latency');
+            const speedEl = document.getElementById('telemetry-speed');
+            if (loadEl) loadEl.innerText = `${(70 + Math.random() * 25).toFixed(1)}%`;
+            if (latencyEl) latencyEl.innerText = `${Math.floor(10 + Math.random() * 15)}ms`;
+            if (speedEl) speedEl.innerText = `${(4.8 + Math.random() * 4).toFixed(1)} Gb/s`;
+        }, 350);
     }
 
-    const statusEl = document.getElementById('login-progress-status');
     const barEl = document.getElementById('login-progress-bar');
     const pctEl = document.getElementById('login-progress-pct');
 
@@ -575,6 +550,7 @@ function startScanning(phone, email) {
     
     function runNextStep() {
         if (currentStep >= scanSteps.length) {
+            if (progressView.telemetryInterval) clearInterval(progressView.telemetryInterval);
             setTimeout(() => {
                 state.subscriptions = [
                     {
@@ -676,104 +652,23 @@ function appendTerminalLog(message, type = 'info') {
 }
 
 function updateScanTerminal(stepIndex, stepText) {
-    const chartPath = document.getElementById('mock-chart-path');
-    const chartArea = document.getElementById('mock-chart-area');
+    const statusEl = document.getElementById('login-progress-status');
+    const detailEl = document.getElementById('scan-terminal-detail');
 
-    if (stepIndex === 0) {
-        animateMockCost(199);
-        if (chartPath) gsap.to(chartPath, { attr: { d: 'M 0 30 Q 15 28 30 29 T 60 28 T 100 27' }, duration: 0.8, ease: 'power2.out' });
-        if (chartArea) gsap.to(chartArea, { attr: { d: 'M 0 30 Q 15 28 30 29 T 60 28 T 100 27 L 100 30 L 0 30 Z' }, duration: 0.8, ease: 'power2.out' });
-    } else if (stepIndex === 1) {
-        animateMockCost(450);
-        if (chartPath) gsap.to(chartPath, { attr: { d: 'M 0 30 Q 15 25 30 28 T 60 26 T 100 24' }, duration: 0.8, ease: 'power2.out' });
-        if (chartArea) gsap.to(chartArea, { attr: { d: 'M 0 30 Q 15 25 30 28 T 60 26 T 100 24 L 100 30 L 0 30 Z' }, duration: 0.8, ease: 'power2.out' });
-    } else if (stepIndex === 2) {
-        // Transition to Slide 2 (at 40%)
-        transitionFeatureSlide(
-            'Feature 02',
-            'Automated Bill Detector',
-            'No manual entry needed. The sync engine scans transaction reminders, OTP gateways, and invoices securely without exposing credentials.',
-            2
-        );
-        animateMockCost(1179);
-        
-        // Show Netflix card unblurred
-        const netflixCard = document.getElementById('mock-card-netflix');
-        if (netflixCard) {
-            gsap.to(netflixCard, { opacity: 1, filter: 'blur(0px)', scale: 1.05, duration: 0.5 });
-        }
-        if (chartPath) gsap.to(chartPath, { attr: { d: 'M 0 30 Q 15 15 30 20 T 60 25 T 100 15' }, duration: 0.8, ease: 'power2.out' });
-        if (chartArea) gsap.to(chartArea, { attr: { d: 'M 0 30 Q 15 15 30 20 T 60 25 T 100 15 L 100 30 L 0 30 Z' }, duration: 0.8, ease: 'power2.out' });
-    } else if (stepIndex === 3) {
-        animateMockCost(1379);
-        if (chartPath) gsap.to(chartPath, { attr: { d: 'M 0 30 Q 15 12 30 16 T 60 20 T 100 12' }, duration: 0.8, ease: 'power2.out' });
-        if (chartArea) gsap.to(chartArea, { attr: { d: 'M 0 30 Q 15 12 30 16 T 60 20 T 100 12 L 100 30 L 0 30 Z' }, duration: 0.8, ease: 'power2.out' });
-    } else if (stepIndex === 4) {
-        animateMockCost(1490);
-        
-        // Show Jio card unblurred
-        const jioCard = document.getElementById('mock-card-jio');
-        if (jioCard) {
-            gsap.to(jioCard, { opacity: 1, filter: 'blur(0px)', scale: 1.05, duration: 0.5 });
-        }
-        if (chartPath) gsap.to(chartPath, { attr: { d: 'M 0 30 Q 15 10 30 14 T 60 16 T 100 8' }, duration: 0.8, ease: 'power2.out' });
-        if (chartArea) gsap.to(chartArea, { attr: { d: 'M 0 30 Q 15 10 30 14 T 60 16 T 100 8 L 100 30 L 0 30 Z' }, duration: 0.8, ease: 'power2.out' });
-    } else if (stepIndex === 5) {
-        // Transition to Slide 3 (at 85%)
-        transitionFeatureSlide(
-            'Feature 03',
-            'Smart Renewal Alerts',
-            'Receive alert alerts before your billing cards get debited. Configure custom warning intervals and prevent unapproved subscriptions.',
-            3
-        );
-        animateMockCost(1796);
-        if (chartPath) gsap.to(chartPath, { attr: { d: 'M 0 30 Q 15 5 30 10 T 60 8 T 100 4' }, duration: 0.8, ease: 'power2.out' });
-        if (chartArea) gsap.to(chartArea, { attr: { d: 'M 0 30 Q 15 5 30 10 T 60 8 T 100 4 L 100 30 L 0 30 Z' }, duration: 0.8, ease: 'power2.out' });
-    }
-}
+    const statusUpdates = [
+        { status: 'INITIALIZING QUANTUM CORE GATEWAYS...', detail: 'MATRIX SEQUENCE_0x4F8A // CALIBRATING SYSTEM CORE' },
+        { status: 'DECRYPTING SECURE MATRIX TUNNELS...', detail: 'CRYPT_PROT: SHA-512_GCM // INITIALIZING SHA Matrix' },
+        { status: 'STABILIZING GRID DIMENSION VECTORS...', detail: 'REF_GRAVITY: 9.80665 m/s² // SYNC_VECTORS: ACTIVE' },
+        { status: 'CALIBRATING SPACETIME COORDINATES...', detail: 'CORE_TEMP: 34.2°C // VOLTAGE: 1.25V STABLE' },
+        { status: 'COMPILING NEURAL CONFIGURATIONS...', detail: 'THREAD_ALLOC: ID_0x8F9B // DUAL CORE PROCESSING' },
+        { status: 'STABILIZING ELECTROMAGNETIC ENGINES...', detail: 'SHIELD_VOLT: 12.5kV // CALIBRATION: OK' },
+        { status: 'COMPLETING SYSTEM DIAGNOSTICS...', detail: 'SYNC_PROGRESS: FINALIZING INTERFACES' },
+        { status: 'SYSTEM CORES BALANCED AND SECURE.', detail: 'REDIRECTING SOCKETS // PIPELINE COMPLETED' }
+    ];
 
-function animateMockCost(targetVal) {
-    const el = document.getElementById('mock-dashboard-cost');
-    if (!el) return;
-    const currentVal = parseInt(el.innerText.replace('₹', '').replace(',', '')) || 0;
-    const obj = { value: currentVal };
-    gsap.to(obj, {
-        value: targetVal,
-        duration: 1.2,
-        ease: 'power1.out',
-        onUpdate: () => {
-            el.innerText = `₹${Math.round(obj.value).toLocaleString()}`;
-        }
-    });
-}
-
-function transitionFeatureSlide(tag, title, desc, activeIndex) {
-    const container = document.getElementById('feature-slide-content');
-    if (!container) return;
-    
-    // Update dots first
-    [1, 2, 3].forEach(idx => {
-        const dot = document.getElementById(`slide-dot-${idx}`);
-        if (dot) {
-            if (idx === activeIndex) {
-                dot.className = 'w-6 h-1.5 rounded-full bg-brand-500 transition-all duration-300';
-            } else {
-                dot.className = 'w-2 h-1.5 rounded-full bg-white/10 transition-all duration-300';
-            }
-        }
-    });
-
-    // GSAP text transition
-    gsap.to(container, { opacity: 0, y: -10, duration: 0.25, ease: 'power2.in', onComplete: () => {
-        const tagEl = document.getElementById('feature-tag');
-        const titleEl = document.getElementById('feature-title');
-        const descEl = document.getElementById('feature-desc');
-        if (tagEl) tagEl.innerText = tag;
-        if (titleEl) titleEl.innerText = title;
-        if (descEl) descEl.innerText = desc;
-        
-        gsap.fromTo(container, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' });
-    }});
+    const currentUpdate = statusUpdates[stepIndex] || { status: stepText, detail: 'RUNNING DIAGNOSTICS...' };
+    if (statusEl) statusEl.innerText = currentUpdate.status;
+    if (detailEl) detailEl.innerText = currentUpdate.detail;
 }
 
 // ==========================================
