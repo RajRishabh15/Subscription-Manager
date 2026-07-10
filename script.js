@@ -507,52 +507,28 @@ function startScanning(phone, email) {
 
     const scanView = document.getElementById('scan-view');
     const progressView = document.getElementById('login-progress-view');
-    
-    if (scanView) scanView.classList.add('hidden');
+        if (scanView) scanView.classList.add('hidden');
     if (progressView) {
         progressView.classList.remove('hidden');
         lucide.createIcons();
-        
-        // Reset Phase containers visibility and styles
-        const authContainer = document.getElementById('phase-container-auth');
-        const scanContainer = document.getElementById('phase-container-scan');
-        const buildContainer = document.getElementById('phase-container-build');
-        if (authContainer) {
-            authContainer.classList.remove('hidden');
-            authContainer.style.opacity = '1';
-            authContainer.style.transform = 'scale(1)';
+          // Reset Feature Phase containers visibility and styles
+        const feat1 = document.getElementById('phase-container-feat1');
+        const feat2 = document.getElementById('phase-container-feat2');
+        const feat3 = document.getElementById('phase-container-feat3');
+        if (feat1) {
+            feat1.classList.remove('hidden');
+            feat1.style.opacity = '1';
+            feat1.style.transform = 'scale(1)';
         }
-        if (scanContainer) {
-            scanContainer.classList.add('hidden');
-            scanContainer.style.opacity = '0';
-            scanContainer.style.transform = 'scale(0.95)';
-            
-            // Reset scanning nodes inside Phase 2
-            const services = ['netflix', 'jio', 'hotstar', 'spotify'];
-            services.forEach(s => {
-                const node = document.getElementById(`scan-node-${s}`);
-                const line = document.getElementById(`scan-line-${s}`);
-                if (node) {
-                    node.style.background = '#0f0e13';
-                    node.style.boxShadow = 'none';
-                    node.style.borderColor = 'rgba(255, 255, 255, 0.06)';
-                    node.style.opacity = '0.25';
-                    node.style.transform = 'scale(0.75)';
-                    const icon = node.querySelector('i');
-                    if (icon) icon.style.color = '#64748b';
-                    const label = node.querySelector('span');
-                    if (label) label.style.color = '#64748b';
-                }
-                if (line) {
-                    line.setAttribute('stroke', 'rgba(255,255,255,0.06)');
-                    line.setAttribute('stroke-width', '1');
-                }
-            });
+        if (feat2) {
+            feat2.classList.add('hidden');
+            feat2.style.opacity = '0';
+            feat2.style.transform = 'scale(0.95)';
         }
-        if (buildContainer) {
-            buildContainer.classList.add('hidden');
-            buildContainer.style.opacity = '0';
-            buildContainer.style.transform = 'scale(0.95)';
+        if (feat3) {
+            feat3.classList.add('hidden');
+            feat3.style.opacity = '0';
+            feat3.style.transform = 'scale(0.95)';
         }
     }
 
@@ -562,16 +538,6 @@ function startScanning(phone, email) {
 
     if (barEl) barEl.style.width = '0%';
     if (pctEl) pctEl.innerText = '0%';
-
-    // Initialize the terminal console
-    const terminalEl = document.getElementById('scraper-terminal');
-    if (terminalEl) {
-        terminalEl.innerHTML = `
-            <div class="text-slate-500">[SYSTEM] Initialization sequence initialized...</div>
-            <div class="text-slate-500">[SYSTEM] Decryption protocols ready. AES-256 enabled.</div>
-            <div class="text-slate-550">[SYSTEM] Scanning OTP gateways...</div>
-        `;
-    }
 
     const scanSteps = [
         { pct: 12, text: 'Opening secure connection to OTP servers...' },
@@ -586,24 +552,8 @@ function startScanning(phone, email) {
 
     let currentStep = 0;
     
-    // Background matrix/raw debug scanner logs generator
-    let logInterval = setInterval(() => {
-        const rawLogs = [
-            `DEBUG: socket recv (28 bytes) from secure-api.aio-sync.io:443`,
-            `DEBUG: decrypting data frame 0x${Math.floor(Math.random()*16777215).toString(16).toUpperCase()}... OK`,
-            `DEBUG: DB_CACHE: sync sequence verified`,
-            `DEBUG: matching receipt regex filter /billing|invoice|receipt/i...`,
-            `DEBUG: handshake packet acknowledged (ack=${Math.floor(Math.random()*900000)})`,
-            `DEBUG: parsing HTML table data structure... OK`,
-            `DEBUG: connection speed: ${(4 + Math.random()*8).toFixed(1)} Mbps`
-        ];
-        const randomLog = rawLogs[Math.floor(Math.random() * rawLogs.length)];
-        appendTerminalLog(randomLog, 'raw');
-    }, 180);
-
     function runNextStep() {
         if (currentStep >= scanSteps.length) {
-            clearInterval(logInterval);
             setTimeout(() => {
                 state.subscriptions = [
                     {
@@ -705,71 +655,29 @@ function appendTerminalLog(message, type = 'info') {
 }
 
 function updateScanTerminal(stepIndex, stepText) {
-    const authContainer = document.getElementById('phase-container-auth');
-    const scanContainer = document.getElementById('phase-container-scan');
-    const buildContainer = document.getElementById('phase-container-build');
+    const feat1 = document.getElementById('phase-container-feat1');
+    const feat2 = document.getElementById('phase-container-feat2');
+    const feat3 = document.getElementById('phase-container-feat3');
 
-    // 1. Manage Phase Transitions based on Step index
+    // Manage Phase Transitions based on Step index
     if (stepIndex === 2) {
-        // Transition from Phase 1 to Phase 2 (at 40%)
-        if (authContainer && !authContainer.classList.contains('hidden') && scanContainer && scanContainer.classList.contains('hidden')) {
-            gsap.to(authContainer, { opacity: 0, scale: 0.9, duration: 0.45, ease: 'power2.inOut', onComplete: () => {
-                authContainer.classList.add('hidden');
-                scanContainer.classList.remove('hidden');
-                gsap.fromTo(scanContainer, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out' });
+        // Transition from Feature 1 to Feature 2 (at 40%)
+        if (feat1 && !feat1.classList.contains('hidden') && feat2 && feat2.classList.contains('hidden')) {
+            gsap.to(feat1, { opacity: 0, scale: 0.9, duration: 0.45, ease: 'power2.inOut', onComplete: () => {
+                feat1.classList.add('hidden');
+                feat2.classList.remove('hidden');
+                gsap.fromTo(feat2, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out' });
             }});
         }
     } else if (stepIndex === 5) {
-        // Transition from Phase 2 to Phase 3 (at 85%)
-        if (scanContainer && !scanContainer.classList.contains('hidden') && buildContainer && buildContainer.classList.contains('hidden')) {
-            gsap.to(scanContainer, { opacity: 0, scale: 0.9, duration: 0.45, ease: 'power2.inOut', onComplete: () => {
-                scanContainer.classList.add('hidden');
-                buildContainer.classList.remove('hidden');
-                gsap.fromTo(buildContainer, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out' });
+        // Transition from Feature 2 to Feature 3 (at 85%)
+        if (feat2 && !feat2.classList.contains('hidden') && feat3 && feat3.classList.contains('hidden')) {
+            gsap.to(feat2, { opacity: 0, scale: 0.9, duration: 0.45, ease: 'power2.inOut', onComplete: () => {
+                feat2.classList.add('hidden');
+                feat3.classList.remove('hidden');
+                gsap.fromTo(feat3, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out' });
             }});
         }
-    }
-
-    // 2. Perform actions inside each step
-    if (stepIndex === 0) {
-        appendTerminalLog(">> [AUTH] Sending handshakes to secure OTP gateway...", "auth");
-        appendTerminalLog(">> [AUTH] Handshake response: 200 OK (handshake complete)", "sys");
-        appendTerminalLog(">> [AUTH] Decryption keys verified: AES-256 GCM initialized.", "sys");
-    } else if (stepIndex === 1) {
-        appendTerminalLog(">> [JIO] Requesting data mapping via Telecom API...", "auth");
-        appendTerminalLog(">> [JIO] Connected to node: jio-bill-server-west-04", "sys");
-        appendTerminalLog(">> [JIO] Found mobile billing trigger: INR 1,179 due on " + getFutureDate(12), "success");
-    } else if (stepIndex === 2) {
-        // Light up Jio and Netflix
-        lightUpScanNode('jio', '#3b82f6');
-        lightUpScanNode('netflix', '#ef4444');
-    } else if (stepIndex === 3) {
-        // Keep Netflix pulsing and line active
-        lightUpScanNode('netflix', '#ef4444');
-    } else if (stepIndex === 4) {
-        // Light up Hotstar and Spotify
-        lightUpScanNode('hotstar', '#06b6d4');
-        lightUpScanNode('spotify', '#10b981');
-    }
-}
-
-function lightUpScanNode(serviceId, color) {
-    const node = document.getElementById(`scan-node-${serviceId}`);
-    const line = document.getElementById(`scan-line-${serviceId}`);
-    if (node) {
-        node.style.background = 'rgba(236, 72, 153, 0.05)';
-        node.style.boxShadow = `0 0 25px ${color}40, inset 0 0 10px ${color}20`;
-        node.style.borderColor = color;
-        node.style.opacity = '1';
-        node.style.transform = 'scale(1.1)';
-        const icon = node.querySelector('i');
-        if (icon) icon.style.color = color;
-        const label = node.querySelector('span');
-        if (label) label.style.color = color;
-    }
-    if (line) {
-        line.setAttribute('stroke', color);
-        line.setAttribute('stroke-width', '2');
     }
 }
 
