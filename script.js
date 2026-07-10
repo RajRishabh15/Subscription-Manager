@@ -606,7 +606,7 @@ function startScanning(phone, email) {
                 
                 // Dramatic reveal transition
                 revealDashboardFromScan(progressView);
-            }, 800);
+            }, 250);
             return;
         }
 
@@ -620,11 +620,11 @@ function startScanning(phone, email) {
 
         currentStep++;
         
-        const delay = 800 + Math.random() * 800;
+        const delay = 180 + Math.random() * 220;
         setTimeout(runNextStep, delay);
     }
 
-    setTimeout(runNextStep, 500);
+    setTimeout(runNextStep, 200);
 }
 
 function appendTerminalLog(message, type = 'info') {
