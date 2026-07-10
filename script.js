@@ -1681,254 +1681,457 @@ function renderAccountTab() {
 
     const curAvatar = state.currentUser.avatar || 'nebula';
     const activeAvatarVibe = AVATAR_VIBES[curAvatar] || AVATAR_VIBES.nebula;
-    
+    const firstChar = (state.currentUser.name || 'U')[0].toUpperCase();
+    const totalSubs = state.subscriptions.length;
+    const activeSubs = state.subscriptions.filter(s => !s.status || s.status === 'active').length;
+    const monthlySpend = state.subscriptions
+        .filter(s => !s.status || s.status === 'active')
+        .reduce((a, s) => a + (s.cycle === 'monthly' ? parseFloat(s.cost)||0 : (parseFloat(s.cost)||0)/12), 0);
+
     // Generate initial diagnostics console log lines
     let logHtml = '';
     const now = new Date();
     for (let i = 0; i < 5; i++) {
         const timeStr = new Date(now.getTime() - (5 - i) * 60000).toLocaleTimeString();
-        logHtml += `<div class="text-textMuted font-mono">[${timeStr}] ${DIAGNOSTIC_LOG_TEMPLATES[i]}</div>`;
+        logHtml += `<div class="text-textMuted font-mono text-[10px] flex items-center space-x-1.5"><span class="text-emerald-500 font-extrabold select-none">❯</span> <span>[${timeStr}] ${DIAGNOSTIC_LOG_TEMPLATES[i]}</span></div>`;
     }
 
-    let html = `
-        <!-- Account Settings Header -->
-        <div class="mb-6">
-            <h2 class="text-4xl font-extrabold text-cardTitle font-sans tracking-tight mb-2">Account Settings</h2>
-            <p class="text-sm text-textMuted font-sans max-w-xl">Manage your profile, connected sources, and preferences from a unified control panel.</p>
+    const html = `
+        <!-- Page Header -->
+        <div class="mb-8 flex items-end justify-between">
+            <div>
+                <h1 class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-purple-400 to-indigo-400 font-space tracking-wide mb-1">Account</h1>
+                <p class="text-sm text-textMuted font-sans">Your identity, preferences &amp; connected sources</p>
+            </div>
+            <div id="account-save-indicator" class="hidden items-center gap-2 text-xs text-emerald-400 font-space font-bold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Saved
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            <!-- LEFT COLUMN: Profile info & System diagnostics -->
-            <div class="lg:col-span-4 space-y-6">
-                
-                <!-- Profile details & Avatar customizer -->
-                <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between">
-                    
-                    <div class="text-center pb-6 border-b border-glassBorder relative z-10">
-                        <div class="relative w-20 h-20 mx-auto mb-4">
-                            <div id="account-avatar-ring" class="w-20 h-20 rounded-full bg-gradient-to-tr ${activeAvatarVibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl border-2 ${activeAvatarVibe.gradient.split(' ').pop()}">
-                                ${state.currentUser.avatarIcon 
-                                    ? `<i id="account-large-avatar-icon" data-lucide="${state.currentUser.avatarIcon}" class="w-9 h-9"></i>`
-                                    : `<span id="account-large-avatar-char" class="text-3xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- LEFT: Hero Profile Card -->
+            <div class="lg:col-span-4 space-y-5">
+
+                <!-- Avatar card -->
+                <div class="relative bg-gradient-to-b from-[#11101a] to-[#0a0910] border border-glassBorder rounded-[28px] overflow-hidden group">
+                    <!-- Top shimmer bar -->
+                    <div class="h-[2px] bg-gradient-to-r from-transparent via-brand-500 to-transparent"></div>
+                    <!-- Ambient glow -->
+                    <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full blur-[80px] opacity-30 pointer-events-none" style="background: radial-gradient(circle, ${activeAvatarVibe.glowColor || '#ec4899'} 0%, transparent 70%);"></div>
+
+                    <div class="p-6 text-center relative z-10">
+                        <!-- Avatar ring with animated border -->
+                        <div class="relative w-28 h-28 mx-auto mb-4 cursor-pointer group/avatar" id="account-avatar-click-zone">
+                            <!-- Rotating conic border -->
+                            <div class="absolute inset-0 rounded-full p-[2px] animate-spin" style="animation-duration:4s;background:conic-gradient(from 0deg, rgba(236,72,153,0.8), rgba(139,92,246,0.8), rgba(59,130,246,0.6), rgba(236,72,153,0.8));border-radius:9999px;">
+                                <div class="w-full h-full rounded-full bg-[#0a0910]"></div>
+                            </div>
+                            <!-- Avatar itself -->
+                            <div id="account-avatar-ring" class="absolute inset-[3px] rounded-full bg-gradient-to-tr ${activeAvatarVibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl">
+                                ${state.currentUser.avatarIcon
+                                    ? `<i id="account-large-avatar-icon" data-lucide="${state.currentUser.avatarIcon}" class="w-11 h-11"></i>`
+                                    : `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${firstChar}</span>`
                                 }
                             </div>
-                            <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-cardSubBg border border-glassBorder flex items-center justify-center text-brand-400">
-                                <i data-lucide="${activeAvatarVibe.icon}" class="w-3.5 h-3.5 animate-pulse"></i>
+                            <!-- Camera overlay on hover -->
+                            <div class="absolute inset-[3px] rounded-full bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center">
+                                <i data-lucide="camera" class="w-6 h-6 text-white"></i>
                             </div>
                         </div>
-                        
-                        <h3 class="text-lg font-bold text-cardTitle font-space">${state.currentUser.name}</h3>
-                        <p class="text-[9px] text-brand-400 mt-1 uppercase tracking-widest font-space font-semibold">${activeAvatarVibe.name} Secured</p>
-                        
-                        <!-- Profile editable fields input -->
-                        <div class="space-y-3 text-left mt-6">
-                            <div>
-                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1 font-space">Display Name</label>
-                                <input type="text" id="profile-input-name" value="${state.currentUser.name}" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle placeholder-slate-650 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1 font-space">Primary Mobile</label>
-                                <input type="text" id="profile-input-phone" value="${state.currentUser.phone}" placeholder="98765 43210" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle placeholder-slate-650 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-[8px] font-bold text-textMuted uppercase tracking-widest mb-1 font-space">Primary Email</label>
-                                <input type="email" id="profile-input-email" value="${state.currentUser.email}" placeholder="name@domain.com" class="w-full bg-inputBg border border-glassBorder focus:border-brand-500 rounded-xl py-2 px-3 text-xs text-cardTitle placeholder-slate-650 focus:outline-none">
-                            </div>
-                        </div>
+
+                        <h3 class="text-xl font-extrabold text-cardTitle font-space mb-0.5">${state.currentUser.name || 'User'}</h3>
+                        <p class="text-xs text-textMuted font-sans mb-1">${state.currentUser.email || '—'}</p>
+                        <span class="inline-flex items-center gap-1.5 text-[9px] font-bold text-brand-400 uppercase tracking-widest bg-brand-500/10 border border-brand-500/20 px-3 py-1 rounded-full font-space">
+                            <i data-lucide="${activeAvatarVibe.icon}" class="w-3 h-3"></i> ${activeAvatarVibe.name} Vibes
+                        </span>
                     </div>
 
-                    <div class="pt-6 relative z-10 space-y-3">
-                        <!-- Customise Profile Button -->
-                        <button id="btn-open-avatar-modal" class="w-full bg-gradient-to-r from-brand-500/20 to-purple-500/20 border border-brand-500/40 hover:border-brand-500/70 hover:from-brand-500/30 hover:to-purple-500/30 text-brand-400 font-semibold text-xs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-space group">
-                            <i data-lucide="palette" class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
-                            <span>Customise Profile</span>
-                        </button>
-                        <button onclick="triggerAccountReset()" class="w-full bg-inputBg border border-glassBorder hover:border-glassBorder text-cardTitle hover:text-cardTitle font-semibold text-xs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-sans">
-                            <i data-lucide="log-out" class="w-4 h-4 text-textMuted"></i>
-                            <span>Log Out</span>
-                        </button>
-                        <button onclick="triggerDeleteAccount()" class="w-full bg-red-500/10 border border-red-500/25 hover:bg-red-550 hover:text-cardTitle text-red-400 font-semibold text-xs py-3 rounded-xl transition-all flex items-center justify-center space-x-2 font-sans">
-                            <i data-lucide="user-x" class="w-4 h-4"></i>
-                            <span>Delete Account</span>
-                        </button>
+                    <!-- Stats bar -->
+                    <div class="grid grid-cols-3 divide-x divide-glassBorder border-t border-glassBorder">
+                        <div class="py-4 text-center">
+                            <div class="text-lg font-extrabold text-cardTitle font-space">${activeSubs}</div>
+                            <div class="text-[9px] text-textMuted uppercase tracking-widest font-sans">Active</div>
+                        </div>
+                        <div class="py-4 text-center">
+                            <div class="text-lg font-extrabold text-brand-400 font-space">${formatCurrency(monthlySpend)}</div>
+                            <div class="text-[9px] text-textMuted uppercase tracking-widest font-sans">/month</div>
+                        </div>
+                        <div class="py-4 text-center">
+                            <div class="text-lg font-extrabold text-cardTitle font-space">${totalSubs}</div>
+                            <div class="text-[9px] text-textMuted uppercase tracking-widest font-sans">Total</div>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="space-y-2.5">
+                    <button id="btn-open-avatar-modal" class="w-full relative overflow-hidden bg-gradient-to-r from-brand-500/15 to-purple-500/15 border border-brand-500/35 hover:border-brand-500/70 hover:from-brand-500/25 hover:to-purple-500/25 text-brand-400 font-semibold text-xs py-3.5 rounded-2xl transition-all flex items-center justify-center gap-2 font-space group">
+                        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style="background: radial-gradient(circle at center, rgba(236,72,153,0.08) 0%, transparent 70%)"></div>
+                        <i data-lucide="sparkles" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
+                        <span>Customise Avatar</span>
+                    </button>
+                    <button onclick="triggerAccountReset()" class="w-full bg-[#13111a] border border-glassBorder hover:border-white/20 text-textMuted hover:text-cardTitle font-semibold text-xs py-3.5 rounded-2xl transition-all flex items-center justify-center gap-2 font-sans">
+                        <i data-lucide="log-out" class="w-4 h-4"></i> Log Out
+                    </button>
+                    <button onclick="triggerDeleteAccount()" class="w-full bg-red-500/8 border border-red-500/20 hover:bg-red-500/15 hover:border-red-500/40 text-red-400/80 hover:text-red-400 font-semibold text-xs py-3 rounded-2xl transition-all flex items-center justify-center gap-2 font-sans">
+                        <i data-lucide="user-x" class="w-4 h-4"></i> Delete Account
+                    </button>
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: Account settings forms & Card visualizer -->
-            <div class="lg:col-span-8 space-y-6">
-                
-                <!-- Connected Sources -->
-                <div class="bg-glassBg border border-glassBorder rounded-3xl p-6">
-                    <div class="flex items-center space-x-3 mb-6">
-                        <div class="p-3 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-2xl flex-shrink-0">
-                            <i data-lucide="link" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-cardTitle font-sans tracking-tight">Connected Sources</h3>
-                            <p class="text-xs text-textMuted font-sans">Active phone numbers and email accounts used to aggregate billing notifications.</p>
-                        </div>
-                    </div>
+            <!-- RIGHT: Tabbed settings panel -->
+            <div class="lg:col-span-8 space-y-5">
 
-                    <!-- Input form -->
-                    <form id="connect-scan-directory-form" class="flex gap-3 pb-5 border-b border-glassBorder mb-5">
-                        <div class="relative flex-grow">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-textMuted">
-                                <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                            </span>
-                            <input type="text" required id="scan-directory-input-field" placeholder="Enter secondary email or 10-digit mobile number"
-                                class="w-full bg-inputBg border border-glassBorder rounded-xl py-3 pl-9 pr-4 text-xs text-cardTitle focus:outline-none focus:border-brand-500 placeholder-slate-650 font-sans">
-                        </div>
-                        <button type="submit" class="bg-gradient-to-r from-brand-600 to-cosmicBlue-600 hover:from-brand-500 hover:to-cosmicBlue-500 text-cardTitle font-bold text-xs px-5 py-3 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.15)] whitespace-nowrap font-space">
-                            Link & Scan
+                <!-- Tab switcher -->
+                <div class="flex items-center gap-1 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-fit" id="account-tab-bar">
+                    ${[
+                        { id: 'identity', icon: 'user', label: 'Identity & Prefs' },
+                        { id: 'sources',  icon: 'link', label: 'Sources' },
+                        { id: 'appearance', icon: 'palette', label: 'Aesthetics' },
+                        { id: 'diagnostics', icon: 'terminal', label: 'Diagnostics' },
+                    ].map((t, i) => `
+                        <button data-acct-tab="${t.id}" onclick="switchAccountTab('${t.id}')" class="acct-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-semibold transition-all font-space ${i === 0 ? 'bg-brand-500/25 text-brand-300 border border-brand-500/40' : 'text-textMuted hover:text-cardTitle'}">
+                            <i data-lucide="${t.icon}" class="w-3.5 h-3.5"></i> ${t.label}
                         </button>
-                    </form>
-
-                    <!-- Directories list -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[190px] overflow-y-auto pr-1 scrollbar-thin">
-                        ${state.currentUser.linkedCredentials.length > 0 ? state.currentUser.linkedCredentials.map((cred, idx) => {
-                            const isEmail = cred.type === 'Email';
-                            return `
-                                <div class="flex items-center justify-between p-3.5 bg-glassBg border border-glassBorder rounded-2xl text-xs hover:border-brand-500/15 transition-all">
-                                    <div class="flex items-center space-x-3.5">
-                                        <div class="p-2.5 bg-inputBg border border-glassBorder text-textMuted rounded-xl flex-shrink-0">
-                                            <i data-lucide="${isEmail ? 'mail' : 'smartphone'}" class="w-4.5 h-4.5"></i>
-                                        </div>
-                                        <div>
-                                            <div class="font-semibold text-cardTitle font-space truncate max-w-[130px]">${cred.value}</div>
-                                            <div class="text-[9px] text-textMuted">Connected: ${cred.dateAdded}</div>
-                                        </div>
-                                    </div>
-                                    <button class="btn-delete-credential p-2 bg-red-500/10 border border-red-500/25 text-red-400 hover:bg-red-500 hover:text-cardTitle rounded-xl transition-all flex-shrink-0" data-index="${idx}" title="Unlink Directory">
-                                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                    </button>
-                                </div>
-                            `;
-                        }).join('') : `
-                            <div class="col-span-full py-8 text-center text-textMuted text-xs font-sans">No directories linked. Enter one above to scan for bills.</div>
-                        `}
-                    </div>
+                    `).join('')}
                 </div>
 
-
-                <!-- Theme Customizer & System Settings -->
-                <div class="bg-glassBg/40 border border-glassBorder/60 backdrop-blur-3xl rounded-[32px] p-8 shadow-[0_15px_50px_rgba(0,0,0,0.4)] relative overflow-hidden group hover:border-brand-500/30 transition-all duration-500">
-                    <!-- Subtle Glow -->
-                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-brand-500/10 blur-[60px] rounded-full pointer-events-none transition-all group-hover:bg-brand-500/20"></div>
-                    
-                    <div class="flex items-center space-x-4 mb-8 relative z-10">
-                        <div class="p-3 bg-gradient-to-br from-brand-500/20 to-purple-500/20 border border-brand-500/30 text-brand-400 rounded-2xl shadow-[0_0_15px_rgba(236,72,153,0.15)] flex-shrink-0">
-                            <i data-lucide="palette" class="w-6 h-6"></i>
+                <!-- IDENTITY TAB -->
+                <div id="acct-panel-identity" class="acct-panel space-y-5">
+                    <!-- Profile Identity card -->
+                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-6 space-y-5">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="p-2.5 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
+                                <i data-lucide="user-round" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-cardTitle font-space">Profile Identity</h3>
+                                <p class="text-[11px] text-textMuted font-sans">Your name, contact and display preferences</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-cardTitle font-space tracking-tight">Aesthetic Customization & Core Settings</h3>
-                            <p class="text-xs text-textMuted font-sans mt-1">Personalize visual themes, financial metrics, and intelligent alert protocols.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[9px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Display Name</label>
+                                <input type="text" id="profile-input-name" value="${state.currentUser.name || ''}"
+                                    class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 focus:shadow-[0_0_0_3px_rgba(236,72,153,0.12)] rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600"
+                                    placeholder="Your name">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Primary Mobile</label>
+                                <input type="tel" id="profile-input-phone" value="${state.currentUser.phone || ''}"
+                                    class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 focus:shadow-[0_0_0_3px_rgba(236,72,153,0.12)] rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600"
+                                    placeholder="98765 43210">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-[9px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Primary Email</label>
+                                <input type="email" id="profile-input-email" value="${state.currentUser.email || ''}"
+                                    class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 focus:shadow-[0_0_0_3px_rgba(236,72,153,0.12)] rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600"
+                                    placeholder="name@domain.com">
+                            </div>
                         </div>
+                        <button id="btn-save-profile" class="w-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs py-3.5 rounded-xl transition-all shadow-[0_4px_20px_rgba(236,72,153,0.25)] font-space flex items-center justify-center gap-2">
+                            <i data-lucide="save" class="w-3.5 h-3.5"></i> Save Profile Changes
+                        </button>
                     </div>
 
-                    <div class="space-y-8 relative z-10">
-                        <!-- Theme custom swatch lists -->
-                        <div>
-                            <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest mb-4 font-space">Neural Color Schemes</label>
-                            <div class="grid grid-cols-3 gap-3">
-                                ${Object.keys(THEMES).map(themeName => {
-                                    const isSelected = state.preferences.theme === themeName;
-                                    const colors = THEMES[themeName];
-                                    const displayName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
+                    <!-- Currency & Alerts Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Currency Card -->
+                        <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-5">
+                            <div class="flex items-center gap-2.5 mb-4">
+                                <div class="p-2 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
+                                    <i data-lucide="circle-dollar-sign" class="w-4 h-4"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-cardTitle font-space">Currency</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2.5">
+                                ${['INR', 'USD', 'EUR', 'GBP'].map(c => {
+                                    const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
+                                    const names = { INR: 'Indian Rupee', USD: 'US Dollar', EUR: 'Euro', GBP: 'Pound' };
+                                    const isSel = state.preferences.currency === c;
                                     return `
-                                        <button class="theme-select-btn group relative flex flex-col items-center gap-2.5 p-3 rounded-2xl border ${
-                                            isSelected 
-                                            ? 'border-white/40 bg-white/5 shadow-[0_0_20px_rgba(255,255,255,0.08)]' 
-                                            : 'border-glassBorder/40 bg-glassBg/30 hover:border-white/20 hover:bg-white/5'
-                                        } transition-all duration-300 focus:outline-none overflow-hidden" data-theme="${themeName}">
-                                            <!-- Animated gradient swatch -->
-                                            <div class="relative w-12 h-12 rounded-full flex-shrink-0" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}, ${colors.brandHex})">
-                                                <div class="absolute inset-0.5 rounded-full" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}); filter: blur(1px);"></div>
-                                                ${isSelected ? `<div class="absolute inset-0 rounded-full flex items-center justify-center"><span class="w-3 h-3 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"></span></div>` : ''}
+                                        <button data-currency="${c}" class="currency-btn flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${isSel ? 'bg-brand-500/12 border-brand-500/50 text-brand-400 shadow-[0_0_16px_rgba(236,72,153,0.12)]' : 'bg-[#13111a] border-glassBorder text-textMuted hover:border-brand-500/30 hover:bg-[#1a1723] hover:text-cardTitle'}">
+                                            <div>
+                                                <div class="font-bold text-xs font-space">${c}</div>
+                                                <div class="text-[9px] opacity-60 font-sans">${names[c]}</div>
                                             </div>
-                                            <!-- Color band preview -->
-                                            <div class="flex gap-1">
-                                                <div class="w-3 h-1.5 rounded-full" style="background:${colors.brandHex}"></div>
-                                                <div class="w-3 h-1.5 rounded-full" style="background:${colors.cosmicHex}"></div>
-                                            </div>
-                                            <span class="text-[10px] ${ isSelected ? 'text-white font-bold' : 'text-textMuted group-hover:text-slate-300' } font-space transition-colors">${displayName}</span>
-                                            <!-- Selected ring glow -->
-                                            ${isSelected ? `<div class="absolute inset-0 rounded-2xl border border-white/20 shadow-[inset_0_0_20px_rgba(255,255,255,0.04)] pointer-events-none"></div>` : ''}
+                                            <span class="text-xl font-black font-space opacity-80">${symbols[c]}</span>
                                         </button>
                                     `;
                                 }).join('')}
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-glassBorder/50">
-                            <!-- Currency -->
-                            <div class="space-y-3">
-                                <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest font-space mb-2">Global Currency Standard</label>
-                                <div class="grid grid-cols-2 gap-3">
-                                    ${['INR', 'USD', 'EUR', 'GBP'].map(c => {
-                                        const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
-                                        const isSel = state.preferences.currency === c;
-                                        return `
-                                            <button data-currency="${c}" class="currency-btn flex items-center justify-between px-4 py-3.5 rounded-2xl border transition-all ${isSel ? 'bg-brand-500/10 border-brand-500 text-brand-400 shadow-[0_0_15px_rgba(236,72,153,0.15)]' : 'bg-[#13111a]/80 border-glassBorder text-textMuted hover:border-brand-500/40 hover:bg-[#1a1723] hover:text-cardTitle'}">
-                                                <span class="font-sans font-bold text-xs">${c}</span>
-                                                <span class="font-space font-black opacity-80 text-lg">${symbols[c]}</span>
+                        <!-- Intelligent Alerts Card -->
+                        <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-5">
+                            <div class="flex items-center gap-2.5 mb-4">
+                                <div class="p-2 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
+                                    <i data-lucide="bell" class="w-4 h-4"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-cardTitle font-space">Alerts</h3>
+                            </div>
+                            <div class="space-y-4">
+                                ${[
+                                    { id: 'chk-billing-alerts', pref: 'billingAlerts', label: 'Billing Renewal Warnings', sub: '5-day threshold' },
+                                    { id: 'chk-sms-alerts', pref: 'smsAlerts', label: 'SMS Match Pulse', sub: 'Real-time notifications' },
+                                    { id: 'chk-monthly-reports', pref: 'monthlyReports', label: 'Monthly Analytics Brief', sub: 'Spend &amp; trend digest' }
+                                ].map(a => `
+                                    <label class="flex items-center justify-between cursor-pointer select-none group/toggle">
+                                        <div class="flex-1 mr-4">
+                                            <div class="text-xs font-semibold text-cardTitle font-space group-hover/toggle:text-white transition-colors">${a.label}</div>
+                                            <div class="text-[10px] text-textMuted font-sans">${a.sub}</div>
+                                        </div>
+                                        <div class="relative flex-shrink-0">
+                                            <input type="checkbox" id="${a.id}" ${state.preferences[a.pref] ? 'checked' : ''} class="sr-only peer">
+                                            <div class="w-11 h-6 bg-[#1a1723] border border-glassBorder rounded-full transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-brand-500 peer-checked:to-purple-500 peer-checked:border-transparent peer-checked:shadow-[0_0_14px_rgba(236,72,153,0.4)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all after:duration-300 peer-checked:after:translate-x-5 peer-checked:after:border-white"></div>
+                                        </div>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SOURCES TAB -->
+                <div id="acct-panel-sources" class="acct-panel hidden space-y-4">
+                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-6">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="p-2.5 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
+                                <i data-lucide="link" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-cardTitle font-space">Connected Sources</h3>
+                                <p class="text-[11px] text-textMuted font-sans">Link email addresses and phone numbers to scan for billing activity</p>
+                            </div>
+                        </div>
+
+                        <form id="connect-scan-directory-form" class="flex gap-3 mb-5">
+                            <div class="relative flex-1">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-textMuted pointer-events-none">
+                                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                                </span>
+                                <input type="text" id="scan-directory-input-field" required
+                                    placeholder="Email address or 10-digit mobile"
+                                    class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 pl-10 pr-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600">
+                            </div>
+                            <button type="submit" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs px-5 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.2)] font-space whitespace-nowrap flex items-center gap-1.5">
+                                <i data-lucide="zap" class="w-3.5 h-3.5"></i> Link &amp; Scan
+                            </button>
+                        </form>
+
+                        <div class="space-y-2.5 max-h-[250px] overflow-y-auto scrollbar-thin pr-1">
+                            ${state.currentUser.linkedCredentials.length > 0 ? state.currentUser.linkedCredentials.map((cred, idx) => {
+                                const isEmail = cred.type === 'Email';
+                                return `
+                                    <div class="flex items-center justify-between p-4 bg-[#13111a] border border-glassBorder rounded-2xl group hover:border-brand-500/25 transition-all">
+                                        <div class="flex items-center gap-3.5">
+                                            <div class="w-10 h-10 rounded-xl ${isEmail ? 'bg-sky-500/10 border-sky-500/20 text-sky-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'} border flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="${isEmail ? 'mail' : 'smartphone'}" class="w-4.5 h-4.5"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-semibold text-sm text-cardTitle font-space">${cred.value}</div>
+                                                <div class="text-[10px] text-textMuted font-sans">Linked ${cred.dateAdded}</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded-full font-space uppercase tracking-widest">Active</span>
+                                            <button class="btn-delete-credential w-8 h-8 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 rounded-xl flex items-center justify-center transition-all" data-index="${idx}">
+                                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                                             </button>
-                                        `;
-                                    }).join('')}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('') : `
+                                <div class="py-10 text-center border border-dashed border-glassBorder rounded-2xl">
+                                    <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-[#1a1723] border border-glassBorder flex items-center justify-center text-textMuted">
+                                        <i data-lucide="unlink" class="w-5 h-5"></i>
+                                    </div>
+                                    <p class="text-sm font-semibold text-cardTitle font-space mb-1">No sources linked</p>
+                                    <p class="text-xs text-textMuted font-sans">Add an email or phone above to begin scanning</p>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- APPEARANCE TAB -->
+                <div id="acct-panel-appearance" class="acct-panel hidden space-y-5">
+                    <!-- Theme swatches -->
+                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-6">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="p-2.5 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
+                                <i data-lucide="palette" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-cardTitle font-space">Neural Color Scheme</h3>
+                                <p class="text-[11px] text-textMuted font-sans">Choose your interface's signature aesthetic vibe</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            ${Object.keys(THEMES).map(themeName => {
+                                const isSelected = state.preferences.theme === themeName;
+                                const colors = THEMES[themeName];
+                                const displayName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
+                                return `
+                                    <button class="theme-select-btn group relative flex flex-col items-center gap-3 p-4 rounded-2xl border transition-all duration-300 focus:outline-none overflow-hidden ${isSelected ? 'border-white/30 bg-white/5 shadow-[0_0_24px_rgba(255,255,255,0.06)]' : 'border-glassBorder/40 bg-[#13111a] hover:border-white/20 hover:bg-[#1a1723]'}" data-theme="${themeName}">
+                                        <div class="relative w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}, ${colors.brandHex})">
+                                            <div class="absolute inset-[3px] rounded-full bg-[#0a0910]"></div>
+                                            ${isSelected ? `<div class="absolute inset-0 rounded-full flex items-center justify-center"><span class="w-3 h-3 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)] z-10"></span></div>` : ''}
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="flex gap-1.5 justify-center mb-1">
+                                                <div class="w-4 h-1.5 rounded-full" style="background:${colors.brandHex}"></div>
+                                                <div class="w-4 h-1.5 rounded-full" style="background:${colors.cosmicHex}"></div>
+                                            </div>
+                                            <span class="text-[11px] font-bold ${isSelected ? 'text-white' : 'text-textMuted group-hover:text-slate-300'} font-space transition-colors">${displayName}</span>
+                                        </div>
+                                        ${isSelected ? `<div class="absolute inset-0 rounded-2xl border border-white/15 pointer-events-none"></div>` : ''}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIAGNOSTICS TAB -->
+                <div id="acct-panel-diagnostics" class="acct-panel hidden space-y-5">
+                    <!-- Holographic Console Terminal -->
+                    <div class="bg-[#0b0a10] border border-glassBorder/70 rounded-[24px] p-6 shadow-inner relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-emerald-500 to-teal-500 opacity-60"></div>
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-450">
+                                    <i data-lucide="terminal" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-cardTitle font-space">Security Diagnostics Console</h3>
+                                    <p class="text-[11px] text-textMuted font-sans">Live system logs &amp; mailbox scraper monitoring</p>
                                 </div>
                             </div>
-                            
-                            <!-- Notifications checkboxes -->
-                            <div class="space-y-5 font-sans">
-                                <label class="block text-[10px] font-bold text-brand-400/80 uppercase tracking-widest font-space mb-2">Intelligent Alerts</label>
-                                
-                                <!-- Alert 1 -->
-                                <label class="flex items-center cursor-pointer select-none group/toggle">
-                                    <div class="relative flex-shrink-0">
-                                        <input type="checkbox" id="chk-billing-alerts" ${state.preferences.billingAlerts ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-11 h-6 bg-[#13111a] border border-glassBorder rounded-full transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-brand-500 peer-checked:to-purple-500 peer-checked:border-transparent peer-checked:shadow-[0_0_15px_rgba(236,72,153,0.4)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all after:duration-300 peer-checked:after:translate-x-5 peer-checked:after:border-white"></div>
-                                    </div>
-                                    <span class="ml-4 text-textMuted group-hover/toggle:text-cardTitle transition-colors text-xs font-medium leading-tight">Priority Billing Renewal Warnings (5-Day Threshold)</span>
-                                </label>
-
-                                <!-- Alert 2 -->
-                                <label class="flex items-center cursor-pointer select-none group/toggle">
-                                    <div class="relative flex-shrink-0">
-                                        <input type="checkbox" id="chk-sms-alerts" ${state.preferences.smsAlerts ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-11 h-6 bg-[#13111a] border border-glassBorder rounded-full transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-brand-500 peer-checked:to-purple-500 peer-checked:border-transparent peer-checked:shadow-[0_0_15px_rgba(236,72,153,0.4)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all after:duration-300 peer-checked:after:translate-x-5 peer-checked:after:border-white"></div>
-                                    </div>
-                                    <span class="ml-4 text-textMuted group-hover/toggle:text-cardTitle transition-colors text-xs font-medium leading-tight">Real-time SMS Pulse on Subscription Matches</span>
-                                </label>
-
-                                <!-- Alert 3 -->
-                                <label class="flex items-center cursor-pointer select-none group/toggle">
-                                    <div class="relative flex-shrink-0">
-                                        <input type="checkbox" id="chk-monthly-reports" ${state.preferences.monthlyReports ? 'checked' : ''} class="sr-only peer">
-                                        <div class="w-11 h-6 bg-[#13111a] border border-glassBorder rounded-full transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-brand-500 peer-checked:to-purple-500 peer-checked:border-transparent peer-checked:shadow-[0_0_15px_rgba(236,72,153,0.4)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all after:duration-300 peer-checked:after:translate-x-5 peer-checked:after:border-white"></div>
-                                    </div>
-                                    <span class="ml-4 text-textMuted group-hover/toggle:text-cardTitle transition-colors text-xs font-medium leading-tight">Comprehensive Monthly Spend & Analytics Brief</span>
-                                </label>
+                            <div class="flex items-center gap-1.5 text-[9px] font-bold text-emerald-450 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full font-space animate-pulse">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online
                             </div>
+                        </div>
+
+                        <div id="diagnostic-console" class="w-full h-48 bg-[#040308] border border-[#1a1725] rounded-xl p-4 overflow-y-auto scrollbar-thin text-left flex flex-col gap-1.5 font-mono select-text shadow-inner">
+                            ${logHtml}
+                        </div>
+                    </div>
+
+                    <!-- System Info & Backup -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-5 space-y-4.5">
+                            <div class="flex items-center gap-2.5 mb-2">
+                                <div class="p-2 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
+                                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-cardTitle font-space">Telemetry Metrics</h3>
+                            </div>
+                            <div class="space-y-3 font-sans text-xs">
+                                <div class="flex justify-between items-center py-2 border-b border-[#181622]">
+                                    <span class="text-textMuted">Database Sync</span>
+                                    <span class="text-emerald-400 font-bold font-space text-[11px]">Sync Complete</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-[#181622]">
+                                    <span class="text-textMuted">Encryption Layer</span>
+                                    <span class="text-brand-400 font-bold font-space text-[11px]">AES-256 GCM</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-[#181622]">
+                                    <span class="text-textMuted">API Scans Executed</span>
+                                    <span class="text-cardTitle font-bold font-space text-[11px]" id="diag-scans-run">${state.diagnostics.scansRun || 0}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2">
+                                    <span class="text-textMuted">Connected Directory Gateways</span>
+                                    <span class="text-cardTitle font-bold font-space text-[11px]" id="diag-api-connected">${state.diagnostics.apiConnected || 0} / 8</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-5 space-y-4">
+                            <div class="flex items-center gap-2.5 mb-2">
+                                <div class="p-2 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
+                                    <i data-lucide="database" class="w-4 h-4"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-cardTitle font-space">Backup &amp; Restore</h3>
+                            </div>
+                            <p class="text-[11px] text-textMuted font-sans">Download a backup configuration or restore system states from a saved JSON file.</p>
+                            
+                            <div class="flex gap-2.5">
+                                <button id="btn-export-backup" class="flex-1 bg-[#13111a] hover:bg-[#1a1723] text-cardTitle border border-[#222] hover:border-white/10 font-bold text-xs py-3 rounded-xl transition-all font-space flex items-center justify-center gap-1.5">
+                                    <i data-lucide="download" class="w-3.5 h-3.5"></i> Export State
+                                </button>
+                                <button id="btn-trigger-import" type="button" onclick="document.getElementById('backup-import-file').click()" class="flex-1 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.15)] font-space flex items-center justify-center gap-1.5">
+                                    <i data-lucide="upload" class="w-3.5 h-3.5"></i> Import State
+                                </button>
+                            </div>
+                            <input type="file" id="backup-import-file" class="hidden" accept=".json" onchange="handleBackupImport(event)">
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-    `;
-
     container.innerHTML = html;
-    
-    // Bind all event listeners inside account tab
     bindAccountEventListeners();
-    
-    // Start diagnostics interval
+
+    // Wire up save profile button
+    const saveBtn = document.getElementById('btn-save-profile');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            const name = document.getElementById('profile-input-name').value.trim();
+            const phone = document.getElementById('profile-input-phone').value.trim();
+            const email = document.getElementById('profile-input-email').value.trim();
+            if (name) state.currentUser.name = name;
+            if (phone !== undefined) state.currentUser.phone = phone;
+            if (email !== undefined) state.currentUser.email = email;
+            saveStateToStorage();
+            syncAvatarUI();
+            // Show save indicator
+            const ind = document.getElementById('account-save-indicator');
+            if (ind) {
+                ind.classList.remove('hidden');
+                ind.classList.add('flex');
+                gsap.fromTo(ind, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.3, ease: 'back.out(2)' });
+                setTimeout(() => {
+                    gsap.to(ind, { opacity: 0, y: -8, duration: 0.25, onComplete: () => {
+                        ind.classList.add('hidden');
+                        ind.classList.remove('flex');
+                    }});
+                }, 2200);
+            }
+        });
+    }
+
+    // Wire avatar click zone to open modal
+    const avatarZone = document.getElementById('account-avatar-click-zone');
+    if (avatarZone) avatarZone.addEventListener('click', () => {
+        const btn = document.getElementById('btn-open-avatar-modal');
+        if (btn) btn.click();
+    });
+
+    // GSAP entrance animations
+    gsap.fromTo('.acct-panel > *', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out', stagger: 0.08, delay: 0.05 });
+
     startDiagnosticLogging();
-    
     lucide.createIcons();
     applyCardTiltEffect();
 }
+
+window.switchAccountTab = function(tabId) {
+    document.querySelectorAll('.acct-panel').forEach(p => p.classList.add('hidden'));
+    document.querySelectorAll('.acct-tab-btn').forEach(b => {
+        const active = b.getAttribute('data-acct-tab') === tabId;
+        b.className = `acct-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-semibold transition-all font-space ${active ? 'bg-brand-500/25 text-brand-300 border border-brand-500/40' : 'text-textMuted hover:text-cardTitle'}`;
+    });
+    const panel = document.getElementById(`acct-panel-${tabId}`);
+    if (panel) {
+        panel.classList.remove('hidden');
+        gsap.fromTo(panel.children, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out', stagger: 0.07 });
+    }
+    lucide.createIcons();
+};
 
     let pendingVibe = state.currentUser.avatar || 'nebula';
     let pendingIcon = state.currentUser.avatarIcon || null;
@@ -2460,6 +2663,40 @@ function bindAccountEventListeners() {
         });
     }
 }
+
+window.handleBackupImport = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const parsed = JSON.parse(e.target.result);
+            if (parsed && typeof parsed === 'object' && parsed.currentUser && Array.isArray(parsed.subscriptions)) {
+                state.currentUser = { ...state.currentUser, ...parsed.currentUser };
+                state.subscriptions = parsed.subscriptions;
+                if (parsed.preferences) state.preferences = { ...state.preferences, ...parsed.preferences };
+                if (parsed.diagnostics) state.diagnostics = { ...state.diagnostics, ...parsed.diagnostics };
+                if (parsed.billingCard) state.billingCard = { ...state.billingCard, ...parsed.billingCard };
+                
+                saveStateToStorage();
+                alert("System state successfully restored from backup!");
+                
+                initAppView();
+                if (state.activeTab === 'account') {
+                    renderAccountTab();
+                    switchAccountTab('diagnostics');
+                }
+            } else {
+                alert("Invalid backup file format. Must contain valid user identity and subscriptions data.");
+            }
+        } catch (err) {
+            console.error("Error parsing backup JSON:", err);
+            alert("Failed to parse the backup file. Please ensure it is a valid JSON file exported from Subscription Manager.");
+        }
+    };
+    reader.readAsText(file);
+};
 
 function updateCardVendorIcon(number) {
     const iconContainer = document.getElementById('card-vendor-icon');
