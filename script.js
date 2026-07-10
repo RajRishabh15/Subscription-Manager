@@ -1759,6 +1759,12 @@ function syncAvatarUI() {
             : `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
         lucide.createIcons({ nodes: [ring] });
     }
+
+    // 4. Update left profile card linked sources count
+    const linkedCountEl = document.getElementById('account-stat-linked-count');
+    if (linkedCountEl) {
+        linkedCountEl.innerText = `${state.currentUser.linkedCredentials.length} Linked`;
+    }
 }
 
 // ==========================================
@@ -1833,19 +1839,25 @@ function renderAccountTab() {
                         <p id="account-large-avatar-email" class="text-xs text-textMuted font-sans mb-1">${state.currentUser.email || '—'}</p>
                     </div>
 
-                    <!-- Stats bar -->
+                    <!-- System Security/Integrity Bar -->
                     <div class="grid grid-cols-3 divide-x divide-glassBorder border-t border-glassBorder">
                         <div class="py-4 text-center">
-                            <div class="text-lg font-extrabold text-cardTitle font-space">${activeSubs}</div>
-                            <div class="text-[9px] text-textMuted uppercase tracking-widest font-sans">Active</div>
+                            <div class="text-xs font-black text-emerald-450 font-space flex items-center justify-center gap-1">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-450"></i> SECURE
+                            </div>
+                            <div class="text-[8px] text-textMuted uppercase tracking-widest font-sans mt-0.5">Integrity</div>
                         </div>
                         <div class="py-4 text-center">
-                            <div class="text-lg font-extrabold text-brand-400 font-space">${formatCurrency(monthlySpend)}</div>
-                            <div class="text-[9px] text-textMuted uppercase tracking-widest font-sans">/month</div>
+                            <div class="text-xs font-black text-brand-400 font-space" id="account-stat-linked-count">
+                                ${state.currentUser.linkedCredentials.length} Linked
+                            </div>
+                            <div class="text-[8px] text-textMuted uppercase tracking-widest font-sans mt-0.5">Sources</div>
                         </div>
                         <div class="py-4 text-center">
-                            <div class="text-lg font-extrabold text-cardTitle font-space">${totalSubs}</div>
-                            <div class="text-[9px] text-textMuted uppercase tracking-widest font-sans">Total</div>
+                            <div class="text-xs font-black text-cyan-400 font-space flex items-center justify-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span> ONLINE
+                            </div>
+                            <div class="text-[8px] text-textMuted uppercase tracking-widest font-sans mt-0.5">Session</div>
                         </div>
                     </div>
                 </div>
