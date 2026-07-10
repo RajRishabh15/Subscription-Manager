@@ -2067,16 +2067,14 @@ function renderAccountTab() {
                                 </button>
                             </div>
                             <input type="file" id="backup-import-file" class="hidden" accept=".json" onchange="handleBackupImport(event)">
-                        </div>
-                    </div>
                 </div>
-
             </div>
         </div>
+    `;
+
     container.innerHTML = html;
     bindAccountEventListeners();
 
-    // Wire up save profile button
     const saveBtn = document.getElementById('btn-save-profile');
     if (saveBtn) {
         saveBtn.addEventListener('click', () => {
