@@ -1831,9 +1831,6 @@ function renderAccountTab() {
 
                         <h3 id="account-large-avatar-name" class="text-xl font-extrabold text-cardTitle font-space mb-0.5">${state.currentUser.name || 'User'}</h3>
                         <p id="account-large-avatar-email" class="text-xs text-textMuted font-sans mb-1">${state.currentUser.email || '—'}</p>
-                        <span class="inline-flex items-center gap-1.5 text-[9px] font-bold text-brand-400 uppercase tracking-widest bg-brand-500/10 border border-brand-500/20 px-3 py-1 rounded-full font-space">
-                            <i data-lucide="${activeAvatarVibe.icon}" class="w-3 h-3"></i> ${activeAvatarVibe.name} Vibes
-                        </span>
                     </div>
 
                     <!-- Stats bar -->
