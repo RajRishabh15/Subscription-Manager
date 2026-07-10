@@ -1736,6 +1736,24 @@ function applyCardTiltEffect() {
 // Sync Avatar pill in floating header
 function syncAvatarUI() {
     renderPillNav();
+
+    // 1. Update left profile card name
+    const largeNameEl = document.getElementById('account-large-avatar-name');
+    if (largeNameEl) {
+        largeNameEl.innerText = state.currentUser.name || 'User';
+    }
+
+    // 2. Update left profile card email
+    const largeEmailEl = document.getElementById('account-large-avatar-email');
+    if (largeEmailEl) {
+        largeEmailEl.innerText = state.currentUser.email || '—';
+    }
+
+    // 3. Update left profile card character bubble (if there is no icon set)
+    const largeCharEl = document.getElementById('account-large-avatar-char');
+    if (largeCharEl && !state.currentUser.avatarIcon) {
+        largeCharEl.innerText = (state.currentUser.name || 'U')[0].toUpperCase();
+    }
 }
 
 // ==========================================
@@ -1806,8 +1824,8 @@ function renderAccountTab() {
                             </div>
                         </div>
 
-                        <h3 class="text-xl font-extrabold text-cardTitle font-space mb-0.5">${state.currentUser.name || 'User'}</h3>
-                        <p class="text-xs text-textMuted font-sans mb-1">${state.currentUser.email || '—'}</p>
+                        <h3 id="account-large-avatar-name" class="text-xl font-extrabold text-cardTitle font-space mb-0.5">${state.currentUser.name || 'User'}</h3>
+                        <p id="account-large-avatar-email" class="text-xs text-textMuted font-sans mb-1">${state.currentUser.email || '—'}</p>
                         <span class="inline-flex items-center gap-1.5 text-[9px] font-bold text-brand-400 uppercase tracking-widest bg-brand-500/10 border border-brand-500/20 px-3 py-1 rounded-full font-space">
                             <i data-lucide="${activeAvatarVibe.icon}" class="w-3 h-3"></i> ${activeAvatarVibe.name} Vibes
                         </span>
