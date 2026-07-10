@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const savedAuthMode = localStorage.getItem('auth_mode_redirect') || 'login';
     localStorage.removeItem('auth_mode_redirect');
 
-    // Check query params for simulated mock Gmail redirect
+    // Check mock redirect (only used when Supabase is NOT configured)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('mock_login') === 'gmail') {
         const mockEmail = urlParams.get('mock_email') || 'mock.user@gmail.com';
@@ -227,22 +227,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // Check live Supabase session if configured and not logged in yet
-    if (isSupabaseConfigured && !state.isLoggedIn) {
+    // Check live Supabase session (returned from real Google OAuth redirect)
+    if (isSupabaseConfigured) {
         try {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session && session.user) {
+                const email = session.user.email;
+                // Pull name from Google's user_metadata if available
+                const googleName = session.user.user_metadata?.full_name
+                    || session.user.user_metadata?.name
+                    || '';
+
                 if (savedAuthMode === 'signup') {
-                    showRegisterSetup('', session.user.email);
+                    // New user signing up — go to profile setup
+                    showRegisterSetup(googleName, email);
                 } else {
+                    // Existing user logging in — just start the app
+                    // If they haven't completed profile setup yet, send them there
                     const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
-                    const isRegistered = registeredUsers.some(u => u.email === session.user.email);
+                    const isRegistered = registeredUsers.some(u => u.email === email);
                     if (isRegistered) {
-                        startScanning(null, session.user.email);
+                        startScanning(null, email);
                     } else {
-                        alert("This Gmail account is not registered. Please switch to Sign Up mode to register first.");
-                        await supabaseClient.auth.signOut();
-                        initAppView();
+                        // They logged in with Google but never completed setup — send to setup
+                        showRegisterSetup(googleName, email);
                     }
                 }
                 return;
@@ -2481,7 +2489,10 @@ async function signInWithGmail() {
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + window.location.pathname
+                    redirectTo: window.location.origin + window.location.pathname,
+                    queryParams: {
+                        prompt: 'select_account' // Always show account chooser
+                    }
                 }
             });
             if (error) {
