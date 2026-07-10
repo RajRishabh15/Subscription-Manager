@@ -1038,6 +1038,7 @@ function renderHomeTab() {
         </div>
     `;
 
+    container.innerHTML = html;
 }
 
 // Generate Pie/Donut SVG dynamically based on categories percentage
