@@ -856,78 +856,62 @@ function renderHomeTab() {
             </button>
         </div>
 
-        <!-- 4 Summary Cards Grid (Futuristic Redesign) -->
+        <!-- 4 Summary Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-2">
             
-            <!-- Card 1: Monthly Spend -->
-            <div class="relative bg-[#0c0a13]/80 backdrop-blur-xl border border-[#222] rounded-[32px] p-6 h-44 flex flex-col justify-between overflow-hidden group hover:border-indigo-500/50 transition-all duration-500 shadow-[0_8px_30px_rgb(0,0,0,0.5)]">
-                <!-- Hover Glow Effect -->
-                <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                <div class="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
-                
-                <div class="relative z-10 flex justify-between items-start">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-space">Monthly Spend</span>
-                    <div class="p-2.5 bg-[#13111a] border border-[#333] rounded-xl text-indigo-400 group-hover:bg-indigo-500/20 group-hover:border-indigo-500/40 group-hover:scale-110 transition-all shadow-[0_0_15px_rgba(99,102,241,0.1)]">
+            <!-- Card 1: Monthly spend -->
+            <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between h-40 hover:bg-glassBorder/50 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-medium text-textMuted font-sans">Monthly spend</span>
+                    <div class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg group-hover:bg-indigo-500/20 transition-colors">
                         <i data-lucide="trending-up" class="w-4 h-4"></i>
                     </div>
                 </div>
-                <div class="relative z-10">
-                    <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 font-space tracking-tight">${formatCurrency(monthlySpend)}</div>
-                    <div class="text-xs text-indigo-400/80 mt-1.5 font-space flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span> ${activeCount} active plans</div>
+                <div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${formatCurrency(monthlySpend)}</div>
+                    <div class="text-[11px] text-textMuted mt-1 font-sans">Includes ${activeCount} active plans</div>
                 </div>
             </div>
 
-            <!-- Card 2: Active Plans -->
-            <div class="relative bg-[#0c0a13]/80 backdrop-blur-xl border border-[#222] rounded-[32px] p-6 h-44 flex flex-col justify-between overflow-hidden group hover:border-emerald-500/50 transition-all duration-500 shadow-[0_8px_30px_rgb(0,0,0,0.5)]">
-                <!-- Hover Glow Effect -->
-                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                <div class="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
-
-                <div class="relative z-10 flex justify-between items-start">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-space">Active Plans</span>
-                    <div class="p-2.5 bg-[#13111a] border border-[#333] rounded-xl text-emerald-400 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 group-hover:scale-110 transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                        <i data-lucide="activity" class="w-4 h-4"></i>
+            <!-- Card 2: Active plans -->
+            <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between h-40 hover:bg-glassBorder/50 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-medium text-textMuted font-sans">Active plans</span>
+                    <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg group-hover:bg-emerald-500/20 transition-colors">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
                     </div>
                 </div>
-                <div class="relative z-10">
-                    <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 font-space tracking-tight">${activeCount}</div>
-                    <div class="text-xs text-emerald-400/80 mt-1.5 font-space flex items-center gap-1.5"><i data-lucide="calendar" class="w-3 h-3"></i> ${criticalBills.length} renewing soon</div>
+                <div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${activeCount}</div>
+                    <div class="text-[11px] text-textMuted mt-1 font-sans">${criticalBills.length} renewing soon</div>
                 </div>
             </div>
 
-            <!-- Card 3: Data Sources -->
-            <div class="relative bg-[#0c0a13]/80 backdrop-blur-xl border border-[#222] rounded-[32px] p-6 h-44 flex flex-col justify-between overflow-hidden group hover:border-cyan-500/50 transition-all duration-500 shadow-[0_8px_30px_rgb(0,0,0,0.5)]">
-                <!-- Hover Glow Effect -->
-                <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                <div class="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
-
-                <div class="relative z-10 flex justify-between items-start">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-space">Data Sources</span>
-                    <div class="p-2.5 bg-[#13111a] border border-[#333] rounded-xl text-cyan-400 group-hover:bg-cyan-500/20 group-hover:border-cyan-500/40 group-hover:scale-110 transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)]">
-                        <i data-lucide="radar" class="w-4 h-4"></i>
+            <!-- Card 3: Detected via email -->
+            <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between h-40 hover:bg-glassBorder/50 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-medium text-textMuted font-sans">Detected via sources</span>
+                    <div class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
+                        <i data-lucide="mail" class="w-4 h-4"></i>
                     </div>
                 </div>
-                <div class="relative z-10">
-                    <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 font-space tracking-tight">${state.currentUser.linkedCredentials.length}</div>
-                    <div class="text-xs text-cyan-400/80 mt-1.5 font-space flex items-center gap-1.5"><i data-lucide="refresh-cw" class="w-3 h-3 animate-spin" style="animation-duration:3s"></i> auto-synced live</div>
+                <div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${activeCount}</div>
+                    <div class="text-[11px] text-textMuted mt-1 font-sans">auto-synced</div>
                 </div>
             </div>
 
-            <!-- Card 4: System Alerts -->
-            <div class="relative bg-[#0c0a13]/80 backdrop-blur-xl border border-[#222] rounded-[32px] p-6 h-44 flex flex-col justify-between overflow-hidden group hover:border-rose-500/50 transition-all duration-500 shadow-[0_8px_30px_rgb(0,0,0,0.5)]">
-                <!-- Hover Glow Effect -->
-                <div class="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                <div class="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-rose-500/50 to-transparent"></div>
-
-                <div class="relative z-10 flex justify-between items-start">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-space">System Alerts</span>
-                    <div class="p-2.5 bg-[#13111a] border border-[#333] rounded-xl text-rose-400 group-hover:bg-rose-500/20 group-hover:border-rose-500/40 group-hover:scale-110 transition-all shadow-[0_0_15px_rgba(244,63,94,0.1)]">
-                        <i data-lucide="alert-circle" class="w-4 h-4"></i>
+            <!-- Card 4: Alerts -->
+            <div class="bg-glassBg border border-glassBorder rounded-3xl p-6 flex flex-col justify-between h-40 hover:bg-glassBorder/50 transition-colors group">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-medium text-textMuted font-sans">Alerts</span>
+                    <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg group-hover:bg-amber-500/20 transition-colors">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
                     </div>
                 </div>
-                <div class="relative z-10">
-                    <div class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 font-space tracking-tight">${criticalBills.length}</div>
-                    <div class="text-xs text-rose-400/80 mt-1.5 font-space flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-3 h-3"></i> actions required</div>
+                <div>
+                    <div class="text-3xl font-bold text-cardTitle font-sans tracking-tight">${criticalBills.length}</div>
+                    <div class="text-[11px] text-textMuted mt-1 font-sans">actions required</div>
                 </div>
             </div>
 
