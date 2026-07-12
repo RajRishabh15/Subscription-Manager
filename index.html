@@ -109,7 +109,7 @@
             <!-- Animated background elements -->
             <div class="absolute inset-0 pointer-events-none">
                 <!-- Base gradient -->
-                <div class="absolute inset-0 bg-[#04020a]"></div>
+                <div class="absolute inset-0 bg-[#04020a]/40"></div>
                 <!-- Glowing orbs -->
                 <div class="absolute top-[15%] left-[10%] w-[500px] h-[500px] rounded-full bg-brand-500/5 blur-[120px] animate-pulse" style="animation-duration:8s;"></div>
                 <div class="absolute bottom-[10%] right-[5%] w-[400px] h-[400px] rounded-full bg-cosmicBlue-500/5 blur-[100px] animate-pulse" style="animation-duration:12s;animation-delay:3s;"></div>
@@ -117,13 +117,13 @@
                 <!-- Subtle grid -->
                 <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
                 <!-- Radial fade to make grid fade from center -->
-                <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,transparent_30%,#04020a_100%)]"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,transparent_30%,rgba(4,2,10,0.8)_100%)]"></div>
             </div>
 
-            <div class="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
                 <!-- ── LEFT COLUMN ── -->
-                <div class="space-y-8">
+                <div class="lg:col-span-7 space-y-8 lg:pr-8">
                     <!-- Pill badge -->
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-500/40 bg-brand-500/10 backdrop-blur-sm shadow-[0_0_20px_rgba(236,72,153,0.15)]">
                         <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
@@ -134,7 +134,7 @@
                     <div class="space-y-3">
                         <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.0] tracking-tight font-sans">
                             Take Control<br>
-                            <span style="color: transparent; -webkit-text-fill-color: transparent; background: linear-gradient(90deg, #ec4899, #a855f7, #22d3ee); -webkit-background-clip: text; background-clip: text;">of Your Digital</span><br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-purple-500 to-cosmicBlue-400">of Your Digital</span><br>
                             <span class="text-white">Subscriptions</span>
                         </h1>
                     </div>
@@ -199,71 +199,18 @@
                         </div>
                     </div>
 
-                    <!-- Dashboard Preview Strip -->
-                    <div class="relative rounded-2xl border border-white/8 overflow-hidden max-w-lg group hover:border-brand-500/20 transition-all duration-500 shadow-[0_20px_60px_rgba(0,0,0,0.7)]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-brand-500/5 via-transparent to-cosmicBlue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <!-- Mock UI bars -->
-                        <div class="relative bg-[#0a0812] p-4">
-                            <!-- Titlebar chrome -->
-                            <div class="flex items-center gap-1.5 mb-3">
-                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-amber-500/60"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/60"></div>
-                                <div class="flex-1 mx-2 h-4 rounded bg-white/5 flex items-center px-2">
-                                    <span class="text-[8px] text-slate-600 font-mono">app.aiomanager.io/dashboard</span>
-                                </div>
-                            </div>
-                            <!-- Mock content -->
-                            <div class="grid grid-cols-3 gap-2 mb-2">
-                                <div class="h-12 rounded-xl bg-brand-500/8 border border-brand-500/15 flex flex-col justify-between p-2">
-                                    <span class="text-[7px] text-slate-500 font-space uppercase">Monthly</span>
-                                    <span class="text-[11px] font-black text-white font-space">₹2,840</span>
-                                </div>
-                                <div class="h-12 rounded-xl bg-cosmicBlue-500/8 border border-cosmicBlue-500/15 flex flex-col justify-between p-2">
-                                    <span class="text-[7px] text-slate-500 font-space uppercase">Active</span>
-                                    <span class="text-[11px] font-black text-white font-space">7 Plans</span>
-                                </div>
-                                <div class="h-12 rounded-xl bg-purple-500/8 border border-purple-500/15 flex flex-col justify-between p-2">
-                                    <span class="text-[7px] text-slate-500 font-space uppercase">Alerts</span>
-                                    <span class="text-[11px] font-black text-white font-space">2 Due</span>
-                                </div>
-                            </div>
-                            <!-- Progress bars -->
-                            <div class="space-y-1.5">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[7px] text-slate-600 font-space w-14">Netflix</span>
-                                    <div class="flex-1 h-1 rounded-full bg-white/5"><div class="h-full w-3/4 rounded-full bg-gradient-to-r from-brand-500 to-purple-500 opacity-70"></div></div>
-                                    <span class="text-[7px] text-slate-500">₹649</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[7px] text-slate-600 font-space w-14">Spotify</span>
-                                    <div class="flex-1 h-1 rounded-full bg-white/5"><div class="h-full w-1/3 rounded-full bg-gradient-to-r from-cosmicBlue-500 to-emerald-500 opacity-70"></div></div>
-                                    <span class="text-[7px] text-slate-500">₹119</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[7px] text-slate-600 font-space w-14">Jio Fibre</span>
-                                    <div class="flex-1 h-1 rounded-full bg-white/5"><div class="h-full w-1/2 rounded-full bg-gradient-to-r from-amber-500 to-rose-500 opacity-70"></div></div>
-                                    <span class="text-[7px] text-slate-500">₹999</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Overlay badge -->
-                        <div class="absolute bottom-3 right-3 bg-[#0a0812]/90 border border-white/10 backdrop-blur-md px-2.5 py-1 rounded-lg flex items-center gap-1.5 text-[8px]">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                            <span class="text-emerald-400 font-space font-bold tracking-wide">LIVE SYNC ACTIVE</span>
-                        </div>
-                    </div>
+
                 </div>
 
                 <!-- ── RIGHT COLUMN: LOGIN CARD ── -->
-                <div class="flex justify-center lg:justify-end">
+                <div class="lg:col-span-5 flex justify-center lg:justify-center mt-8 lg:mt-0">
                     <div class="relative w-full max-w-[420px]">
 
                         <!-- Card glow backdrop -->
                         <div class="absolute -inset-px rounded-[36px] bg-gradient-to-b from-brand-500/20 via-transparent to-cosmicBlue-500/20 blur-sm opacity-60"></div>
 
                         <!-- Main card -->
-                        <div class="relative bg-[#060510]/95 border border-white/[0.12] rounded-[34px] p-8 shadow-[0_40px_100px_rgba(0,0,0,0.95)] overflow-hidden backdrop-blur-sm">
+                        <div class="relative bg-[#060510]/95 border border-brand-500/20 rounded-[34px] p-8 shadow-[0_40px_100px_rgba(236,72,153,0.1)] overflow-hidden backdrop-blur-sm">
 
                             <!-- Inner shimmer top line -->
                             <div class="absolute top-0 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-brand-400/70 to-transparent"></div>
@@ -280,7 +227,7 @@
                                     </div>
                                 </div>
                                 <h2 class="text-2xl font-black text-white tracking-tight mb-2 font-sans">
-                                    Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-cosmicBlue-300">AIOManager</span>
+                                    Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cosmicBlue-400">AIOManager</span>
                                 </h2>
                                 <p class="text-slate-400 text-[13px] font-sans leading-relaxed px-2">
                                     Sign in to discover and manage all your subscriptions in one place.
@@ -293,7 +240,7 @@
                                 <!-- Google Sign In Button -->
                                 <div id="email-input-group" class="transition-all duration-300">
                                     <button id="btn-gmail-login"
-                                        class="group relative w-full overflow-hidden rounded-2xl border border-white/[0.14] bg-white/[0.06] hover:bg-white/[0.10] hover:border-white/25 transition-all duration-300 py-4 px-5 flex items-center justify-center gap-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] active:scale-[0.98]">
+                                        class="group relative w-full overflow-hidden rounded-2xl border border-brand-500/20 bg-brand-500/5 hover:bg-brand-500/10 hover:border-brand-500/30 transition-all duration-300 py-4 px-5 flex items-center justify-center gap-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] active:scale-[0.98]">
                                         <!-- Shimmer hover effect -->
                                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/6 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none"></div>
                                         <div class="relative bg-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 p-1">
@@ -347,7 +294,7 @@
                                     <div>
                                         <label for="register-name" class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 font-space">Full Name</label>
                                         <input type="text" id="register-name" placeholder="John Doe"
-                                            class="w-full bg-white/5 border border-white/10 focus:border-brand-500/60 rounded-2xl py-3.5 px-4 text-white placeholder-slate-600 focus:outline-none transition-all text-sm font-sans shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+                                            class="w-full bg-[#0a0812] border border-brand-500/20 focus:border-brand-500/60 rounded-2xl py-3.5 px-4 text-white placeholder-slate-600 focus:outline-none transition-all text-sm font-sans shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
                                     </div>
 
                                     <!-- Avatar selection -->
