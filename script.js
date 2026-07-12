@@ -356,7 +356,7 @@ function initGlitches() {
             centerVignette: true,
             outerVignette: false,
             smooth: true,
-            glitchColors: ["#3d0a20", "#ec4899", "#22d3ee"]
+            glitchColors: ["#022c22", "#14b8a6", "#38bdf8"]
         });
     }
     
@@ -368,7 +368,7 @@ function initGlitches() {
             centerVignette: true,
             outerVignette: false,
             smooth: true,
-            glitchColors: ["#3d0a20", "#ec4899", "#22d3ee"]
+            glitchColors: ["#022c22", "#14b8a6", "#38bdf8"]
         });
     }
     

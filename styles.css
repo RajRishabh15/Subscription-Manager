@@ -1,16 +1,16 @@
 /* AIOManager — Cosmic Pink & Light Blue Glitter Theme Stylesheet */
 
 :root {
-    /* Cosmic Pink & Cyan theme colors (raw components for Tailwind) */
-    --brand-500-rgb: 236 72 153;
-    --brand-600-rgb: 219 39 119;
-    --brand-700-rgb: 190 24 93;
-    --brand-900-rgb: 131 24 67;
+    /* Cosmic Mint & Sky Blue theme colors (raw components for Tailwind) */
+    --brand-500-rgb: 20 184 166;
+    --brand-600-rgb: 13 148 136;
+    --brand-700-rgb: 15 118 110;
+    --brand-900-rgb: 19 78 74;
     
-    --cosmic-400-rgb: 34 211 238;
-    --cosmic-500-rgb: 6 182 212;
-    --cosmic-600-rgb: 8 145 178;
-    --cosmic-900-rgb: 8 51 68;
+    --cosmic-400-rgb: 56 189 248;
+    --cosmic-500-rgb: 14 165 233;
+    --cosmic-600-rgb: 2 132 199;
+    --cosmic-900-rgb: 12 74 110;
     
     /* CSS variables mapped to rgb functions for custom CSS properties */
     --brand-500: rgb(var(--brand-500-rgb));
@@ -24,8 +24,8 @@
     --cosmic-900: rgb(var(--cosmic-900-rgb));
     
     /* RGB values for custom glow shadows and drop shadows */
-    --brand-rgb: 236, 72, 153;      /* #ec4899 */
-    --cosmic-rgb: 34, 211, 238;     /* #22d3ee */
+    --brand-rgb: 20, 184, 166;      /* #14b8a6 */
+    --cosmic-rgb: 56, 189, 248;     /* #38bdf8 */
 
     /* Theme-switch variables default (Dark) */
     --cosmicBg: #04020a;
