@@ -144,56 +144,69 @@
                     </p>
 
                     <!-- Feature grid -->
-                    <div class="grid grid-cols-2 gap-3 max-w-lg">
-                        <!-- Feature 1 -->
-                        <div class="group relative p-4 rounded-2xl border border-white/[0.10] bg-white/[0.05] hover:border-brand-500/50 hover:bg-brand-500/10 transition-all duration-300 overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
-                            <div class="relative flex items-start gap-3">
-                                <div class="p-2 rounded-xl bg-brand-500/20 border border-brand-500/40 text-brand-400 flex-shrink-0">
-                                    <i data-lucide="scan-line" class="w-4 h-4"></i>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 max-w-xl mt-4">
+                        <!-- Feature 1: Smart Scanner -->
+                        <div class="group relative p-6 rounded-[24px] border border-white/10 bg-[#0c0a15]/80 hover:bg-[#130f23]/90 backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(236,72,153,0.25)] overflow-hidden">
+                            <!-- Top Accent line -->
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-brand-500 via-transparent to-transparent opacity-40 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <!-- Ambient corner glow -->
+                            <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-brand-500/10 blur-2xl group-hover:bg-brand-500/20 transition-all duration-500"></div>
+                            
+                            <div class="relative flex flex-col gap-4">
+                                <div class="w-12 h-12 rounded-[18px] bg-brand-500/15 border border-brand-500/30 text-brand-400 flex items-center justify-center shadow-[inset_0_0_20px_rgba(236,72,153,0.1)] group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
+                                    <i data-lucide="scan-line" class="w-6 h-6"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-white font-space">Smart Scanner</h4>
-                                    <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">Auto-detects invoices from linked accounts.</p>
+                                    <h4 class="text-sm font-bold text-white font-sans tracking-wide mb-1.5">Smart Scanner</h4>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed font-sans">Auto-detects recurring invoices securely from your linked accounts.</p>
                                 </div>
                             </div>
                         </div>
-                        <!-- Feature 2 -->
-                        <div class="group relative p-4 rounded-2xl border border-white/[0.10] bg-white/[0.05] hover:border-cosmicBlue-500/50 hover:bg-cosmicBlue-500/10 transition-all duration-300 overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-cosmicBlue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
-                            <div class="relative flex items-start gap-3">
-                                <div class="p-2 rounded-xl bg-cosmicBlue-500/20 border border-cosmicBlue-500/40 text-cosmicBlue-400 flex-shrink-0">
-                                    <i data-lucide="zap" class="w-4 h-4"></i>
+
+                        <!-- Feature 2: Instant Cancel -->
+                        <div class="group relative p-6 rounded-[24px] border border-white/10 bg-[#0c0a15]/80 hover:bg-[#130f23]/90 backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(6,182,212,0.25)] overflow-hidden">
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-cosmicBlue-500 via-transparent to-transparent opacity-40 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-cosmicBlue-500/10 blur-2xl group-hover:bg-cosmicBlue-500/20 transition-all duration-500"></div>
+                            
+                            <div class="relative flex flex-col gap-4">
+                                <div class="w-12 h-12 rounded-[18px] bg-cosmicBlue-500/15 border border-cosmicBlue-500/30 text-cosmicBlue-400 flex items-center justify-center shadow-[inset_0_0_20px_rgba(6,182,212,0.1)] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                                    <i data-lucide="zap" class="w-6 h-6"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-white font-space">Instant Cancel</h4>
-                                    <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">Cancel any subscription in one tap.</p>
+                                    <h4 class="text-sm font-bold text-white font-sans tracking-wide mb-1.5">Instant Cancel</h4>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed font-sans">Cancel any unwanted subscription with a single tap in seconds.</p>
                                 </div>
                             </div>
                         </div>
-                        <!-- Feature 3 -->
-                        <div class="group relative p-4 rounded-2xl border border-white/[0.10] bg-white/[0.05] hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300 overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
-                            <div class="relative flex items-start gap-3">
-                                <div class="p-2 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-400 flex-shrink-0">
-                                    <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+
+                        <!-- Feature 3: Spend Analytics -->
+                        <div class="group relative p-6 rounded-[24px] border border-white/10 bg-[#0c0a15]/80 hover:bg-[#130f23]/90 backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(168,85,247,0.25)] overflow-hidden">
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-purple-500 via-transparent to-transparent opacity-40 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-purple-500/10 blur-2xl group-hover:bg-purple-500/20 transition-all duration-500"></div>
+                            
+                            <div class="relative flex flex-col gap-4">
+                                <div class="w-12 h-12 rounded-[18px] bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shadow-[inset_0_0_20px_rgba(168,85,247,0.1)] group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
+                                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-white font-space">Spend Analytics</h4>
-                                    <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">Visual breakdown of all your recurring costs.</p>
+                                    <h4 class="text-sm font-bold text-white font-sans tracking-wide mb-1.5">Spend Analytics</h4>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed font-sans">Visual breakdown and AI insights for all your recurring costs.</p>
                                 </div>
                             </div>
                         </div>
-                        <!-- Feature 4 -->
-                        <div class="group relative p-4 rounded-2xl border border-white/[0.10] bg-white/[0.05] hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all duration-300 overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
-                            <div class="relative flex items-start gap-3">
-                                <div class="p-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex-shrink-0">
-                                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+
+                        <!-- Feature 4: Always Secure -->
+                        <div class="group relative p-6 rounded-[24px] border border-white/10 bg-[#0c0a15]/80 hover:bg-[#130f23]/90 backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.25)] overflow-hidden">
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-emerald-500 via-transparent to-transparent opacity-40 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-emerald-500/10 blur-2xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+                            
+                            <div class="relative flex flex-col gap-4">
+                                <div class="w-12 h-12 rounded-[18px] bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-[inset_0_0_20px_rgba(16,185,129,0.1)] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                                    <i data-lucide="shield-check" class="w-6 h-6"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-white font-space">Always Secure</h4>
-                                    <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">Bank-grade encryption on every sync.</p>
+                                    <h4 class="text-sm font-bold text-white font-sans tracking-wide mb-1.5">Always Secure</h4>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed font-sans">Bank-grade encryption applied on every single sync gateway.</p>
                                 </div>
                             </div>
                         </div>
