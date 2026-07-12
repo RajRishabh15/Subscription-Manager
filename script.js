@@ -352,11 +352,11 @@ function initGlitches() {
     if (loginBg) {
         loginGlitchInstance = new LetterGlitch({
             container: loginBg,
-            glitchSpeed: 50,
+            glitchSpeed: 40,
             centerVignette: true,
             outerVignette: false,
             smooth: true,
-            glitchColors: ["#2b4539", "#61dca3", "#61b3dc"]
+            glitchColors: ["#3d0a20", "#ec4899", "#22d3ee"]
         });
     }
     
@@ -368,7 +368,7 @@ function initGlitches() {
             centerVignette: true,
             outerVignette: false,
             smooth: true,
-            glitchColors: ["#2b4539", "#61dca3", "#61b3dc"]
+            glitchColors: ["#3d0a20", "#ec4899", "#22d3ee"]
         });
     }
     
