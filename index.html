@@ -1,127 +1,139 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AIOManager | Subscriptions Evolved</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Geist:wght@400;600&family=Space+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Sora:wght@100..900&family=Space+Mono:wght@100..900&display=swap" rel="stylesheet"/>
-<!-- Tailwind Configuration -->
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                "on-background": "#dce1fb",
-                "primary": "#89ceff",
-                "on-tertiary-container": "#4d0087",
-                "error-container": "#93000a",
-                "surface-dim": "#0c1324",
-                "secondary-fixed-dim": "#4fdbc8",
-                "outline-variant": "#3e4850",
-                "on-primary": "#00344d",
-                "inverse-primary": "#006591",
-                "on-primary-container": "#003751",
-                "tertiary-container": "#bf7dff",
-                "on-primary-fixed": "#001e2f",
-                "surface-container-low": "#151b2d",
-                "on-tertiary-fixed": "#2c0051",
-                "on-error": "#690005",
-                "error": "#ffb4ab",
-                "on-secondary-container": "#003f38",
-                "on-primary-fixed-variant": "#004c6e",
-                "primary-container": "#0ea5e9",
-                "tertiary-fixed": "#f0dbff",
-                "surface-variant": "#2e3447",
-                "inverse-surface": "#dce1fb",
-                "surface-container-lowest": "#070d1f",
-                "surface-container-high": "#23293c",
-                "surface-tint": "#89ceff",
-                "on-error-container": "#ffdad6",
-                "secondary-fixed": "#71f8e4",
-                "surface-bright": "#33394c",
-                "on-tertiary": "#490080",
-                "on-surface-variant": "#bec8d2",
-                "secondary": "#4fdbc8",
-                "secondary-container": "#04b4a2",
-                "surface-container-highest": "#2e3447",
-                "surface-container": "#191f31",
-                "on-tertiary-fixed-variant": "#6900b3",
-                "surface": "#0c1324",
-                "on-secondary-fixed": "#00201c",
-                "inverse-on-surface": "#2a3043",
-                "background": "#0c1324",
-                "on-secondary-fixed-variant": "#005048",
-                "tertiary-fixed-dim": "#ddb7ff",
-                "on-surface": "#dce1fb",
-                "outline": "#88929b",
-                "tertiary": "#ddb7ff",
-                "on-secondary": "#003731",
-                "primary-fixed-dim": "#89ceff",
-                "primary-fixed": "#c9e6ff"
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AIOManager | Subscriptions Evolved</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Geist:wght@400;600&family=Space+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Sora:wght@100..900&family=Space+Mono:wght@100..900&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#dce1fb",
+                        "primary": "#89ceff",
+                        "on-tertiary-container": "#4d0087",
+                        "error-container": "#93000a",
+                        "surface-dim": "#0c1324",
+                        "secondary-fixed-dim": "#4fdbc8",
+                        "outline-variant": "#3e4850",
+                        "on-primary": "#00344d",
+                        "inverse-primary": "#006591",
+                        "on-primary-container": "#003751",
+                        "tertiary-container": "#bf7dff",
+                        "on-primary-fixed": "#001e2f",
+                        "surface-container-low": "#151b2d",
+                        "on-tertiary-fixed": "#2c0051",
+                        "on-error": "#690005",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#003f38",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "primary-container": "#0ea5e9",
+                        "tertiary-fixed": "#f0dbff",
+                        "surface-variant": "#2e3447",
+                        "inverse-surface": "#dce1fb",
+                        "surface-container-lowest": "#070d1f",
+                        "surface-container-high": "#23293c",
+                        "surface-tint": "#89ceff",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#71f8e4",
+                        "surface-bright": "#33394c",
+                        "on-tertiary": "#490080",
+                        "on-surface-variant": "#bec8d2",
+                        "secondary": "#4fdbc8",
+                        "secondary-container": "#04b4a2",
+                        "surface-container-highest": "#2e3447",
+                        "surface-container": "#191f31",
+                        "on-tertiary-fixed-variant": "#6900b3",
+                        "surface": "#0c1324",
+                        "on-secondary-fixed": "#00201c",
+                        "inverse-on-surface": "#2a3043",
+                        "background": "#0c1324",
+                        "on-secondary-fixed-variant": "#005048",
+                        "tertiary-fixed-dim": "#ddb7ff",
+                        "on-surface": "#dce1fb",
+                        "outline": "#88929b",
+                        "tertiary": "#ddb7ff",
+                        "on-secondary": "#003731",
+                        "primary-fixed-dim": "#89ceff",
+                        "primary-fixed": "#c9e6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px",
+                        "unit": "8px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Geist"],
+                        "display-lg": ["Sora"],
+                        "body-lg": ["Geist"],
+                        "headline-md": ["Sora"],
+                        "display-lg-mobile": ["Sora"],
+                        "label-sm": ["Space Mono"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }]
+                    }
+                },
             },
-            "borderRadius": {
-                "DEFAULT": "0.25rem",
-                "lg": "0.5rem",
-                "xl": "0.75rem",
-                "full": "9999px"
-            },
-            "spacing": {
-                "gutter": "24px",
-                "margin-desktop": "48px",
-                "margin-mobile": "16px",
-                "unit": "8px",
-                "container-max": "1440px"
-            },
-            "fontFamily": {
-                "body-md": ["Geist"],
-                "display-lg": ["Sora"],
-                "body-lg": ["Geist"],
-                "headline-md": ["Sora"],
-                "display-lg-mobile": ["Sora"],
-                "label-sm": ["Space Mono"]
-            },
-            "fontSize": {
-                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
-                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
-                "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
-                "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}]
-            }
-          },
-        },
-      }
+        }
     </script>
-<style>
+    <style>
         body {
             background-color: #05060A;
             color: #dce1fb;
             scroll-behavior: smooth;
             overflow-x: hidden;
         }
+
         .reveal {
             opacity: 0;
             transform: translateY(80px) scale(0.95);
             transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         .reveal.active {
             opacity: 1;
             transform: translateY(0) scale(1);
         }
+
         .glass-card {
             background: rgba(21, 27, 45, 0.6);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .glass-card:hover {
             border: 1px solid rgba(79, 219, 200, 0.3);
             box-shadow: 0 0 30px rgba(79, 219, 200, 0.1);
         }
+
         .ambient-glow {
             position: absolute;
             width: 600px;
@@ -131,7 +143,15 @@
             z-index: -1;
             pointer-events: none;
         }
+
+        .nav-hidden {
+            transform: translate(-50%, -150%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
         .nav-visible {
+            transform: translate(-50%, 0);
             opacity: 1;
             pointer-events: auto;
         }
@@ -141,7 +161,7 @@
             -webkit-text-stroke: 8px #05060A;
             paint-order: stroke fill;
         }
-        
+
         /* Custom Mouse Scroll Icon */
         .mouse-icon {
             width: 20px;
@@ -152,6 +172,7 @@
             display: flex;
             justify-content: center;
         }
+
         .mouse-wheel {
             width: 4px;
             height: 4px;
@@ -160,177 +181,232 @@
             margin-top: 6px;
             animation: scrollWheel 2s infinite ease-in-out;
         }
+
         @keyframes scrollWheel {
-            0% { transform: translateY(0); opacity: 1; }
-            50% { transform: translateY(8px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 0; }
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(8px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 0;
+            }
         }
+
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
 <body class="font-body-md text-body-md antialiased">
-<!-- Ambient Background Elements -->
-<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-<!-- Particle Canvas Background (Now covers whole page) -->
-<canvas id="particle-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
-<div class="ambient-glow top-[-20%] left-[-10%]" style="background: radial-gradient(circle, rgba(137, 206, 255, 0.1) 0%, transparent 70%);"></div>
-<div class="ambient-glow bottom-[-10%] right-[-10%]" style="background: radial-gradient(circle, rgba(221, 183, 255, 0.1) 0%, transparent 70%);"></div>
-</div>
-<!-- TopAppBar -->
-<header class="absolute top-0 left-0 w-full z-50 transition-all duration-500" id="main-nav">
-<div class="flex justify-between items-center px-8 md:px-12 py-8 max-w-[1600px] mx-auto">
-<div class="flex items-center gap-2">
-<span class="font-display-lg text-[18px] md:text-[22px] text-[#5C9EE5] font-bold tracking-tight">AIOManager</span>
-</div>
-<div class="flex items-center gap-8 md:gap-12">
-<a class="font-body-md text-[14px] md:text-[16px] text-[#e2e8f0] border-b border-[#5C9EE5] pb-1" href="index.html">Home</a>
-<a class="font-body-md text-[14px] md:text-[16px] text-[#64748b] hover:text-[#e2e8f0] transition-colors pb-1" href="login.html">Login</a>
-</div>
-</div>
-</header>
-<main>
-<!-- Hero Section -->
-<section class="h-screen w-full flex flex-col items-center justify-center relative overflow-hidden" id="hero">
-
-<!-- Central Typography -->
-<div class="relative z-10 text-center px-margin-mobile flex flex-col items-center mt-[-5vh] max-w-5xl mx-auto">
-    <h1 class="font-display-lg text-[40px] md:text-[64px] font-light leading-[1.1] text-[#8c9bab] mb-8">
-        Making Digital Subscriptions as<br>Transparent as Cash.
-    </h1>
-    
-    <p class="font-body-lg text-[18px] md:text-[22px] text-[#5b697a] font-light leading-relaxed max-w-3xl">
-        If you pay for a service, you should know exactly where your money goes, no matter how many you have. We are building the reliability layer for your digital life.
-    </p>
-</div>
-
-<!-- Scroll Icon Fixed to Bottom -->
-<div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-pointer z-20 group" onclick="document.getElementById('first-section').scrollIntoView({behavior: 'smooth'})">
-    <div class="mouse-icon group-hover:border-white/50 transition-colors">
-        <div class="mouse-wheel group-hover:bg-white transition-colors"></div>
+    <!-- Ambient Background Elements -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <!-- Particle Canvas Background (Now covers whole page) -->
+        <canvas id="particle-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
+        <div class="ambient-glow top-[-20%] left-[-10%]"
+            style="background: radial-gradient(circle, rgba(137, 206, 255, 0.1) 0%, transparent 70%);"></div>
+        <div class="ambient-glow bottom-[-10%] right-[-10%]"
+            style="background: radial-gradient(circle, rgba(221, 183, 255, 0.1) 0%, transparent 70%);"></div>
     </div>
-    <svg class="w-3 h-3 text-[#4a5568] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-</div>
+    <!-- TopAppBar -->
+    <header
+        class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl z-50 transition-all duration-500 nav-hidden bg-[#151b2d]/80 backdrop-blur-[24px] border border-white/10 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
+        id="main-nav">
+        <div class="flex justify-between items-center px-8 py-4">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-headline-md">rocket_launch</span>
+                <span
+                    class="font-display-lg text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">AIOManager</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a class="px-6 py-2 rounded-full bg-gradient-to-r from-secondary to-tertiary text-on-surface font-bold hover:shadow-[0_0_15px_rgba(79,219,200,0.3)] transition-all duration-300 font-label-sm text-label-sm"
+                    href="login.html">
+                    Login
+                </a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <!-- Hero Section -->
+        <section class="h-screen w-full flex flex-col items-center justify-center relative overflow-hidden" id="hero">
 
-<!-- Ambient Center Glow -->
-<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-<div class="w-[800px] h-[400px] bg-primary/10 rounded-full blur-[120px]"></div>
-</div>
-</section>
-<!-- Content Sections Container -->
-<div class="max-w-container-max mx-auto px-gutter space-y-[176px] pb-[176px]" id="first-section">
-<!-- Section 1: What is AIOManager? -->
-<section class="reveal grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
-<div class="glass-card p-12 lg:p-16 rounded-2xl relative overflow-hidden group">
-<!-- Subtle hover glow effect inside card -->
-<div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-<span class="font-label-sm text-[12px] text-secondary mb-6 block tracking-widest">01 / CONCEPT</span>
-<h2 class="font-display-lg text-[48px] md:text-[64px] font-extrabold mb-8 leading-tight text-white drop-shadow-md">What is<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">AIOManager?</span></h2>
-<p class="font-body-lg text-[18px] md:text-[20px] text-[#8492a6] font-light leading-relaxed">
-                        AIOManager is a secure, intelligent dashboard engineered to organize your entire subscription ecosystem. It acts as a mission control for your digital life, unifying scattered services into one high-fidelity interface.
-                    </p>
-</div>
-<div class="relative h-[450px] rounded-2xl overflow-hidden shadow-[0_0_80px_-15px_rgba(79,219,200,0.2)] group transition-transform duration-700 hover:scale-[1.02]">
-<div class="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-tertiary/20 mix-blend-overlay z-10 pointer-events-none group-hover:opacity-50 transition-opacity duration-500"></div>
-<img class="w-full h-full object-cover" data-alt="A sleek, futuristic digital dashboard UI displayed on a floating holographic screen. The interface shows detailed graphs, subscription lists, and spending metrics using a palette of deep navy, teal, and soft purple. The background is a dark, minimalist space with subtle particles of light. Professional tech photography style with shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxdeE1WhJ8vFBTvq_VHYKQithOtTsvbpJPqO9hb9bBzJzfv0upNDuxCg6z9X20rztM9i9b2ATorRkb4QoITC767_59XUueQdpVbvT2eSGZ4WsCjNJ9VV24VAWhw914wrmI62ewccIMgSlaEeAZh7-boJfM-Tfc5A7fU6dZJ5dxuCbecddT49i3TLk11GjHRD0dsiOBOhhoAsLjANl8EeEN9jEhWMP0_vxoDu1_GinJyjAivv0oCaXZE8Belu2ES-osKEHBLXAjCaU"/>
-</div>
-</section>
-<!-- Section 2: Features Grid -->
-<section class="reveal flex flex-col items-center text-center max-w-5xl mx-auto py-24 md:py-32">
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-<div class="glass-card p-6 rounded-lg text-left">
-<span class="material-symbols-outlined text-primary mb-4">money_off</span>
-<h3 class="font-headline-md text-headline-md mb-2">Zero Waste</h3>
-<p class="font-body-md text-body-md text-on-surface-variant">Identify and purge unused services instantly.</p>
-</div>
-<div class="glass-card p-6 rounded-lg text-left">
-<span class="material-symbols-outlined text-primary mb-4">notifications_active</span>
-<h3 class="font-headline-md text-headline-md mb-2">Smart Alerts</h3>
-<p class="font-body-md text-body-md text-on-surface-variant">Get notified before every recurring charge.</p>
-</div>
-<div class="glass-card p-6 rounded-lg text-left">
-<span class="material-symbols-outlined text-primary mb-4">query_stats</span>
-<h3 class="font-headline-md text-headline-md mb-2">Deep Insights</h3>
-<p class="font-body-md text-body-md text-on-surface-variant">Understand your spending patterns over time.</p>
-</div>
-</div>
-</section>
-<!-- Section 3: The Solution -->
-<section class="reveal grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-<div class="order-2 md:order-1 relative h-[500px] rounded-xl overflow-hidden glass-card">
-<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10"></div>
-<img class="w-full h-full object-cover" data-alt="Close-up of a high-tech server rack with glowing fiber optic cables in teal and violet. The scene conveys absolute security and bank-grade encryption. The lighting is cinematic, highlighting the metallic textures and the soft glow of data transmission in a dark, cold-aisle data center environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcQy40h1nX9DyMi3KLsG5lGE4QECWpCvpPmE8bkaL7xZDnJELdW2JcWs2K6vLyb_S0zehDzMM6mTcFsK4VZPpE0Slpjf-iRXS1STny0UEPwom7JbUpa4nVkGlDi-E35p9XtgqHIV0zvnctDSNUSuSj78e1eRuxtDjKCjT2C1IwOOAm_bhkolKhM2KQ2LOnE0xJpDiK2CNpRKMt-R5SmUwVMgdZudP_vRSIj2ikm9TYyg4LvWoXueLy3-MNBsmua6f05HV6gmMr4tc"/>
-</div>
-<div class="order-1 md:order-2 space-y-8">
-<div class="glass-card p-8 rounded-xl border-l-4 border-primary">
-<h3 class="font-headline-md text-headline-md mb-2">One-Click Cancellation</h3>
-<p class="font-body-md text-body-md text-on-surface-variant">No more jumping through hoops. Terminate any subscription with a single secure request.</p>
-</div>
-<div class="glass-card p-8 rounded-xl border-l-4 border-secondary">
-<h3 class="font-headline-md text-headline-md mb-2">Automated Spend Analytics</h3>
-<p class="font-body-md text-body-md text-on-surface-variant">AI-driven categorization of your bank statements to find hidden recurring costs.</p>
-</div>
-<div class="glass-card p-8 rounded-xl border-l-4 border-tertiary">
-<h3 class="font-headline-md text-headline-md mb-2">Bank-Grade Encryption</h3>
-<p class="font-body-md text-body-md text-on-surface-variant">Your data is secured using AES-256 encryption. We never store your credentials.</p>
-</div>
-</div>
-</section>
-<!-- Section 4: Launch Information -->
-<section class="reveal">
-<div class="glass-card p-margin-desktop rounded-2xl relative overflow-hidden group">
-<div class="absolute top-0 right-0 p-8">
-<span class="material-symbols-outlined text-[80px] text-primary/10 group-hover:text-primary/20 transition-all duration-500">auto_awesome</span>
-</div>
-<div class="relative z-10">
-<span class="font-label-sm text-label-sm text-secondary mb-4 block">04 / ROADMAP</span>
-<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-8">Public Beta V1.0</h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<div>
-<h4 class="font-label-sm text-label-sm text-on-surface-variant mb-1">RELEASE DATE</h4>
-<p class="font-headline-md text-headline-md">August 2026</p>
-</div>
-<div>
-<h4 class="font-label-sm text-label-sm text-on-surface-variant mb-1">STATUS</h4>
-<p class="font-headline-md text-headline-md text-secondary">Active Development</p>
-</div>
-<div>
-<h4 class="font-label-sm text-label-sm text-on-surface-variant mb-1">AVAILABILITY</h4>
-<p class="font-headline-md text-headline-md">100% Free Tier</p>
-</div>
-</div>
-<div class="mt-12">
-<button class="px-8 py-4 rounded-full bg-primary text-on-primary font-bold hover:bg-secondary hover:text-on-secondary transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest">
+            <!-- Central Typography -->
+            <div class="relative z-10 text-center px-margin-mobile flex flex-col items-center mt-[-10vh]">
+                <h1
+                    class="font-display-lg text-[64px] md:text-[100px] leading-tight font-extrabold tracking-tighter text-[#5C9EE5] flex justify-center items-center">
+                    <span class="relative z-10">A</span>
+                    <span class="relative z-20 -ml-2 md:-ml-4 text-cut-bg">I</span>
+                    <span class="relative z-30 -ml-2 md:-ml-4 text-cut-bg">O</span>
+                    <span class="relative z-10 ml-1">Manager</span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p
+                    class="mt-4 text-[18px] md:text-[22px] text-[#8492a6] font-light tracking-wide max-w-2xl text-center">
+                    Take control anywhere. Even when subscriptions hide.
+                </p>
+
+                <!-- Coming Soon Text -->
+                <span class="mt-12 font-label-sm text-[11px] tracking-[0.35em] text-[#4a5568] uppercase">
+                    Scroll to Explore
+                </span>
+            </div>
+
+            <!-- Scroll Icon Fixed to Bottom -->
+            <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-pointer z-20 group"
+                onclick="document.getElementById('first-section').scrollIntoView({behavior: 'smooth'})">
+                <div class="mouse-icon group-hover:border-white/50 transition-colors">
+                    <div class="mouse-wheel group-hover:bg-white transition-colors"></div>
+                </div>
+                <svg class="w-3 h-3 text-[#4a5568] group-hover:text-white transition-colors" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+
+            <!-- Ambient Center Glow -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-[800px] h-[400px] bg-primary/10 rounded-full blur-[120px]"></div>
+            </div>
+        </section>
+        <!-- Content Sections Container -->
+        <div class="max-w-container-max mx-auto px-gutter space-y-[176px] pb-[176px]" id="first-section">
+            <!-- Section 1: What is AIOManager? -->
+            <section class="reveal flex flex-col items-center text-center max-w-5xl mx-auto py-24 md:py-32">
+                <span class="font-label-sm text-[12px] text-secondary mb-6 block tracking-widest">01 / CONCEPT</span>
+                <h2 class="font-display-lg text-[40px] md:text-[56px] font-light leading-tight text-[#8c9bab] mb-8">
+                    What is AIOManager?
+                </h2>
+                <p class="font-body-lg text-[18px] md:text-[22px] text-[#5b697a] font-light leading-relaxed max-w-3xl">
+                    AIOManager is a secure, intelligent dashboard engineered to organize your entire subscription
+                    ecosystem. It acts as a mission control for your digital life, unifying scattered services into
+                    one high-fidelity interface.
+                </p>
+            </section>
+            <!-- Section 2: Why We Made It -->
+            <section class="reveal flex flex-col items-center text-center max-w-3xl mx-auto">
+                <span class="font-label-sm text-label-sm text-tertiary mb-4 block">02 / PURPOSE</span>
+                <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-6">Why We Made It</h2>
+                <p class="font-body-lg text-body-lg text-on-surface-variant mb-12">
+                    In an era of subscription fatigue, capital is bleeding into forgotten trials and dormant services.
+                    We built AIOManager to stop the leak, providing total transparency over your automated spending.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                    <div class="glass-card p-6 rounded-lg text-left">
+                        <span class="material-symbols-outlined text-primary mb-4">money_off</span>
+                        <h3 class="font-headline-md text-headline-md mb-2">Zero Waste</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Identify and purge unused services
+                            instantly.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg text-left">
+                        <span class="material-symbols-outlined text-primary mb-4">notifications_active</span>
+                        <h3 class="font-headline-md text-headline-md mb-2">Smart Alerts</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Get notified before every recurring
+                            charge.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg text-left">
+                        <span class="material-symbols-outlined text-primary mb-4">query_stats</span>
+                        <h3 class="font-headline-md text-headline-md mb-2">Deep Insights</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Understand your spending patterns
+                            over time.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Section 3: The Solution -->
+            <section class="reveal grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1 relative h-[500px] rounded-xl overflow-hidden glass-card">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10"></div>
+                    <img class="w-full h-full object-cover"
+                        data-alt="Close-up of a high-tech server rack with glowing fiber optic cables in teal and violet. The scene conveys absolute security and bank-grade encryption. The lighting is cinematic, highlighting the metallic textures and the soft glow of data transmission in a dark, cold-aisle data center environment."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcQy40h1nX9DyMi3KLsG5lGE4QECWpCvpPmE8bkaL7xZDnJELdW2JcWs2K6vLyb_S0zehDzMM6mTcFsK4VZPpE0Slpjf-iRXS1STny0UEPwom7JbUpa4nVkGlDi-E35p9XtgqHIV0zvnctDSNUSuSj78e1eRuxtDjKCjT2C1IwOOAm_bhkolKhM2KQ2LOnE0xJpDiK2CNpRKMt-R5SmUwVMgdZudP_vRSIj2ikm9TYyg4LvWoXueLy3-MNBsmua6f05HV6gmMr4tc" />
+                </div>
+                <div class="order-1 md:order-2 space-y-8">
+                    <div class="glass-card p-8 rounded-xl border-l-4 border-primary">
+                        <h3 class="font-headline-md text-headline-md mb-2">One-Click Cancellation</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">No more jumping through hoops.
+                            Terminate any subscription with a single secure request.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-xl border-l-4 border-secondary">
+                        <h3 class="font-headline-md text-headline-md mb-2">Automated Spend Analytics</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">AI-driven categorization of your
+                            bank statements to find hidden recurring costs.</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-xl border-l-4 border-tertiary">
+                        <h3 class="font-headline-md text-headline-md mb-2">Bank-Grade Encryption</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">Your data is secured using AES-256
+                            encryption. We never store your credentials.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Section 4: Launch Information -->
+            <section class="reveal">
+                <div class="glass-card p-margin-desktop rounded-2xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-8">
+                        <span
+                            class="material-symbols-outlined text-[80px] text-primary/10 group-hover:text-primary/20 transition-all duration-500">auto_awesome</span>
+                    </div>
+                    <div class="relative z-10">
+                        <span class="font-label-sm text-label-sm text-secondary mb-4 block">04 / ROADMAP</span>
+                        <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-8">Public Beta V1.0</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div>
+                                <h4 class="font-label-sm text-label-sm text-on-surface-variant mb-1">RELEASE DATE</h4>
+                                <p class="font-headline-md text-headline-md">August 2026</p>
+                            </div>
+                            <div>
+                                <h4 class="font-label-sm text-label-sm text-on-surface-variant mb-1">STATUS</h4>
+                                <p class="font-headline-md text-headline-md text-secondary">Active Development</p>
+                            </div>
+                            <div>
+                                <h4 class="font-label-sm text-label-sm text-on-surface-variant mb-1">AVAILABILITY</h4>
+                                <p class="font-headline-md text-headline-md">100% Free Tier</p>
+                            </div>
+                        </div>
+                        <div class="mt-12">
+                            <button
+                                class="px-8 py-4 rounded-full bg-primary text-on-primary font-bold hover:bg-secondary hover:text-on-secondary transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest">
                                 Join Early Access Waitlist
                             </button>
-</div>
-</div>
-</div>
-</section>
-</div>
-</main>
-<!-- Footer -->
-<footer class="w-full py-12 bg-surface-container-lowest border-t border-white/5">
-<div class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto gap-unit">
-<div class="flex flex-col items-center md:items-start gap-2">
-<span class="font-display-lg text-body-lg font-bold text-on-surface">AIOManager</span>
-<p class="font-body-md text-body-md text-on-surface-variant">© 2024 AIOManager. Securely navigating the subscription galaxy.</p>
-</div>
-<div class="flex flex-wrap justify-center gap-6 mt-6 md:mt-0">
-<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Privacy Policy</a>
-<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Terms of Service</a>
-<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Security Architecture</a>
-<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">Contact Support</a>
-</div>
-</div>
-</footer>
-<script>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="w-full py-12 bg-surface-container-lowest border-t border-white/5">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center px-gutter max-w-container-max mx-auto gap-unit">
+            <div class="flex flex-col items-center md:items-start gap-2">
+                <span class="font-display-lg text-body-lg font-bold text-on-surface">AIOManager</span>
+                <p class="font-body-md text-body-md text-on-surface-variant">© 2024 AIOManager. Securely navigating the
+                    subscription galaxy.</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6 mt-6 md:mt-0">
+                <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors duration-300"
+                    href="#">Privacy Policy</a>
+                <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors duration-300"
+                    href="#">Terms of Service</a>
+                <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors duration-300"
+                    href="#">Security Architecture</a>
+                <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors duration-300"
+                    href="#">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+    <script>
         // Intersection Observer for Reveal Animations
         const observerOptions = {
             threshold: 0.15,
@@ -347,8 +423,21 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Scroll Logic for Nav Visibility removed since nav is absolute top
+        // Scroll Logic for Nav Visibility
+        const nav = document.getElementById('main-nav');
+        const heroHeight = document.getElementById('hero').offsetHeight;
 
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > heroHeight * 0.5) {
+                nav.classList.remove('nav-hidden');
+                nav.classList.add('nav-visible');
+            } else {
+                nav.classList.add('nav-hidden');
+                nav.classList.remove('nav-visible');
+            }
+        });
 
         // Micro-interaction: Mouse Follow Glow for Glass Cards
         document.querySelectorAll('.glass-card').forEach(card => {
@@ -364,16 +453,16 @@
         // Particle Canvas Background
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-        
+
         let width, height;
         let particles = [];
-        
+
         function initCanvas() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
             const numParticles = Math.min(Math.floor(width * height / 15000), 100);
-            for(let i = 0; i < numParticles; i++) {
+            for (let i = 0; i < numParticles; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
@@ -383,18 +472,18 @@
                 });
             }
         }
-        
+
         function drawParticles() {
             ctx.clearRect(0, 0, width, height);
-            
-            for(let i = 0; i < particles.length; i++) {
+
+            for (let i = 0; i < particles.length; i++) {
                 let p = particles[i];
                 p.x += p.vx * 0.5; // Slower, more majestic movement
                 p.y += p.vy * 0.5;
-                
-                if(p.x < 0 || p.x > width) p.vx *= -1;
-                if(p.y < 0 || p.y > height) p.vy *= -1;
-                
+
+                if (p.x < 0 || p.x > width) p.vx *= -1;
+                if (p.y < 0 || p.y > height) p.vy *= -1;
+
                 // Draw outer halo (glitter effect)
                 ctx.beginPath();
                 ctx.fillStyle = 'rgba(92, 158, 229, 0.15)';
@@ -406,13 +495,13 @@
                 ctx.fillStyle = 'rgba(163, 209, 255, 0.9)';
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fill();
-                
-                for(let j = i + 1; j < particles.length; j++) {
+
+                for (let j = i + 1; j < particles.length; j++) {
                     let p2 = particles[j];
                     let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if(dist < 150) {
+                    if (dist < 150) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(92, 158, 229, ${0.15 * (1 - dist/150)})`;
+                        ctx.strokeStyle = `rgba(92, 158, 229, ${0.15 * (1 - dist / 150)})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
@@ -422,9 +511,11 @@
             }
             requestAnimationFrame(drawParticles);
         }
-        
+
         window.addEventListener('resize', initCanvas);
         initCanvas();
         drawParticles();
     </script>
-</body></html>
+</body>
+
+</html>
