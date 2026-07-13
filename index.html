@@ -131,13 +131,7 @@
             z-index: -1;
             pointer-events: none;
         }
-        .nav-hidden {
-            transform: translate(-50%, -150%);
-            opacity: 0;
-            pointer-events: none;
-        }
         .nav-visible {
-            transform: translate(-50%, 0);
             opacity: 1;
             pointer-events: auto;
         }
@@ -190,16 +184,14 @@
 <div class="ambient-glow bottom-[-10%] right-[-10%]" style="background: radial-gradient(circle, rgba(221, 183, 255, 0.1) 0%, transparent 70%);"></div>
 </div>
 <!-- TopAppBar -->
-<header class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl z-50 transition-all duration-500 nav-hidden bg-[#151b2d]/80 backdrop-blur-[24px] border border-white/10 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]" id="main-nav">
-<div class="flex justify-between items-center px-8 py-4">
+<header class="absolute top-0 left-0 w-full z-50 transition-all duration-500" id="main-nav">
+<div class="flex justify-between items-center px-8 md:px-12 py-8 max-w-[1600px] mx-auto">
 <div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-headline-md">rocket_launch</span>
-<span class="font-display-lg text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">AIOManager</span>
+<span class="font-display-lg text-[18px] md:text-[22px] text-[#5C9EE5] font-bold tracking-tight">AIOManager</span>
 </div>
-<div class="flex items-center gap-6">
-<a class="px-6 py-2 rounded-full bg-gradient-to-r from-secondary to-tertiary text-on-surface font-bold hover:shadow-[0_0_15px_rgba(79,219,200,0.3)] transition-all duration-300 font-label-sm text-label-sm" href="login.html">
-                    Login
-                </a>
+<div class="flex items-center gap-8 md:gap-12">
+<a class="font-body-md text-[14px] md:text-[16px] text-[#e2e8f0] border-b border-[#5C9EE5] pb-1" href="index.html">Home</a>
+<a class="font-body-md text-[14px] md:text-[16px] text-[#64748b] hover:text-[#e2e8f0] transition-colors pb-1" href="login.html">Login</a>
 </div>
 </div>
 </header>
@@ -208,23 +200,14 @@
 <section class="h-screen w-full flex flex-col items-center justify-center relative overflow-hidden" id="hero">
 
 <!-- Central Typography -->
-<div class="relative z-10 text-center px-margin-mobile flex flex-col items-center mt-[-10vh]">
-    <h1 class="font-display-lg text-[64px] md:text-[100px] leading-tight font-extrabold tracking-tighter text-[#5C9EE5] flex justify-center items-center">
-        <span class="relative z-10">A</span>
-        <span class="relative z-20 -ml-2 md:-ml-4 text-cut-bg">I</span>
-        <span class="relative z-30 -ml-2 md:-ml-4 text-cut-bg">O</span>
-        <span class="relative z-10 ml-1">Manager</span>
+<div class="relative z-10 text-center px-margin-mobile flex flex-col items-center mt-[-5vh] max-w-5xl mx-auto">
+    <h1 class="font-display-lg text-[40px] md:text-[64px] font-light leading-[1.1] text-[#8c9bab] mb-8">
+        Making Digital Subscriptions as<br>Transparent as Cash.
     </h1>
     
-    <!-- Subtitle -->
-    <p class="mt-4 text-[18px] md:text-[22px] text-[#8492a6] font-light tracking-wide max-w-2xl text-center">
-        Take control anywhere. Even when subscriptions hide.
+    <p class="font-body-lg text-[18px] md:text-[22px] text-[#5b697a] font-light leading-relaxed max-w-3xl">
+        If you pay for a service, you should know exactly where your money goes, no matter how many you have. We are building the reliability layer for your digital life.
     </p>
-
-    <!-- Coming Soon Text -->
-    <span class="mt-12 font-label-sm text-[11px] tracking-[0.35em] text-[#4a5568] uppercase">
-        Scroll to Explore
-    </span>
 </div>
 
 <!-- Scroll Icon Fixed to Bottom -->
@@ -258,14 +241,8 @@
 <img class="w-full h-full object-cover" data-alt="A sleek, futuristic digital dashboard UI displayed on a floating holographic screen. The interface shows detailed graphs, subscription lists, and spending metrics using a palette of deep navy, teal, and soft purple. The background is a dark, minimalist space with subtle particles of light. Professional tech photography style with shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxdeE1WhJ8vFBTvq_VHYKQithOtTsvbpJPqO9hb9bBzJzfv0upNDuxCg6z9X20rztM9i9b2ATorRkb4QoITC767_59XUueQdpVbvT2eSGZ4WsCjNJ9VV24VAWhw914wrmI62ewccIMgSlaEeAZh7-boJfM-Tfc5A7fU6dZJ5dxuCbecddT49i3TLk11GjHRD0dsiOBOhhoAsLjANl8EeEN9jEhWMP0_vxoDu1_GinJyjAivv0oCaXZE8Belu2ES-osKEHBLXAjCaU"/>
 </div>
 </section>
-<!-- Section 2: Why We Made It -->
+<!-- Section 2: Features Grid -->
 <section class="reveal flex flex-col items-center text-center max-w-5xl mx-auto py-24 md:py-32">
-<h2 class="font-display-lg text-[40px] md:text-[56px] font-light leading-tight text-[#8c9bab] mb-8">
-    Making Digital Subscriptions as<br>Transparent as Cash.
-</h2>
-<p class="font-body-lg text-[18px] md:text-[22px] text-[#5b697a] font-light leading-relaxed max-w-3xl">
-    If you pay for a service, you should know exactly where your money goes, no matter how many you have. We are building the reliability layer for your digital life.
-</p>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
 <div class="glass-card p-6 rounded-lg text-left">
 <span class="material-symbols-outlined text-primary mb-4">money_off</span>
@@ -370,21 +347,8 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Scroll Logic for Nav Visibility
-        const nav = document.getElementById('main-nav');
-        const heroHeight = document.getElementById('hero').offsetHeight;
+        // Scroll Logic for Nav Visibility removed since nav is absolute top
 
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > heroHeight * 0.5) {
-                nav.classList.remove('nav-hidden');
-                nav.classList.add('nav-visible');
-            } else {
-                nav.classList.add('nav-hidden');
-                nav.classList.remove('nav-visible');
-            }
-        });
 
         // Micro-interaction: Mouse Follow Glow for Glass Cards
         document.querySelectorAll('.glass-card').forEach(card => {
