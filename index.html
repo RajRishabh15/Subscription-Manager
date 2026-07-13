@@ -98,7 +98,7 @@
     </script>
 <style>
         body {
-            background-color: #0c1324;
+            background-color: #05060A;
             color: #dce1fb;
             scroll-behavior: smooth;
             overflow-x: hidden;
@@ -409,18 +409,24 @@
         
         function drawParticles() {
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = 'rgba(137, 206, 255, 0.5)';
-            ctx.strokeStyle = 'rgba(137, 206, 255, 0.1)';
             
             for(let i = 0; i < particles.length; i++) {
                 let p = particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
+                p.x += p.vx * 0.5; // Slower, more majestic movement
+                p.y += p.vy * 0.5;
                 
                 if(p.x < 0 || p.x > width) p.vx *= -1;
                 if(p.y < 0 || p.y > height) p.vy *= -1;
                 
+                // Draw outer halo (glitter effect)
                 ctx.beginPath();
+                ctx.fillStyle = 'rgba(92, 158, 229, 0.15)';
+                ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Draw inner bright core
+                ctx.beginPath();
+                ctx.fillStyle = 'rgba(163, 209, 255, 0.9)';
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fill();
                 
@@ -429,6 +435,8 @@
                     let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                     if(dist < 150) {
                         ctx.beginPath();
+                        ctx.strokeStyle = `rgba(92, 158, 229, ${0.15 * (1 - dist/150)})`;
+                        ctx.lineWidth = 0.5;
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();
