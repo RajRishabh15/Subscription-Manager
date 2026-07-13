@@ -132,12 +132,38 @@
             pointer-events: none;
         }
         .nav-hidden {
-            transform: translateY(-100%);
+            transform: translate(-50%, -150%);
             opacity: 0;
+            pointer-events: none;
         }
         .nav-visible {
-            transform: translateY(0);
+            transform: translate(-50%, 0);
             opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* Custom Mouse Scroll Icon */
+        .mouse-icon {
+            width: 20px;
+            height: 32px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 999px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+        .mouse-wheel {
+            width: 4px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            margin-top: 6px;
+            animation: scrollWheel 2s infinite ease-in-out;
+        }
+        @keyframes scrollWheel {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(8px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
         }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -156,8 +182,8 @@
 <div class="ambient-glow bottom-[-10%] right-[-10%]" style="background: radial-gradient(circle, rgba(221, 183, 255, 0.1) 0%, transparent 70%);"></div>
 </div>
 <!-- TopAppBar -->
-<header class="fixed top-0 w-full z-50 transition-all duration-500 nav-hidden bg-surface/60 backdrop-blur-[20px] border-b border-white/10" id="main-nav">
-<div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
+<header class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 transition-all duration-500 nav-hidden bg-[#151b2d]/80 backdrop-blur-[24px] border border-white/10 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]" id="main-nav">
+<div class="flex justify-between items-center px-8 py-3">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-primary text-headline-md">rocket_launch</span>
 <span class="font-display-lg text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">AIOManager</span>
@@ -172,23 +198,41 @@
 <main>
 <!-- Hero Section -->
 <section class="h-screen w-full flex flex-col items-center justify-center relative overflow-hidden" id="hero">
+<!-- Particle Canvas Background -->
+<canvas id="particle-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-40 z-0"></canvas>
+
 <!-- Central Typography -->
-<div class="relative z-10 text-center px-margin-mobile">
-<h1 class="font-display-lg text-[64px] md:text-[120px] leading-tight font-extrabold tracking-tighter bg-gradient-to-br from-secondary via-primary to-tertiary bg-clip-text text-transparent animate-pulse duration-[4000ms]">
-                    AIOManager
-                </h1>
-<div class="mt-8 flex flex-col items-center gap-4 opacity-40">
-<span class="font-label-sm text-label-sm tracking-[0.3em] uppercase">Scroll to explore</span>
-<span class="material-symbols-outlined animate-bounce">expand_more</span>
+<div class="relative z-10 text-center px-margin-mobile flex flex-col items-center mt-[-10vh]">
+    <h1 class="font-display-lg text-[64px] md:text-[100px] leading-tight font-extrabold tracking-tighter text-[#5C9EE5]">
+        AIOManager
+    </h1>
+    
+    <!-- Subtitle -->
+    <p class="mt-4 text-[18px] md:text-[22px] text-[#8492a6] font-light tracking-wide max-w-2xl text-center">
+        Take control anywhere. Even when subscriptions hide.
+    </p>
+
+    <!-- Coming Soon Text -->
+    <span class="mt-12 font-label-sm text-[11px] tracking-[0.35em] text-[#4a5568] uppercase">
+        Scroll to Explore
+    </span>
 </div>
+
+<!-- Scroll Icon Fixed to Bottom -->
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-40 hover:opacity-100 transition-opacity duration-300 cursor-pointer z-20 group" onclick="document.getElementById('first-section').scrollIntoView({behavior: 'smooth'})">
+    <div class="mouse-icon group-hover:border-white/50 transition-colors">
+        <div class="mouse-wheel group-hover:bg-white transition-colors"></div>
+    </div>
+    <svg class="w-3 h-3 text-[#4a5568] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
 </div>
+
 <!-- Ambient Center Glow -->
 <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
 <div class="w-[800px] h-[400px] bg-primary/10 rounded-full blur-[120px]"></div>
 </div>
 </section>
 <!-- Content Sections Container -->
-<div class="max-w-container-max mx-auto px-gutter space-y-[176px] pb-[176px]">
+<div class="max-w-container-max mx-auto px-gutter space-y-[176px] pb-[176px]" id="first-section">
 <!-- Section 1: What is AIOManager? -->
 <section class="reveal grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 <div class="glass-card p-margin-desktop rounded-xl">
@@ -339,5 +383,63 @@
                 card.style.setProperty('--mouse-y', `${y}px`);
             });
         });
+
+        // Particle Canvas Background
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        function initCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            particles = [];
+            const numParticles = Math.min(Math.floor(width * height / 15000), 100);
+            for(let i = 0; i < numParticles; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    radius: Math.random() * 1.5 + 0.5
+                });
+            }
+        }
+        
+        function drawParticles() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(137, 206, 255, 0.5)';
+            ctx.strokeStyle = 'rgba(137, 206, 255, 0.1)';
+            
+            for(let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                
+                if(p.x < 0 || p.x > width) p.vx *= -1;
+                if(p.y < 0 || p.y > height) p.vy *= -1;
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                for(let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if(dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(drawParticles);
+        }
+        
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        drawParticles();
     </script>
 </body></html>
