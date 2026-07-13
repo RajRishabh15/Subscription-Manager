@@ -141,6 +141,12 @@
             opacity: 1;
             pointer-events: auto;
         }
+
+        /* Interlocking Logo Text */
+        .text-cut-bg {
+            -webkit-text-stroke: 8px #05060A;
+            paint-order: stroke fill;
+        }
         
         /* Custom Mouse Scroll Icon */
         .mouse-icon {
@@ -203,8 +209,11 @@
 
 <!-- Central Typography -->
 <div class="relative z-10 text-center px-margin-mobile flex flex-col items-center mt-[-10vh]">
-    <h1 class="font-display-lg text-[64px] md:text-[100px] leading-tight font-extrabold tracking-tighter text-[#5C9EE5]">
-        AIOManager
+    <h1 class="font-display-lg text-[64px] md:text-[100px] leading-tight font-extrabold tracking-tighter text-[#5C9EE5] flex justify-center items-center">
+        <span class="relative z-10">A</span>
+        <span class="relative z-20 -ml-2 md:-ml-4 text-cut-bg">I</span>
+        <span class="relative z-30 -ml-2 md:-ml-4 text-cut-bg">O</span>
+        <span class="relative z-10 ml-1">Manager</span>
     </h1>
     
     <!-- Subtitle -->
