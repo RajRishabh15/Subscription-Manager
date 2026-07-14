@@ -138,26 +138,7 @@
                 </div>
             </header>
 
-            <!-- Animated background elements -->
-            <div class="absolute inset-0 pointer-events-none">
-                <!-- Base gradient -->
-                <div class="absolute inset-0 bg-[#04020a]/40"></div>
-                <!-- Glowing orbs -->
-                <div class="absolute top-[15%] left-[10%] w-[500px] h-[500px] rounded-full bg-brand-500/5 blur-[120px] animate-pulse"
-                    style="animation-duration:8s;"></div>
-                <div class="absolute bottom-[10%] right-[5%] w-[400px] h-[400px] rounded-full bg-cosmicBlue-500/5 blur-[100px] animate-pulse"
-                    style="animation-duration:12s;animation-delay:3s;"></div>
-                <div class="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-cosmicBlue-600/4 blur-[80px] animate-pulse"
-                    style="animation-duration:10s;animation-delay:1s;"></div>
-                <!-- Subtle grid -->
-                <div
-                    class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:60px_60px]">
-                </div>
-                <!-- Radial fade to make grid fade from center -->
-                <div
-                    class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,transparent_30%,rgba(4,2,10,0.8)_100%)]">
-                </div>
-            </div>
+
 
 
 
@@ -968,6 +949,69 @@
                     closeLoginModal();
                 }
             });
+        }
+        // Particle Canvas Background
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function initCanvas() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                particles = [];
+                const numParticles = Math.min(Math.floor(width * height / 15000), 100);
+                for (let i = 0; i < numParticles; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 1.5 + 0.5
+                    });
+                }
+            }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+                    p.x += p.vx * 0.5;
+                    p.y += p.vy * 0.5;
+
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgba(92, 158, 229, 0.15)';
+                    ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgba(163, 209, 255, 0.9)';
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    for (let j = i + 1; j < particles.length; j++) {
+                        let p2 = particles[j];
+                        let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                        if (dist < 150) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(92, 158, 229, ${0.15 * (1 - dist / 150)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(drawParticles);
+            }
+
+            window.addEventListener('resize', initCanvas);
+            initCanvas();
+            drawParticles();
         }
     </script>
 </body>
