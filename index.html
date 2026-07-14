@@ -212,13 +212,13 @@
 
 <body class="font-body-md text-body-md antialiased">
     <!-- Ambient Background Elements -->
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <!-- Particle Canvas Background (Now covers whole page) -->
-        <canvas id="particle-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
-        <div class="ambient-glow top-[-20%] left-[-10%]"
-            style="background: radial-gradient(circle, rgba(137, 206, 255, 0.1) 0%, transparent 70%);"></div>
-        <div class="ambient-glow bottom-[-10%] right-[-10%]"
-            style="background: radial-gradient(circle, rgba(221, 183, 255, 0.1) 0%, transparent 70%);"></div>
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#0a0e17]">
+        <!-- Particle Canvas Background -->
+        <canvas id="particle-canvas" class="absolute inset-0 w-full h-full opacity-60"></canvas>
+        <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full"
+            style="background: radial-gradient(circle, rgba(137, 206, 255, 0.03) 0%, transparent 60%);"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full"
+            style="background: radial-gradient(circle, rgba(137, 206, 255, 0.02) 0%, transparent 60%);"></div>
     </div>
     <!-- TopAppBar -->
     <header
@@ -571,14 +571,15 @@
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            const numParticles = Math.min(Math.floor(width * height / 15000), 100);
+            // Sparse density
+            const numParticles = Math.min(Math.floor(width * height / 25000), 80);
             for (let i = 0; i < numParticles; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
-                    radius: Math.random() * 1.5 + 0.5
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    radius: Math.random() * 1 + 1
                 });
             }
         }
@@ -588,30 +589,30 @@
 
             for (let i = 0; i < particles.length; i++) {
                 let p = particles[i];
-                p.x += p.vx * 0.5; // Slower, more majestic movement
-                p.y += p.vy * 0.5;
+                p.x += p.vx;
+                p.y += p.vy;
 
                 if (p.x < 0 || p.x > width) p.vx *= -1;
                 if (p.y < 0 || p.y > height) p.vy *= -1;
 
-                // Draw outer halo (glitter effect)
+                // Faint outer glow
                 ctx.beginPath();
-                ctx.fillStyle = 'rgba(92, 158, 229, 0.15)';
-                ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(137, 206, 255, 0.15)';
+                ctx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Draw inner bright core
+                // Solid inner dot
                 ctx.beginPath();
-                ctx.fillStyle = 'rgba(163, 209, 255, 0.9)';
+                ctx.fillStyle = 'rgba(137, 206, 255, 0.8)';
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fill();
 
                 for (let j = i + 1; j < particles.length; j++) {
                     let p2 = particles[j];
                     let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if (dist < 150) {
+                    if (dist < 180) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(92, 158, 229, ${0.15 * (1 - dist / 150)})`;
+                        ctx.strokeStyle = `rgba(137, 206, 255, ${0.1 * (1 - dist / 180)})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
