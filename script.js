@@ -3174,12 +3174,7 @@ async function signInWithGmail() {
         }
     } else {
         // Simulated mock redirect to our Google Auth mock page
-        let basePath = window.location.pathname;
-        if (basePath.endsWith('index.html')) {
-            basePath = basePath.replace('index.html', '');
-        } else if (!basePath.endsWith('/')) {
-            basePath += '/';
-        }
+        let basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
         window.location.href = window.location.origin + basePath + 'google-auth.html?redirect_uri=' + encodeURIComponent(window.location.pathname) + '&auth_mode=' + encodeURIComponent(authMode);
     }
 }
