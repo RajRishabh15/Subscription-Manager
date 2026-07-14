@@ -417,7 +417,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div>
                                 <h4 class="font-label-sm text-label-sm text-on-surface-variant mb-1">RELEASE DATE</h4>
-                                <p class="font-headline-md text-headline-md">August 2026</p>
+                                <p class="font-headline-md text-headline-md">September 2026</p>
                             </div>
                             <div>
                                 <h4 class="font-label-sm text-label-sm text-on-surface-variant mb-1">STATUS</h4>
@@ -467,21 +467,30 @@
     </main>
 
     <!-- Early Access Modal -->
-    <div id="earlyAccessModal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
-        <div class="w-[90%] max-w-2xl mx-auto relative transform scale-95 transition-all duration-300" id="modalContent">
+    <div id="earlyAccessModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
+        <div class="w-[90%] max-w-2xl mx-auto relative transform scale-95 transition-all duration-300"
+            id="modalContent">
             <!-- Glowing Border Effect -->
-            <div class="absolute inset-0 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-3xl blur-xl opacity-0 transition-opacity duration-300" id="glowEffect"></div>
-            
+            <div class="absolute inset-0 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-3xl blur-xl opacity-0 transition-opacity duration-300"
+                id="glowEffect"></div>
+
             <!-- Modal Card -->
-            <div class="glass-card relative rounded-3xl bg-gradient-to-br from-[#151b2d]/90 to-[#0f1420]/90 border border-white/20 backdrop-blur-[60px] shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+            <div
+                class="glass-card relative rounded-3xl bg-gradient-to-br from-[#151b2d]/90 to-[#0f1420]/90 border border-white/20 backdrop-blur-[60px] shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
                 <!-- Animated Background -->
-                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
-                
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none">
+                </div>
+
                 <!-- Content -->
                 <div class="relative p-8 md:p-10">
                     <!-- Close Button -->
-                    <button onclick="closeEarlyAccessModal()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors duration-200 group z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-90 transition-transform duration-300">
+                    <button onclick="closeEarlyAccessModal()"
+                        class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors duration-200 group z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="group-hover:rotate-90 transition-transform duration-300">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
@@ -492,10 +501,13 @@
                         <!-- Left Column - Description -->
                         <div class="flex flex-col justify-between">
                             <div>
-                                <h3 class="font-display-lg text-[32px] font-light text-white mb-3 leading-tight">Join Early Access</h3>
-                                <div class="w-12 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mb-6"></div>
+                                <h3 class="font-display-lg text-[32px] font-light text-white mb-3 leading-tight">Join
+                                    Early Access</h3>
+                                <div class="w-12 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mb-6">
+                                </div>
                                 <p class="font-body-md text-[15px] text-[#cbd5e1] leading-relaxed mb-8">
-                                    Get early access to experience our web design and UI firsthand. Your feedback is invaluable in helping us build something exceptional.
+                                    Get early access to experience our web design and UI firsthand. Your feedback is
+                                    invaluable in helping us build something exceptional.
                                 </p>
                             </div>
 
@@ -504,7 +516,9 @@
                                 <div class="flex gap-3">
                                     <span class="text-secondary text-lg flex-shrink-0">ℹ️</span>
                                     <p class="font-body-md text-[12px] text-[#cbd5e1] leading-relaxed">
-                                        <span class="text-secondary font-semibold">Note:</span> We're in the development phase. Currently, only the UI is fully interactive. Core functionalities are being built and will be available soon.
+                                        <span class="text-secondary font-semibold">Note:</span> We're in the development
+                                        phase. Currently, only the UI is fully interactive. Core functionalities are
+                                        being built and will be available soon.
                                     </p>
                                 </div>
                             </div>
@@ -512,38 +526,46 @@
 
                         <!-- Right Column - Form -->
                         <div>
-                            <form id="earlyAccessForm" action="https://formspree.io/f/maqrnqrq" method="POST" class="space-y-4">
+                            <form id="earlyAccessForm" action="https://formspree.io/f/maqrnqrq" method="POST"
+                                class="space-y-4">
                                 <!-- Name Field -->
                                 <div>
-                                    <label class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Full Name *</label>
-                                    <input type="text" name="name" required placeholder="Your name" 
+                                    <label class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Full
+                                        Name *</label>
+                                    <input type="text" name="name" required placeholder="Your name"
                                         class="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/20 text-white placeholder-white/40 focus:border-primary focus:outline-none focus:bg-white/12 focus:shadow-[0_0_20px_rgba(137,206,255,0.2)] transition-all duration-300 font-body-md text-[14px]">
                                 </div>
 
                                 <!-- Email Field -->
                                 <div>
-                                    <label class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Email Address *</label>
-                                    <input type="email" name="email" required placeholder="your@email.com" 
+                                    <label class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Email
+                                        Address *</label>
+                                    <input type="email" name="email" required placeholder="your@email.com"
                                         class="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/20 text-white placeholder-white/40 focus:border-primary focus:outline-none focus:bg-white/12 focus:shadow-[0_0_20px_rgba(137,206,255,0.2)] transition-all duration-300 font-body-md text-[14px]">
                                 </div>
 
                                 <!-- Message Field -->
                                 <div>
-                                    <label class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Message (Optional)</label>
+                                    <label
+                                        class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Message
+                                        (Optional)</label>
                                     <textarea name="message" placeholder="Tell us what you'd like to see..." rows="3"
                                         class="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/20 text-white placeholder-white/40 focus:border-primary focus:outline-none focus:bg-white/12 focus:shadow-[0_0_20px_rgba(137,206,255,0.2)] transition-all duration-300 font-body-md text-[14px] resize-none"></textarea>
                                 </div>
 
                                 <!-- Checkbox -->
                                 <div class="flex items-start gap-3 pt-2">
-                                    <input type="checkbox" id="tryWebsite" name="tryWebsite" class="w-5 h-5 mt-0.5 rounded-lg border border-white/30 bg-white/8 checked:bg-primary checked:border-primary cursor-pointer accent-primary transition-all duration-300 flex-shrink-0">
-                                    <label for="tryWebsite" class="font-body-md text-[13px] text-[#cbd5e1] cursor-pointer leading-relaxed">
+                                    <input type="checkbox" id="tryWebsite" name="tryWebsite"
+                                        class="w-5 h-5 mt-0.5 rounded-lg border border-white/30 bg-white/8 checked:bg-primary checked:border-primary cursor-pointer accent-primary transition-all duration-300 flex-shrink-0">
+                                    <label for="tryWebsite"
+                                        class="font-body-md text-[13px] text-[#cbd5e1] cursor-pointer leading-relaxed">
                                         I'd like to try out the website and provide detailed feedback
                                     </label>
                                 </div>
 
                                 <!-- Submit Button -->
-                                <button type="submit" class="w-full mt-6 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-bold transition-all duration-300 font-body-md text-[14px] uppercase tracking-wide shadow-lg hover:shadow-[0_0_30px_rgba(137,206,255,0.3)]">
+                                <button type="submit"
+                                    class="w-full mt-6 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-bold transition-all duration-300 font-body-md text-[14px] uppercase tracking-wide shadow-lg hover:shadow-[0_0_30px_rgba(137,206,255,0.3)]">
                                     Join Waitlist
                                 </button>
                             </form>
@@ -555,45 +577,112 @@
     </div>
 
     <!-- Beta Modal -->
-    <div id="betaModal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
-        <div class="w-[90%] max-w-md mx-auto relative transform scale-95 transition-all duration-300" id="betaModalContent">
+    <div id="betaModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
+        <div class="w-[90%] max-w-md mx-auto relative transform scale-95 transition-all duration-300"
+            id="betaModalContent">
             <!-- Modal Card -->
-            <div class="glass-card relative rounded-3xl bg-gradient-to-br from-[#151b2d]/90 to-[#0f1420]/90 border border-white/20 backdrop-blur-[60px] shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+            <div
+                class="glass-card relative rounded-3xl bg-gradient-to-br from-[#151b2d]/90 to-[#0f1420]/90 border border-white/20 backdrop-blur-[60px] shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
                 <!-- Animated Background -->
-                <div class="absolute inset-0 bg-gradient-to-br from-secondary/5 via-transparent to-primary/5 pointer-events-none"></div>
-                
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-secondary/5 via-transparent to-primary/5 pointer-events-none">
+                </div>
+
                 <!-- Content -->
                 <div class="relative p-8 md:p-10 text-center">
                     <!-- Close Button -->
-                    <button onclick="closeBetaModal()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors duration-200 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-90 transition-transform duration-300">
+                    <button onclick="closeBetaModal()"
+                        class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors duration-200 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="group-hover:rotate-90 transition-transform duration-300">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
                     </button>
 
                     <!-- Icon -->
-                    <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-secondary/20 border border-secondary/40 flex items-center justify-center">
+                    <div
+                        class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-secondary/20 border border-secondary/40 flex items-center justify-center">
                         <span class="text-3xl">🚀</span>
                     </div>
 
                     <!-- Content -->
-                    <h3 class="font-display-lg text-[32px] font-light text-white mb-3 leading-tight">Public Beta Available</h3>
+                    <h3 class="font-display-lg text-[32px] font-light text-white mb-3 leading-tight">Public Beta
+                        Available</h3>
                     <div class="w-12 h-1 bg-gradient-to-r from-secondary to-primary rounded-full mx-auto mb-6"></div>
-                    
+
                     <p class="font-body-md text-[15px] text-[#cbd5e1] leading-relaxed mb-8">
-                        We're excited to announce that SubEasy is now available for public beta testing! You can explore our fully designed UI to get a feel for the platform. 
+                        We're excited to announce that SubEasy is now available for public beta testing! You can explore
+                        our fully designed UI to get a feel for the platform.
                     </p>
 
                     <div class="bg-primary/15 border border-primary/40 rounded-xl p-4 mb-8">
                         <p class="font-body-md text-[14px] text-[#cbd5e1] leading-relaxed">
-                            <span class="text-primary font-semibold">✨ More features coming soon</span> – We're actively building powerful new functionalities that will make subscription management effortless.
+                            <span class="text-primary font-semibold">✨ More features coming soon</span> – We're actively
+                            building powerful new functionalities that will make subscription management effortless.
                         </p>
                     </div>
 
                     <!-- Button -->
-                    <button onclick="closeBetaModal()" class="w-full px-6 py-3.5 rounded-xl bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 text-white font-bold transition-all duration-300 font-body-md text-[14px] uppercase tracking-wide shadow-lg hover:shadow-[0_0_30px_rgba(79,219,200,0.3)]">
+                    <button onclick="closeBetaModal()"
+                        class="w-full px-6 py-3.5 rounded-xl bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 text-white font-bold transition-all duration-300 font-body-md text-[14px] uppercase tracking-wide shadow-lg hover:shadow-[0_0_30px_rgba(79,219,200,0.3)]">
                         Got It, Let's Explore!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-md z-[101] opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
+        <div class="w-[90%] max-w-md mx-auto relative transform scale-95 transition-all duration-300"
+            id="confirmationModalContent">
+            <!-- Modal Card -->
+            <div
+                class="glass-card relative rounded-3xl bg-gradient-to-br from-[#151b2d]/90 to-[#0f1420]/90 border border-white/20 backdrop-blur-[60px] shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+                <!-- Animated Background -->
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-secondary/5 via-transparent to-primary/5 pointer-events-none">
+                </div>
+
+                <!-- Content -->
+                <div class="relative p-10 text-center">
+                    <!-- Success Icon -->
+                    <div
+                        class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-secondary/30 to-primary/30 border border-secondary/50 flex items-center justify-center animate-pulse">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="text-secondary">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+
+                    <!-- Title -->
+                    <h3 class="font-display-lg text-[28px] font-light text-white mb-4">Confirmation Sent!</h3>
+
+                    <!-- Message -->
+                    <p class="font-body-md text-[15px] text-[#cbd5e1] leading-relaxed mb-4">
+                        Thank you for joining our early access program! 🎉
+                    </p>
+                    <p class="font-body-md text-[15px] text-[#cbd5e1] leading-relaxed mb-8">
+                        We've received your application and will review it shortly. We'll get back to you at the email
+                        address you provided with next steps and exclusive early access details.
+                    </p>
+
+                    <!-- Highlight -->
+                    <div class="bg-primary/15 border border-primary/40 rounded-xl p-4 mb-8">
+                        <p class="font-body-md text-[14px] text-[#cbd5e1]">
+                            Keep an eye on your inbox! We're excited to have you on board. 💌
+                        </p>
+                    </div>
+
+                    <!-- Close Button -->
+                    <button onclick="closeConfirmationModal()"
+                        class="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-bold transition-all duration-300 font-body-md text-[14px] uppercase tracking-wide shadow-lg hover:shadow-[0_0_30px_rgba(137,206,255,0.3)]">
+                        Got It, Thanks!
                     </button>
                 </div>
             </div>
@@ -626,7 +715,8 @@
                         <a href="mailto:rajrish0915@gmail.com"
                             class="font-body-md text-[15px] text-[#8c9bab] hover:text-white transition-colors duration-300">rajrish0915@gmail.com</a>
                         <div class="flex gap-4 mt-1">
-                            <a href="https://www.linkedin.com/in/rishabh-raj-1a5438371/" class="text-[#8c9bab] hover:text-white transition-colors duration-300"
+                            <a href="https://www.linkedin.com/in/rishabh-raj-1a5438371/"
+                                class="text-[#8c9bab] hover:text-white transition-colors duration-300"
                                 aria-label="LinkedIn" target="_blank">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -717,11 +807,11 @@
 
             for (let i = 0; i < particles.length; i++) {
                 let p = particles[i];
-                
+
                 // Store original velocity
                 p.originalVx = p.vx;
                 p.originalVy = p.vy;
-                
+
                 // Cursor interaction - repel particles
                 const distToCursor = Math.hypot(p.x - cursorX, p.y - cursorY);
                 if (distToCursor < cursorRadius && distToCursor > 0) {
@@ -730,17 +820,17 @@
                     p.vx += Math.cos(angle) * repelForce;
                     p.vy += Math.sin(angle) * repelForce;
                 }
-                
+
                 p.x += p.vx;
                 p.y += p.vy;
-                
+
                 // Dampening
                 p.vx *= 0.98;
                 p.vy *= 0.98;
 
                 if (p.x < 0 || p.x > width) p.vx *= -1;
                 if (p.y < 0 || p.y > height) p.vy *= -1;
-                
+
                 // Keep particles in bounds
                 if (p.x < 0) p.x = 0;
                 if (p.x > width) p.x = width;
@@ -782,33 +872,33 @@
         // Cursor Follow Background Flow Effect
         const bgContainer = document.querySelector('.fixed.inset-0.pointer-events-none');
         const glowDivs = bgContainer.querySelectorAll('div[style*="radial-gradient"]');
-        
+
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
-        
+
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
         });
-        
+
         // Animation loop for smooth glow movement
         function animateGlows() {
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
-            
+
             const distX = mouseX - centerX;
             const distY = mouseY - centerY;
-            
+
             glowDivs.forEach((el, index) => {
                 const strength = (index + 1) * 0.2; // parallax strength
                 const moveX = distX * strength;
                 const moveY = distY * strength;
                 el.style.transform = `translate(${moveX}px, ${moveY}px)`;
             });
-            
+
             requestAnimationFrame(animateGlows);
         }
-        
+
         animateGlows();
 
         // Early Access Modal Functions
@@ -872,11 +962,62 @@
             }
         });
 
-        // Form submission with Formspree
-        document.getElementById('earlyAccessForm').addEventListener('submit', (e) => {
-            // Note: Formspree will handle the submission automatically
-            // Just make sure to replace YOUR_FORM_ID in the form action with your actual Formspree ID
-            console.log('Form submitted to Formspree');
+        document.getElementById('confirmationModal').addEventListener('click', (e) => {
+            if (e.target.id === 'confirmationModal') {
+                closeConfirmationModal();
+            }
+        });
+
+        // Confirmation Modal Functions
+        function openConfirmationModal() {
+            const modal = document.getElementById('confirmationModal');
+            const modalContent = document.getElementById('confirmationModalContent');
+            modal.classList.remove('opacity-0', 'invisible');
+            modal.classList.add('opacity-100', 'visible');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeConfirmationModal() {
+            const modal = document.getElementById('confirmationModal');
+            const modalContent = document.getElementById('confirmationModalContent');
+            modal.classList.add('opacity-0', 'invisible');
+            modal.classList.remove('opacity-100', 'visible');
+            modalContent.classList.add('scale-95');
+            modalContent.classList.remove('scale-100');
+            document.body.style.overflow = 'auto';
+            closeEarlyAccessModal();
+        }
+
+        // Form submission with Formspree using fetch
+        document.getElementById('earlyAccessForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Show custom confirmation modal
+                    openConfirmationModal();
+                    // Reset form
+                    form.reset();
+                } else {
+                    alert('Something went wrong. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error submitting form. Please try again.');
+            }
         });
 
         // Close modals on Escape key
@@ -884,6 +1025,7 @@
             if (e.key === 'Escape') {
                 closeEarlyAccessModal();
                 closeBetaModal();
+                closeConfirmationModal();
             }
         });
     </script>
