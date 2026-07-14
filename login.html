@@ -96,8 +96,15 @@
 
     <!-- Theme Switcher Removed -->
 
-    <!-- LOGIN GLITCH BACKGROUND -->
-    <div id="login-glitch-bg" class="fixed inset-0 pointer-events-none -z-10 overflow-hidden opacity-[0.18]"></div>
+    <!-- Ambient Background Elements -->
+    <div id="login-glitch-bg" class="fixed inset-0 pointer-events-none -z-10 overflow-hidden z-0">
+        <!-- Particle Canvas Background -->
+        <canvas id="particle-canvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
+        <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full"
+            style="background: radial-gradient(circle, rgba(137, 206, 255, 0.1) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full"
+            style="background: radial-gradient(circle, rgba(221, 183, 255, 0.1) 0%, transparent 70%);"></div>
+    </div>
 
     <!-- DASHBOARD PIXEL SNOW BACKGROUND -->
     <div id="dashboard-snow-bg" class="fixed inset-0 pointer-events-none -z-10 hidden overflow-hidden opacity-30"></div>
@@ -107,23 +114,27 @@
         <!-- 1. LANDING & SCAN VIEW -->
         <section id="scan-view" class="min-h-screen relative flex flex-col items-center">
             <!-- TOP NAVIGATION HEADER -->
+            <!-- TopAppBar Pill Nav -->
             <header
-                class="absolute top-0 left-0 w-full z-50 py-6 px-6 lg:px-12 flex items-center justify-between backdrop-blur-sm border-b border-white/[0.04]">
-                <!-- Left: Logo & Brand -->
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-[#0c0a15] border border-brand-500/30 flex items-center justify-center p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_15px_rgba(20,184,166,0.2)]">
-                        <img src="favicon.png" class="w-full h-full object-cover rounded-lg" alt="Logo">
+                class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl z-50 transition-all duration-500 bg-[#151b2d]/80 backdrop-blur-[24px] border border-white/10 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
+                id="main-nav">
+                <div class="flex justify-between items-center px-8 py-4">
+                    <div class="flex items-center gap-3">
+                        <img src="favicon.png" alt="SubEasy"
+                            class="w-8 h-8 rounded-full object-cover shadow-[0_0_15px_rgba(92,158,229,0.3)]">
+                        <span
+                            class="font-display-lg text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">SubEasy</span>
                     </div>
-                    <span
-                        class="text-xs sm:text-sm md:text-lg lg:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-500 via-white to-cosmicBlue-400 uppercase tracking-widest font-space drop-shadow-[0_0_15px_rgba(20,184,166,0.3)]">
-                        All-In-One Subscription Manager
-                    </span>
-                </div>
-                <!-- Right: Nav Links -->
-                <div class="flex items-center gap-6 md:gap-8">
-                    <a href="index.html"
-                        class="text-sm font-medium text-slate-300 hover:text-white transition-colors font-sans">Home</a>
+                    <div class="flex items-center gap-6">
+                        <a class="text-[#8c9bab] hover:text-white transition-colors duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                            href="about.html">
+                            About
+                        </a>
+                        <a class="px-6 py-2 rounded-full border border-white/10 text-[#8c9bab] hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                            href="index.html">
+                            Home
+                        </a>
+                    </div>
                 </div>
             </header>
 
