@@ -222,7 +222,7 @@
     </div>
     <!-- TopAppBar -->
     <header
-        class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl z-50 transition-all duration-500 nav-visible bg-[#151b2d]/80 backdrop-blur-[24px] border border-white/10 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
+        class="fixed top-6 left-1/2 -translate-x-1/2 w-[85%] max-w-2xl z-50 transition-all duration-500 nav-visible bg-[#151b2d]/80 backdrop-blur-[40px] border border-white/30 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_40px_rgba(137,206,255,0.1)]"
         id="main-nav">
         <div class="flex justify-between items-center px-8 py-4">
             <div class="flex items-center gap-3">
@@ -231,20 +231,20 @@
                     class="font-display-lg text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">SubEasy</span>
             </div>
             <div class="flex items-center gap-6">
-                <a class="text-[#8c9bab] hover:text-white transition-colors duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                <a class="text-white hover:text-primary transition-colors duration-300 font-label-sm text-label-sm uppercase tracking-widest"
                     href="index.html">
                     Home
                 </a>
-                <a class="px-6 py-2 rounded-full border border-white/10 text-[#8c9bab] hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                <a class="px-6 py-2 rounded-full border border-white/20 text-white hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest"
                     href="login.html">
                     Login
                 </a>
             </div>
         </div>
     </header>
-    <main class="relative z-10 pt-32 pb-24 min-h-screen">
+    <main class="relative z-10 pt-20 pb-24 min-h-screen">
         <div class="max-w-container-max mx-auto px-gutter" id="about-content">
-            <section class="flex flex-col items-center text-center max-w-4xl mx-auto py-20 md:py-32 mt-12 reveal active">
+            <section class="flex flex-col items-center text-center max-w-4xl mx-auto py-12 md:py-20 reveal active">
                 <span class="font-label-sm text-[12px] text-[#5C9EE5] uppercase tracking-[0.25em] mb-8 block opacity-80">
                     ABOUT SUBEASY
                 </span>
@@ -254,6 +254,108 @@
                 <p class="font-body-lg text-[18px] md:text-[22px] text-[#cbd5e1] font-light leading-relaxed max-w-3xl opacity-90">
                     SubEasy was born from a simple observation: your digital life shouldn't be a tangled web of forgotten services. We are building the intelligence to give you absolute visibility and control over your subscriptions, without you lifting a finger.
                 </p>
+            </section>
+
+            <!-- Meet the Founder Section -->
+            <section class="flex flex-col items-center max-w-6xl mx-auto py-12 md:py-16 reveal">
+                <span class="font-label-sm text-[12px] text-[#5C9EE5] uppercase tracking-[0.25em] mb-6 block opacity-80">
+                    MEET THE FOUNDER
+                </span>
+                
+                <div class="glass-card w-full border border-white/20 rounded-2xl p-8 md:p-12 bg-[#151b2d]/60">
+                    <div class="flex flex-col lg:flex-row gap-10 items-center lg:items-start">
+                        <!-- Profile Image -->
+                        <div class="flex-shrink-0">
+                            <div class="w-56 h-56 md:w-72 md:h-72 rounded-full border-2 border-primary/30 overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+                                <span class="font-display-lg text-[100px] md:text-[140px] font-light text-primary/60">R</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Text Content -->
+                        <div class="flex-1 text-left">
+                            <h3 class="font-display-lg text-[32px] md:text-[40px] font-light leading-tight text-white mb-2">
+                                Rishabh Raj
+                            </h3>
+                            <p class="font-label-sm text-[13px] text-secondary uppercase tracking-[0.15em] mb-6">
+                                FOUNDER AND CEO
+                            </p>
+                            
+                            <p class="font-body-lg text-[16px] md:text-[17px] text-[#cbd5e1] leading-relaxed mb-4">
+                                Rishabh founded SubEasy to solve a problem he thinks we face in our daily digital lives. Managing subscriptions was chaotic—money disappeared to forgotten services, and tracking them all manually was impossible. He wanted a smarter way to keep everything in one place, organized and transparent.
+                            </p>
+                            
+                            <p class="font-body-lg text-[16px] md:text-[17px] text-[#cbd5e1] leading-relaxed mb-6">
+                                SubEasy scans your email inbox to automatically map your subscriptions—no bank logins, no manual work. You get complete visibility and control effortlessly. That's the goal: making subscription management as simple as it should be.
+                            </p>
+                            
+                            <!-- Social Links -->
+                            <div class="flex items-center gap-6">
+                                <a href="https://www.linkedin.com/in/rishabh-raj-1a5438371/" target="_blank" rel="noopener noreferrer" 
+                                   class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-primary hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                        <rect x="2" y="9" width="4" height="12"></rect>
+                                        <circle cx="4" cy="4" r="2"></circle>
+                                    </svg>
+                                </a>
+                                <a href="mailto:rajrish0915@gmail.com" 
+                                   class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-primary hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Get In Touch Section -->
+            <section class="flex flex-col items-center text-center max-w-4xl mx-auto py-20 md:py-32 reveal">
+                <span class="font-label-sm text-[12px] text-secondary uppercase tracking-[0.25em] mb-8 block opacity-80">
+                    GET IN TOUCH
+                </span>
+                
+                <h2 class="font-display-lg text-[40px] md:text-[56px] font-light leading-tight text-white mb-6 tracking-tight">
+                    Let's Build Together
+                </h2>
+                
+                <p class="font-body-lg text-[16px] md:text-[18px] text-[#cbd5e1] leading-relaxed mb-12 max-w-2xl">
+                    Whether you are an investor, a potential partner, or simply curious about what we are building, we would love to hear from you.
+                </p>
+                
+                <!-- CTA Button -->
+                <a href="mailto:rajrish0915@gmail.com" class="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-primary/50 hover:border-primary hover:bg-primary/10 hover:shadow-[0_0_30px_rgba(137,206,255,0.4)] transition-all duration-300 hover:scale-110 mb-12 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary transition-colors">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                    </svg>
+                    <span class="font-body-md text-[16px] text-primary transition-colors">Reach Out to Us</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all duration-300">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                
+                <!-- Social Links -->
+                <div class="flex items-center gap-6">
+                    <a href="https://www.linkedin.com/in/rishabh-raj-1a5438371/" target="_blank" rel="noopener noreferrer" 
+                       class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                            <rect x="2" y="9" width="4" height="12"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                    </a>
+                    <a href="mailto:rajrish0915@gmail.com" 
+                       class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </svg>
+                    </a>
+                </div>
             </section>
         </div>
     </main>
@@ -318,18 +420,26 @@
             });
         });
 
-        // Particle Canvas Background
+        // Particle Canvas Background with Cursor Interaction
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
 
         let width, height;
         let particles = [];
+        let cursorX = window.innerWidth / 2;
+        let cursorY = window.innerHeight / 2;
+        const cursorRadius = 150;
+
+        document.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+        });
 
         function initCanvas() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            const numParticles = Math.min(Math.floor(width * height / 15000), 100);
+            const numParticles = Math.min(Math.floor(width * height / 12000), 200);
             for (let i = 0; i < numParticles; i++) {
                 particles.push({
                     x: Math.random() * width,
@@ -346,11 +456,30 @@
 
             for (let i = 0; i < particles.length; i++) {
                 let p = particles[i];
-                p.x += p.vx * 0.5; // Slower, more majestic movement
+                
+                // Cursor interaction - repel particles
+                const distToCursor = Math.hypot(p.x - cursorX, p.y - cursorY);
+                if (distToCursor < cursorRadius && distToCursor > 0) {
+                    const angle = Math.atan2(p.y - cursorY, p.x - cursorX);
+                    const repelForce = (1 - distToCursor / cursorRadius) * 0.8;
+                    p.vx += Math.cos(angle) * repelForce;
+                    p.vy += Math.sin(angle) * repelForce;
+                }
+                
+                p.x += p.vx * 0.5;
                 p.y += p.vy * 0.5;
+                
+                // Dampening
+                p.vx *= 0.98;
+                p.vy *= 0.98;
 
                 if (p.x < 0 || p.x > width) p.vx *= -1;
                 if (p.y < 0 || p.y > height) p.vy *= -1;
+                
+                if (p.x < 0) p.x = 0;
+                if (p.x > width) p.x = width;
+                if (p.y < 0) p.y = 0;
+                if (p.y > height) p.y = height;
 
                 // Draw outer halo (glitter effect)
                 ctx.beginPath();

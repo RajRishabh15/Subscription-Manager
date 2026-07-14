@@ -24,6 +24,18 @@
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                         space: ['Space Grotesk', 'sans-serif'],
                         serif: ['Cormorant Garamond', 'serif'],
+                        'body-md': ['Geist'],
+                        'display-lg': ['Sora'],
+                        'body-lg': ['Geist'],
+                        'headline-md': ['Sora'],
+                        'label-sm': ['Space Mono']
+                    },
+                    fontSize: {
+                        'body-md': ['16px', { 'lineHeight': '1.6', 'fontWeight': '400' }],
+                        'display-lg': ['48px', { 'lineHeight': '1.1', 'letterSpacing': '-0.02em', 'fontWeight': '800' }],
+                        'body-lg': ['18px', { 'lineHeight': '1.6', 'fontWeight': '400' }],
+                        'headline-md': ['24px', { 'lineHeight': '1.4', 'fontWeight': '600' }],
+                        'label-sm': ['12px', { 'lineHeight': '1.0', 'letterSpacing': '0.05em', 'fontWeight': '500' }]
                     },
                     colors: {
                         brand: {
@@ -49,6 +61,9 @@
                         cardSubBg: 'var(--card-sub-bg)',
                         inputBg: 'var(--input-bg)',
                         inputBorder: 'var(--input-border)',
+                        'secondary': '#4fdbc8',
+                        'primary': '#89ceff',
+                        'tertiary': '#ddb7ff',
                     }
                 }
             }
@@ -84,8 +99,7 @@
             color: #f1f5f9;
         }
 
-        html.is-logged-in #scan-view,
-        html.is-logged-in #login-glitch-bg {
+        html.is-logged-in #scan-view {
             display: none !important;
         }
     </style>
@@ -97,7 +111,7 @@
     <!-- Theme Switcher Removed -->
 
     <!-- Ambient Background Elements -->
-    <div id="login-glitch-bg" class="fixed inset-0 pointer-events-none -z-10 overflow-hidden z-0 bg-[#0a0e17]">
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#0a0e17]">
         <!-- Particle Canvas Background -->
         <canvas id="particle-canvas" class="absolute inset-0 w-full h-full opacity-60"></canvas>
         <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full"
@@ -106,9 +120,6 @@
             style="background: radial-gradient(circle, rgba(137, 206, 255, 0.02) 0%, transparent 60%);"></div>
     </div>
 
-    <!-- DASHBOARD PIXEL SNOW BACKGROUND -->
-    <div id="dashboard-snow-bg" class="fixed inset-0 pointer-events-none -z-10 hidden overflow-hidden opacity-30"></div>
-
     <!-- MAIN APP WRAPPER -->
     <main class="flex-grow flex flex-col z-10 relative">
         <!-- 1. LANDING & SCAN VIEW -->
@@ -116,7 +127,7 @@
             <!-- TOP NAVIGATION HEADER -->
             <!-- TopAppBar Pill Nav -->
             <header
-                class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl z-50 transition-all duration-500 bg-[#151b2d]/80 backdrop-blur-[24px] border border-white/10 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
+                class="fixed top-6 left-1/2 -translate-x-1/2 w-[85%] max-w-2xl z-50 transition-all duration-500 bg-[#151b2d]/80 backdrop-blur-[40px] border border-white/30 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_40px_rgba(137,206,255,0.1)]"
                 id="main-nav">
                 <div class="flex justify-between items-center px-8 py-4">
                     <div class="flex items-center gap-3">
@@ -126,11 +137,11 @@
                             class="font-display-lg text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">SubEasy</span>
                     </div>
                     <div class="flex items-center gap-6">
-                        <a class="text-[#8c9bab] hover:text-white transition-colors duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                        <a class="text-white hover:text-primary transition-colors duration-300 font-label-sm text-label-sm uppercase tracking-widest"
                             href="about.html">
                             About
                         </a>
-                        <a class="px-6 py-2 rounded-full border border-white/10 text-[#8c9bab] hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                        <a class="px-6 py-2 rounded-full border border-white/20 text-white hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest"
                             href="index.html">
                             Home
                         </a>
@@ -907,8 +918,6 @@
 
     <!-- Script Entry -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="LetterGlitch.js?v=3"></script>
-    <script src="PixelSnow.js?v=1"></script>
     <script src="PillNav.js?v=3"></script>
     <script src="script.js?v=6"></script>
     <script>
@@ -956,13 +965,20 @@
             const ctx = canvas.getContext('2d');
             let width, height;
             let particles = [];
+            let cursorX = window.innerWidth / 2;
+            let cursorY = window.innerHeight / 2;
+            const cursorRadius = 150;
+
+            document.addEventListener('mousemove', (e) => {
+                cursorX = e.clientX;
+                cursorY = e.clientY;
+            });
 
             function initCanvas() {
                 width = canvas.width = window.innerWidth;
                 height = canvas.height = window.innerHeight;
                 particles = [];
-                // Sparse density
-                const numParticles = Math.min(Math.floor(width * height / 25000), 80);
+                const numParticles = Math.min(Math.floor(width * height / 12000), 200);
                 for (let i = 0; i < numParticles; i++) {
                     particles.push({
                         x: Math.random() * width,
@@ -978,11 +994,30 @@
                 ctx.clearRect(0, 0, width, height);
                 for (let i = 0; i < particles.length; i++) {
                     let p = particles[i];
+                    
+                    // Cursor interaction - repel particles
+                    const distToCursor = Math.hypot(p.x - cursorX, p.y - cursorY);
+                    if (distToCursor < cursorRadius && distToCursor > 0) {
+                        const angle = Math.atan2(p.y - cursorY, p.x - cursorX);
+                        const repelForce = (1 - distToCursor / cursorRadius) * 0.8;
+                        p.vx += Math.cos(angle) * repelForce;
+                        p.vy += Math.sin(angle) * repelForce;
+                    }
+                    
                     p.x += p.vx;
                     p.y += p.vy;
+                    
+                    // Dampening
+                    p.vx *= 0.98;
+                    p.vy *= 0.98;
 
                     if (p.x < 0 || p.x > width) p.vx *= -1;
                     if (p.y < 0 || p.y > height) p.vy *= -1;
+                    
+                    if (p.x < 0) p.x = 0;
+                    if (p.x > width) p.x = width;
+                    if (p.y < 0) p.y = 0;
+                    if (p.y > height) p.y = height;
 
                     // Faint outer glow
                     ctx.beginPath();
@@ -1016,6 +1051,38 @@
             initCanvas();
             drawParticles();
         }
+
+        // Cursor Follow Background Flow Effect
+        const bgContainer = document.querySelector('.fixed.inset-0.pointer-events-none');
+        const glowDivs = bgContainer.querySelectorAll('div[style*="radial-gradient"]');
+        
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        // Animation loop for smooth glow movement
+        function animateGlows() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            const distX = mouseX - centerX;
+            const distY = mouseY - centerY;
+            
+            glowDivs.forEach((el, index) => {
+                const strength = (index + 1) * 0.2; // parallax strength
+                const moveX = distX * strength;
+                const moveY = distY * strength;
+                el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+            
+            requestAnimationFrame(animateGlows);
+        }
+        
+        animateGlows();
     </script>
 </body>
 

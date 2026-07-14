@@ -222,7 +222,7 @@
     </div>
     <!-- TopAppBar -->
     <header
-        class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl z-50 transition-all duration-500 nav-hidden bg-[#151b2d]/80 backdrop-blur-[24px] border border-white/10 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
+        class="fixed top-6 left-1/2 -translate-x-1/2 w-[85%] max-w-2xl z-50 transition-all duration-500 nav-visible bg-[#151b2d]/80 backdrop-blur-[40px] border border-white/30 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_40px_rgba(137,206,255,0.1)]"
         id="main-nav">
         <div class="flex justify-between items-center px-8 py-4">
             <div class="flex items-center gap-3">
@@ -232,11 +232,11 @@
                     class="font-display-lg text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">SubEasy</span>
             </div>
             <div class="flex items-center gap-6">
-                <a class="text-[#8c9bab] hover:text-white transition-colors duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                <a class="text-white hover:text-primary transition-colors duration-300 font-label-sm text-label-sm uppercase tracking-widest"
                     href="about.html">
                     About
                 </a>
-                <a class="px-6 py-2 rounded-full border border-white/10 text-[#8c9bab] hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                <a class="px-6 py-2 rounded-full border border-white/20 text-white hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest"
                     href="login.html">
                     Login
                 </a>
@@ -430,7 +430,7 @@
                             </div>
                         </div>
                         <div class="mt-12">
-                            <button
+                            <button onclick="openEarlyAccessModal()"
                                 class="px-8 py-4 rounded-full bg-primary text-on-primary font-bold hover:bg-secondary hover:text-on-secondary transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest">
                                 Join Early Access Waitlist
                             </button>
@@ -455,9 +455,9 @@
                             </div>
                         </div>
                         <div class="mt-12">
-                            <button
+                            <button onclick="openBetaModal()"
                                 class="px-8 py-4 rounded-full bg-primary text-on-primary font-bold hover:bg-secondary hover:text-on-secondary transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest">
-                                Join Early Access Waitlist
+                                Stay Tuned For Coming Updates.
                             </button>
                         </div>
                     </div>
@@ -465,6 +465,140 @@
             </section>
         </div>
     </main>
+
+    <!-- Early Access Modal -->
+    <div id="earlyAccessModal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
+        <div class="w-[90%] max-w-2xl mx-auto relative transform scale-95 transition-all duration-300" id="modalContent">
+            <!-- Glowing Border Effect -->
+            <div class="absolute inset-0 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-3xl blur-xl opacity-0 transition-opacity duration-300" id="glowEffect"></div>
+            
+            <!-- Modal Card -->
+            <div class="glass-card relative rounded-3xl bg-gradient-to-br from-[#151b2d]/90 to-[#0f1420]/90 border border-white/20 backdrop-blur-[60px] shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+                <!-- Animated Background -->
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
+                
+                <!-- Content -->
+                <div class="relative p-8 md:p-10">
+                    <!-- Close Button -->
+                    <button onclick="closeEarlyAccessModal()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors duration-200 group z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-90 transition-transform duration-300">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+
+                    <!-- Two Column Layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Left Column - Description -->
+                        <div class="flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-display-lg text-[32px] font-light text-white mb-3 leading-tight">Join Early Access</h3>
+                                <div class="w-12 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mb-6"></div>
+                                <p class="font-body-md text-[15px] text-[#cbd5e1] leading-relaxed mb-8">
+                                    Get early access to experience our web design and UI firsthand. Your feedback is invaluable in helping us build something exceptional.
+                                </p>
+                            </div>
+
+                            <!-- Development Note -->
+                            <div class="bg-secondary/15 border border-secondary/40 rounded-xl p-4">
+                                <div class="flex gap-3">
+                                    <span class="text-secondary text-lg flex-shrink-0">ℹ️</span>
+                                    <p class="font-body-md text-[12px] text-[#cbd5e1] leading-relaxed">
+                                        <span class="text-secondary font-semibold">Note:</span> We're in the development phase. Currently, only the UI is fully interactive. Core functionalities are being built and will be available soon.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column - Form -->
+                        <div>
+                            <form id="earlyAccessForm" action="https://formspree.io/f/maqrnqrq" method="POST" class="space-y-4">
+                                <!-- Name Field -->
+                                <div>
+                                    <label class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Full Name *</label>
+                                    <input type="text" name="name" required placeholder="Your name" 
+                                        class="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/20 text-white placeholder-white/40 focus:border-primary focus:outline-none focus:bg-white/12 focus:shadow-[0_0_20px_rgba(137,206,255,0.2)] transition-all duration-300 font-body-md text-[14px]">
+                                </div>
+
+                                <!-- Email Field -->
+                                <div>
+                                    <label class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Email Address *</label>
+                                    <input type="email" name="email" required placeholder="your@email.com" 
+                                        class="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/20 text-white placeholder-white/40 focus:border-primary focus:outline-none focus:bg-white/12 focus:shadow-[0_0_20px_rgba(137,206,255,0.2)] transition-all duration-300 font-body-md text-[14px]">
+                                </div>
+
+                                <!-- Message Field -->
+                                <div>
+                                    <label class="font-body-md text-[13px] text-[#cbd5e1] block mb-2 font-medium">Message (Optional)</label>
+                                    <textarea name="message" placeholder="Tell us what you'd like to see..." rows="3"
+                                        class="w-full px-4 py-3 rounded-xl bg-white/8 border border-white/20 text-white placeholder-white/40 focus:border-primary focus:outline-none focus:bg-white/12 focus:shadow-[0_0_20px_rgba(137,206,255,0.2)] transition-all duration-300 font-body-md text-[14px] resize-none"></textarea>
+                                </div>
+
+                                <!-- Checkbox -->
+                                <div class="flex items-start gap-3 pt-2">
+                                    <input type="checkbox" id="tryWebsite" name="tryWebsite" class="w-5 h-5 mt-0.5 rounded-lg border border-white/30 bg-white/8 checked:bg-primary checked:border-primary cursor-pointer accent-primary transition-all duration-300 flex-shrink-0">
+                                    <label for="tryWebsite" class="font-body-md text-[13px] text-[#cbd5e1] cursor-pointer leading-relaxed">
+                                        I'd like to try out the website and provide detailed feedback
+                                    </label>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <button type="submit" class="w-full mt-6 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-bold transition-all duration-300 font-body-md text-[14px] uppercase tracking-wide shadow-lg hover:shadow-[0_0_30px_rgba(137,206,255,0.3)]">
+                                    Join Waitlist
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Beta Modal -->
+    <div id="betaModal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
+        <div class="w-[90%] max-w-md mx-auto relative transform scale-95 transition-all duration-300" id="betaModalContent">
+            <!-- Modal Card -->
+            <div class="glass-card relative rounded-3xl bg-gradient-to-br from-[#151b2d]/90 to-[#0f1420]/90 border border-white/20 backdrop-blur-[60px] shadow-[0_20px_80px_rgba(0,0,0,0.4)] overflow-hidden">
+                <!-- Animated Background -->
+                <div class="absolute inset-0 bg-gradient-to-br from-secondary/5 via-transparent to-primary/5 pointer-events-none"></div>
+                
+                <!-- Content -->
+                <div class="relative p-8 md:p-10 text-center">
+                    <!-- Close Button -->
+                    <button onclick="closeBetaModal()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors duration-200 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-90 transition-transform duration-300">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+
+                    <!-- Icon -->
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-secondary/20 border border-secondary/40 flex items-center justify-center">
+                        <span class="text-3xl">🚀</span>
+                    </div>
+
+                    <!-- Content -->
+                    <h3 class="font-display-lg text-[32px] font-light text-white mb-3 leading-tight">Public Beta Available</h3>
+                    <div class="w-12 h-1 bg-gradient-to-r from-secondary to-primary rounded-full mx-auto mb-6"></div>
+                    
+                    <p class="font-body-md text-[15px] text-[#cbd5e1] leading-relaxed mb-8">
+                        We're excited to announce that SubEasy is now available for public beta testing! You can explore our fully designed UI to get a feel for the platform. 
+                    </p>
+
+                    <div class="bg-primary/15 border border-primary/40 rounded-xl p-4 mb-8">
+                        <p class="font-body-md text-[14px] text-[#cbd5e1] leading-relaxed">
+                            <span class="text-primary font-semibold">✨ More features coming soon</span> – We're actively building powerful new functionalities that will make subscription management effortless.
+                        </p>
+                    </div>
+
+                    <!-- Button -->
+                    <button onclick="closeBetaModal()" class="w-full px-6 py-3.5 rounded-xl bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 text-white font-bold transition-all duration-300 font-body-md text-[14px] uppercase tracking-wide shadow-lg hover:shadow-[0_0_30px_rgba(79,219,200,0.3)]">
+                        Got It, Let's Explore!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Footer -->
     <footer class="w-full pt-16 pb-8 border-t border-white/5 relative z-10 bg-transparent">
         <div class="max-w-5xl mx-auto px-4 md:px-8">
@@ -533,22 +667,6 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Scroll Logic for Nav Visibility
-        const nav = document.getElementById('main-nav');
-        const heroHeight = document.getElementById('hero').offsetHeight;
-
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll > heroHeight * 0.5) {
-                nav.classList.remove('nav-hidden');
-                nav.classList.add('nav-visible');
-            } else {
-                nav.classList.add('nav-hidden');
-                nav.classList.remove('nav-visible');
-            }
-        });
-
         // Micro-interaction: Mouse Follow Glow for Glass Cards
         document.querySelectorAll('.glass-card').forEach(card => {
             card.addEventListener('mousemove', e => {
@@ -560,26 +678,36 @@
             });
         });
 
-        // Particle Canvas Background
+        // Particle Canvas Background with Cursor Interaction
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
 
         let width, height;
         let particles = [];
+        let cursorX = window.innerWidth / 2;
+        let cursorY = window.innerHeight / 2;
+        const cursorRadius = 150; // Detection radius for cursor interaction
+
+        document.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+        });
 
         function initCanvas() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            // Sparse density
-            const numParticles = Math.min(Math.floor(width * height / 25000), 80);
+            // Increased star density
+            const numParticles = Math.min(Math.floor(width * height / 12000), 200);
             for (let i = 0; i < numParticles; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
                     vx: (Math.random() - 0.5) * 0.3,
                     vy: (Math.random() - 0.5) * 0.3,
-                    radius: Math.random() * 1 + 1
+                    radius: Math.random() * 1.2 + 0.8,
+                    originalVx: 0,
+                    originalVy: 0
                 });
             }
         }
@@ -589,11 +717,35 @@
 
             for (let i = 0; i < particles.length; i++) {
                 let p = particles[i];
+                
+                // Store original velocity
+                p.originalVx = p.vx;
+                p.originalVy = p.vy;
+                
+                // Cursor interaction - repel particles
+                const distToCursor = Math.hypot(p.x - cursorX, p.y - cursorY);
+                if (distToCursor < cursorRadius && distToCursor > 0) {
+                    const angle = Math.atan2(p.y - cursorY, p.x - cursorX);
+                    const repelForce = (1 - distToCursor / cursorRadius) * 0.8;
+                    p.vx += Math.cos(angle) * repelForce;
+                    p.vy += Math.sin(angle) * repelForce;
+                }
+                
                 p.x += p.vx;
                 p.y += p.vy;
+                
+                // Dampening
+                p.vx *= 0.98;
+                p.vy *= 0.98;
 
                 if (p.x < 0 || p.x > width) p.vx *= -1;
                 if (p.y < 0 || p.y > height) p.vy *= -1;
+                
+                // Keep particles in bounds
+                if (p.x < 0) p.x = 0;
+                if (p.x > width) p.x = width;
+                if (p.y < 0) p.y = 0;
+                if (p.y > height) p.y = height;
 
                 // Faint outer glow
                 ctx.beginPath();
@@ -626,6 +778,114 @@
         window.addEventListener('resize', initCanvas);
         initCanvas();
         drawParticles();
+
+        // Cursor Follow Background Flow Effect
+        const bgContainer = document.querySelector('.fixed.inset-0.pointer-events-none');
+        const glowDivs = bgContainer.querySelectorAll('div[style*="radial-gradient"]');
+        
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        // Animation loop for smooth glow movement
+        function animateGlows() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            const distX = mouseX - centerX;
+            const distY = mouseY - centerY;
+            
+            glowDivs.forEach((el, index) => {
+                const strength = (index + 1) * 0.2; // parallax strength
+                const moveX = distX * strength;
+                const moveY = distY * strength;
+                el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+            
+            requestAnimationFrame(animateGlows);
+        }
+        
+        animateGlows();
+
+        // Early Access Modal Functions
+        function openEarlyAccessModal() {
+            const modal = document.getElementById('earlyAccessModal');
+            const modalContent = document.getElementById('modalContent');
+            const glowEffect = document.getElementById('glowEffect');
+            modal.classList.remove('opacity-0', 'invisible');
+            modal.classList.add('opacity-100', 'visible');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+            glowEffect.classList.remove('opacity-0');
+            glowEffect.classList.add('opacity-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEarlyAccessModal() {
+            const modal = document.getElementById('earlyAccessModal');
+            const modalContent = document.getElementById('modalContent');
+            const glowEffect = document.getElementById('glowEffect');
+            modal.classList.add('opacity-0', 'invisible');
+            modal.classList.remove('opacity-100', 'visible');
+            modalContent.classList.add('scale-95');
+            modalContent.classList.remove('scale-100');
+            glowEffect.classList.add('opacity-0');
+            glowEffect.classList.remove('opacity-100');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Beta Modal Functions
+        function openBetaModal() {
+            const modal = document.getElementById('betaModal');
+            const modalContent = document.getElementById('betaModalContent');
+            modal.classList.remove('opacity-0', 'invisible');
+            modal.classList.add('opacity-100', 'visible');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBetaModal() {
+            const modal = document.getElementById('betaModal');
+            const modalContent = document.getElementById('betaModalContent');
+            modal.classList.add('opacity-0', 'invisible');
+            modal.classList.remove('opacity-100', 'visible');
+            modalContent.classList.add('scale-95');
+            modalContent.classList.remove('scale-100');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modals when clicking outside
+        document.getElementById('earlyAccessModal').addEventListener('click', (e) => {
+            if (e.target.id === 'earlyAccessModal') {
+                closeEarlyAccessModal();
+            }
+        });
+
+        document.getElementById('betaModal').addEventListener('click', (e) => {
+            if (e.target.id === 'betaModal') {
+                closeBetaModal();
+            }
+        });
+
+        // Form submission with Formspree
+        document.getElementById('earlyAccessForm').addEventListener('submit', (e) => {
+            // Note: Formspree will handle the submission automatically
+            // Just make sure to replace YOUR_FORM_ID in the form action with your actual Formspree ID
+            console.log('Form submitted to Formspree');
+        });
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeEarlyAccessModal();
+                closeBetaModal();
+            }
+        });
     </script>
 </body>
 
