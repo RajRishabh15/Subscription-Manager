@@ -202,15 +202,51 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+
+        /* Minimal Futuristic Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0e17;
+            border-left: 1px solid rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(137, 206, 255, 0.15);
+            border-radius: 4px;
+            border: 2px solid #0a0e17;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(137, 206, 255, 0.3);
+        }
+        ::-webkit-scrollbar-corner {
     </style>
     <style>
         body {
             min-height: max(884px, 100dvh);
         }
+        
+        @keyframes pageEntry {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .page-entry {
+            animation: pageEntry 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
     </style>
 </head>
 
 <body class="font-body-md text-body-md antialiased">
+    <!-- Scroll Progress Bar -->
+    <div id="scrollProgressBar" class="fixed top-0 left-0 h-1.5 z-[100] bg-gradient-to-r from-primary via-secondary to-tertiary shadow-[0_0_15px_rgba(137,206,255,0.5)] transition-all duration-150 ease-out" style="width: 0%;"></div>
+
     <!-- Ambient Background Elements -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <!-- Particle Canvas Background (Now covers whole page) -->
@@ -220,6 +256,8 @@
         <div class="ambient-glow bottom-[-10%] right-[-10%]"
             style="background: radial-gradient(circle, rgba(221, 183, 255, 0.1) 0%, transparent 70%);"></div>
     </div>
+
+    <div class="page-entry">
     <!-- TopAppBar -->
     <header
         class="fixed top-6 left-1/2 -translate-x-1/2 w-[85%] max-w-2xl z-50 transition-all duration-500 nav-visible bg-[#151b2d]/80 backdrop-blur-[40px] border border-white/30 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_40px_rgba(137,206,255,0.1)]"
@@ -391,7 +429,9 @@
                 <p class="font-body-md text-[14px] text-[#475569]">Making digital subscriptions as transparent as cash.</p>
             </div>
         </div>
+        </div>
     </footer>
+    </div>
     <script>
         // Intersection Observer for Reveal Animations
         const observerOptions = {
@@ -512,6 +552,15 @@
         window.addEventListener('resize', initCanvas);
         initCanvas();
         drawParticles();
+
+        // Scroll Progress Bar Logic
+        const progressBar = document.getElementById('scrollProgressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = scrollPercent + '%';
+        });
     </script>
 </body>
 
