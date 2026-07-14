@@ -102,6 +102,32 @@
         html.is-logged-in #scan-view {
             display: none !important;
         }
+
+        @keyframes pageEntry {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .page-entry {
+            animation: pageEntry 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .nav-hidden {
+            transform: translate(-50%, -150%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .nav-visible {
+            transform: translate(-50%, 0);
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 
@@ -120,28 +146,30 @@
             style="background: radial-gradient(circle, rgba(137, 206, 255, 0.02) 0%, transparent 60%);"></div>
     </div>
 
+    </div>
+
     <!-- MAIN APP WRAPPER -->
-    <main class="flex-grow flex flex-col z-10 relative">
+    <div class="page-entry flex-grow flex flex-col z-10 relative">
         <!-- 1. LANDING & SCAN VIEW -->
         <section id="scan-view" class="min-h-screen relative flex flex-col items-center">
             <!-- TOP NAVIGATION HEADER -->
             <!-- TopAppBar Pill Nav -->
             <header
-                class="fixed top-6 left-1/2 -translate-x-1/2 w-[85%] max-w-2xl z-50 transition-all duration-500 bg-[#151b2d]/80 backdrop-blur-[40px] border border-white/30 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_40px_rgba(137,206,255,0.1)]"
+                class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] max-w-2xl z-50 transition-all duration-700 nav-hidden bg-[#151b2d]/80 backdrop-blur-[40px] border border-white/30 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_40px_rgba(137,206,255,0.1)]"
                 id="main-nav">
-                <div class="flex justify-between items-center px-8 py-4">
-                    <div class="flex items-center gap-3">
+                <div class="flex justify-between items-center px-4 sm:px-8 py-3 sm:py-4">
+                    <div class="flex items-center gap-2 sm:gap-3">
                         <img src="favicon.png" alt="SubEasy"
-                            class="w-8 h-8 rounded-full object-cover shadow-[0_0_15px_rgba(92,158,229,0.3)]">
+                            class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover shadow-[0_0_15px_rgba(92,158,229,0.3)]">
                         <span
-                            class="font-display-lg text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">SubEasy</span>
+                            class="font-display-lg text-[20px] sm:text-headline-md bg-gradient-to-r from-secondary via-primary to-tertiary bg-clip-text text-transparent font-bold">SubEasy</span>
                     </div>
-                    <div class="flex items-center gap-6">
-                        <a class="text-white hover:text-primary transition-colors duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                    <div class="flex items-center gap-4 sm:gap-6">
+                        <a class="text-white hover:text-primary transition-colors duration-300 font-label-sm text-[10px] sm:text-label-sm uppercase tracking-widest"
                             href="about.html">
                             About
                         </a>
-                        <a class="px-6 py-2 rounded-full border border-white/20 text-white hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 font-label-sm text-label-sm uppercase tracking-widest"
+                        <a class="px-4 py-2 sm:px-6 sm:py-2 rounded-full border border-white/20 text-white hover:text-white hover:border-primary hover:bg-primary/10 transition-all duration-300 font-label-sm text-[10px] sm:text-label-sm uppercase tracking-widest"
                             href="index.html">
                             Home
                         </a>
@@ -154,7 +182,7 @@
 
 
             <div
-                class="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-32 lg:pt-40 pb-16 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+                class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 lg:pt-40 pb-16 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
 
                 <!-- ── MAIN HERO CONTENT ── -->
                 <div
@@ -162,7 +190,7 @@
                     <!-- Headline -->
                     <div class="space-y-3">
                         <h1
-                            class="text-5xl sm:text-6xl lg:text-6xl xl:text-7xl font-black text-white leading-[1.05] tracking-tight font-sans">
+                            class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white leading-[1.05] tracking-tight font-sans">
                             Take Control <br class="hidden sm:block">
                             <span
                                 class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-cosmicBlue-400">of
@@ -291,7 +319,7 @@
 
                         <!-- Main card -->
                         <div
-                            class="relative bg-[#060510]/95 border border-brand-500/20 rounded-[34px] p-8 shadow-[0_40px_100px_rgba(20,184,166,0.1)] overflow-hidden backdrop-blur-sm">
+                            class="relative bg-[#060510]/95 border border-brand-500/20 rounded-[34px] p-6 sm:p-8 shadow-[0_40px_100px_rgba(20,184,166,0.1)] overflow-hidden backdrop-blur-sm">
 
                             <!-- Inner shimmer top line -->
                             <div
@@ -1083,6 +1111,17 @@
         }
         
         animateGlows();
+
+        // Initial entry animation logic
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                const nav = document.getElementById('main-nav');
+                if (nav) {
+                    nav.classList.remove('nav-hidden');
+                    nav.classList.add('nav-visible');
+                }
+            }, 100);
+        });
     </script>
 </body>
 
