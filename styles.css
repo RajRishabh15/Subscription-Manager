@@ -1,4 +1,4 @@
-/* AIOManager — Cosmic Pink & Light Blue Glitter Theme Stylesheet */
+/* SubEasy — Cosmic Pink & Light Blue Glitter Theme Stylesheet */
 
 :root {
     /* Cosmic Mint & Sky Blue theme colors (raw components for Tailwind) */
@@ -682,3 +682,4 @@ input::placeholder {
                 radial-gradient(circle at 20% 30%, rgba(0, 219, 231, 0.05) 0%, transparent 50%),
                 radial-gradient(circle at 80% 70%, rgba(255, 5, 65, 0.05) 0%, transparent 50%);
         }
+

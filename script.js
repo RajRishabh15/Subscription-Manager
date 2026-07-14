@@ -1,4 +1,4 @@
-// AIOManager Subscription Manager — Script
+// SubEasy Subscription Manager — Script
 
 // ==========================================
 // MOCK SUBSCRIPTION DATA TEMPLATES & CANCEL GUIDE
@@ -286,7 +286,7 @@ function loadStateFromStorage() {
                 diagnostics: { ...state.diagnostics, ...(parsed.diagnostics || {}) }
             };
         } catch (e) {
-            console.error("Failed to parse stored AIOManager state:", e);
+            console.error("Failed to parse stored SubEasy state:", e);
         }
     }
 }
@@ -423,7 +423,7 @@ function renderPillNav() {
         hoveredPillTextColor: '#ffffff',
         onTabClick: (tabName) => {
             if (tabName === 'scan') {
-                // AIO site icon = re-scan mailbox for new subscriptions
+                // SubEasy site icon = re-scan mailbox for new subscriptions
                 if (state.isLoggedIn && state.currentUser.email) {
                     startScanning(state.currentUser.phone || null, state.currentUser.email);
                 } else {
@@ -2746,7 +2746,7 @@ function bindAccountEventListeners() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `aiomanager_backup_${Date.now()}.json`);
+            downloadAnchor.setAttribute("download", `SubEasy_backup_${Date.now()}.json`);
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
@@ -3146,7 +3146,7 @@ function switchAuthMode(mode) {
         if (toggleBtn) toggleBtn.innerText = "Log In";
         if (gmailBtnText) gmailBtnText.innerText = "Sign Up with Google";
     } else {
-        if (toggleLabel) toggleLabel.innerText = "New to AIOManager?";
+        if (toggleLabel) toggleLabel.innerText = "New to SubEasy?";
         if (toggleBtn) toggleBtn.innerText = "Create Account";
         if (gmailBtnText) gmailBtnText.innerText = "Continue with Google";
     }
@@ -3410,3 +3410,4 @@ function setupEventListeners() {
         });
     }
 }
+
