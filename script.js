@@ -478,6 +478,17 @@ function switchTab(tabName) {
         renderAccountTab();
     }
 
+    // Update mobile bottom nav pill highlighting
+    document.querySelectorAll('.tab-btn-mobile').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabName) {
+            btn.classList.add('active-pill-mobile');
+            btn.classList.remove('text-textMuted');
+        } else {
+            btn.classList.remove('active-pill-mobile');
+            btn.classList.add('text-textMuted');
+        }
+    });
+
     renderPillNav();
     lucide.createIcons();
 }
