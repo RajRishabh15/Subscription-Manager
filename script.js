@@ -273,7 +273,7 @@ function loadStateFromStorage() {
         localStorage.setItem('subsentry_registered_users', JSON.stringify(defaultUsers));
     }
 
-    const savedState = localStorage.getItem('subsentry_state');
+    const savedState = sessionStorage.getItem('subsentry_state');
     if (savedState) {
         try {
             const parsed = JSON.parse(savedState);
@@ -293,7 +293,7 @@ function loadStateFromStorage() {
 
 // Save state to local storage
 function saveStateToStorage() {
-    localStorage.setItem('subsentry_state', JSON.stringify(state));
+    sessionStorage.setItem('subsentry_state', JSON.stringify(state));
 }
 
 // Initialize layout views based on login state
@@ -3116,7 +3116,11 @@ let isSupabaseConfigured = false;
 
 if (SUPABASE_URL && SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL' && SUPABASE_ANON_KEY && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
     try {
-        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                storage: window.sessionStorage
+            }
+        });
         isSupabaseConfigured = true;
         console.log("⚡ Supabase Client initialized successfully.");
     } catch (e) {
