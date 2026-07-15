@@ -110,7 +110,7 @@
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: none;
             }
         }
         .page-entry {
@@ -185,7 +185,7 @@
                 class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 lg:pt-40 pb-16 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
 
                 <!-- ── MAIN HERO CONTENT ── -->
-                <div
+                <div id="login-hero-content"
                     class="w-full lg:w-1/2 space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
                     <!-- Headline -->
                     <div class="space-y-3">
@@ -1121,6 +1121,14 @@
                     nav.classList.add('nav-visible');
                 }
             }, 100);
+
+            // Remove page-entry class to fix sticky position scrolling bugs on mobile
+            setTimeout(() => {
+                const pageWrapper = document.querySelector('.page-entry');
+                if (pageWrapper) {
+                    pageWrapper.classList.remove('page-entry');
+                }
+            }, 1000);
         });
     </script>
 </body>

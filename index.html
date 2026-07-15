@@ -236,7 +236,7 @@
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: none;
             }
         }
         .page-entry {
@@ -1121,6 +1121,11 @@
                 siteWrapper.classList.add('page-entry');
                 document.getElementById('main-nav').classList.remove('nav-hidden');
                 document.getElementById('main-nav').classList.add('nav-visible');
+
+                // Remove page-entry class to fix sticky position scrolling bugs
+                setTimeout(() => {
+                    siteWrapper.classList.remove('page-entry');
+                }, 1000);
             } else {
                 // First time load
                 setTimeout(() => {
@@ -1137,6 +1142,11 @@
                         siteWrapper.classList.add('page-entry');
                         document.getElementById('main-nav').classList.remove('nav-hidden');
                         document.getElementById('main-nav').classList.add('nav-visible');
+
+                        // Remove page-entry class to fix sticky position scrolling bugs
+                        setTimeout(() => {
+                            siteWrapper.classList.remove('page-entry');
+                        }, 1000);
                         
                         sessionStorage.setItem('hasSeenPreloader', 'true');
                     }, 700); // Wait for opacity transition

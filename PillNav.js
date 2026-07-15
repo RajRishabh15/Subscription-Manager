@@ -56,17 +56,26 @@ class PillNav {
     nav.className = 'w-[90%] md:w-max flex items-center justify-between md:justify-start box-border p-[4px] rounded-full border border-glassBorder/10 backdrop-blur-md bg-black/10';
     nav.setAttribute('aria-label', 'Primary');
 
-    // Website Logo (Far Left)
+    // Website Logo & Text (Far Left)
     const siteLogo = document.createElement('button');
-    siteLogo.className = 'rounded-full p-1 hidden md:inline-flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 border-0 mr-12 ml-0 flex-shrink-0';
-    siteLogo.style.width = 'var(--nav-h)';
+    siteLogo.className = 'rounded-full p-1 inline-flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 border-0 md:mr-12 mr-auto flex-shrink-0';
     siteLogo.style.height = 'var(--nav-h)';
     siteLogo.style.background = 'var(--base, #000)';
     
-    const siteLogoImgWrapper = document.createElement('div');
-    siteLogoImgWrapper.className = 'w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-[#0b0a10] border border-[#222] select-none shadow-inner';
-    siteLogoImgWrapper.innerHTML = `<img src="${this.logo}" class="w-full h-full object-cover rounded-full" style="filter: brightness(1.15) drop-shadow(0 0 6px rgba(255,255,255,0.15));" alt="${this.logoAlt}">`;
-    siteLogo.appendChild(siteLogoImgWrapper);
+    const siteLogoInner = document.createElement('div');
+    siteLogoInner.className = 'flex items-center h-full rounded-full overflow-hidden bg-[#0b0a10] border border-[#222] select-none shadow-inner pr-3.5 md:pr-4'; 
+    
+    const imgWrapper = document.createElement('div');
+    imgWrapper.className = 'h-full aspect-square p-0.5 flex-shrink-0';
+    imgWrapper.innerHTML = `<img src="${this.logo}" class="w-full h-full object-cover rounded-full" style="filter: brightness(1.15) drop-shadow(0 0 6px rgba(255,255,255,0.15));" alt="${this.logoAlt}">`;
+    
+    const logoText = document.createElement('span');
+    logoText.className = 'text-[#5C9EE5] font-display-lg font-bold text-sm md:text-base ml-1.5 md:ml-2 tracking-wide';
+    logoText.innerText = 'SubEasy';
+
+    siteLogoInner.appendChild(imgWrapper);
+    siteLogoInner.appendChild(logoText);
+    siteLogo.appendChild(siteLogoInner);
 
     siteLogo.addEventListener('click', () => {
         if (this.onTabClick) this.onTabClick('scan');
@@ -180,74 +189,12 @@ class PillNav {
 
     navItems.appendChild(ul);
     
-    // Hamburger button for mobile menu
-    const hamburger = document.createElement('button');
-    hamburger.className = 'md:hidden rounded-full border-0 flex flex-col items-center justify-center gap-1 cursor-pointer p-0 relative focus:outline-none';
-    hamburger.style.width = 'var(--nav-h)';
-    hamburger.style.height = 'var(--nav-h)';
-    hamburger.style.background = 'var(--base, #000)';
-    hamburger.setAttribute('aria-label', 'Toggle menu');
-    hamburger.setAttribute('aria-expanded', 'false');
-
-    const line1 = document.createElement('span');
-    line1.className = 'hamburger-line w-4 h-0.5 rounded origin-center transition-all';
-    line1.style.background = 'var(--pill-bg, #fff)';
-    
-    const line2 = document.createElement('span');
-    line2.className = 'hamburger-line w-4 h-0.5 rounded origin-center transition-all';
-    line2.style.background = 'var(--pill-bg, #fff)';
-
-    hamburger.appendChild(line1);
-    hamburger.appendChild(line2);
-    
-    // Append in the new order: SiteLogo -> Hamburger -> NavItems -> LogoLink
+    // Append in the new order: SiteLogo -> NavItems -> LogoLink
     nav.appendChild(siteLogo);
-    nav.appendChild(hamburger);
     nav.appendChild(navItems);
     nav.appendChild(logoLink);
 
     outerDiv.appendChild(nav);
-
-    // Mobile Menu Dropdown
-    const mobileMenu = document.createElement('div');
-    mobileMenu.className = 'md:hidden absolute top-[3.2em] left-4 right-4 rounded-[27px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] z-[998] origin-top hidden';
-    mobileMenu.style.background = 'var(--base, #f0f0f0)';
-
-    const mobileUl = document.createElement('ul');
-    mobileUl.className = 'list-none m-0 p-[3px] flex flex-col gap-[3px]';
-
-    this.items.forEach(item => {
-      const mobileLi = document.createElement('li');
-      
-      const mobileA = document.createElement('button');
-      mobileA.className = 'w-full text-left border-0 block py-3 px-4 text-sm font-semibold rounded-[50px] transition-all duration-200 cursor-pointer focus:outline-none';
-      mobileA.style.background = 'var(--pill-bg, #fff)';
-      mobileA.style.color = 'var(--pill-text, #fff)';
-      mobileA.innerText = item.label;
-
-      mobileA.addEventListener('mouseenter', () => {
-        mobileA.style.background = 'var(--base)';
-        mobileA.style.color = 'var(--hover-text, #fff)';
-      });
-      mobileA.addEventListener('mouseleave', () => {
-        mobileA.style.background = 'var(--pill-bg, #fff)';
-        mobileA.style.color = 'var(--pill-text, #fff)';
-      });
-      mobileA.addEventListener('click', () => {
-        this.toggleMobileMenu(hamburger, mobileMenu);
-        if (this.onTabClick) this.onTabClick(item.href);
-      });
-
-      mobileLi.appendChild(mobileA);
-      mobileUl.appendChild(mobileLi);
-    });
-
-    mobileMenu.appendChild(mobileUl);
-    outerDiv.appendChild(mobileMenu);
-
-    hamburger.addEventListener('click', () => {
-      this.toggleMobileMenu(hamburger, mobileMenu);
-    });
 
     this.container.appendChild(outerDiv);
 
@@ -341,47 +288,6 @@ class PillNav {
       ease: this.ease,
       overwrite: 'auto'
     });
-  }
-
-  toggleMobileMenu(hamburger, mobileMenu) {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    hamburger.setAttribute('aria-expanded', this.isMobileMenuOpen);
-
-    const lines = hamburger.querySelectorAll('.hamburger-line');
-    
-    if (this.isMobileMenuOpen) {
-      gsap.to(lines[0], { rotation: 45, y: 3, duration: 0.3, ease: this.ease });
-      gsap.to(lines[1], { rotation: -45, y: -3, duration: 0.3, ease: this.ease });
-      
-      mobileMenu.classList.remove('hidden');
-      gsap.fromTo(
-        mobileMenu,
-        { opacity: 0, y: 10, scaleY: 0.8 },
-        {
-          opacity: 1,
-          y: 0,
-          scaleY: 1,
-          duration: 0.3,
-          ease: this.ease,
-          transformOrigin: 'top center'
-        }
-      );
-    } else {
-      gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease: this.ease });
-      gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease: this.ease });
-      
-      gsap.to(mobileMenu, {
-        opacity: 0,
-        y: 10,
-        scaleY: 0.8,
-        duration: 0.2,
-        ease: this.ease,
-        transformOrigin: 'top center',
-        onComplete: () => {
-          mobileMenu.classList.add('hidden');
-        }
-      });
-    }
   }
 
   destroy() {

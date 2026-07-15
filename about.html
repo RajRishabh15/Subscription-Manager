@@ -236,7 +236,7 @@
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: none;
             }
         }
         .page-entry {
@@ -572,6 +572,14 @@
                     nav.classList.add('nav-visible');
                 }
             }, 100);
+
+            // Remove page-entry class to fix sticky position scrolling bugs on mobile
+            setTimeout(() => {
+                const pageWrapper = document.querySelector('.page-entry');
+                if (pageWrapper) {
+                    pageWrapper.classList.remove('page-entry');
+                }
+            }, 1000);
         });
     </script>
 </body>

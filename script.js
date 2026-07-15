@@ -1882,14 +1882,14 @@ function renderAccountTab() {
             <div class="lg:col-span-8 space-y-5">
 
                 <!-- Tab switcher -->
-                <div class="flex items-center gap-1 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-fit" id="account-tab-bar">
+                <div class="flex items-center gap-1 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-full max-w-full overflow-x-auto scrollbar-hide" id="account-tab-bar">
                     ${[
                         { id: 'identity', icon: 'user', label: 'Identity & Prefs' },
                         { id: 'sources',  icon: 'link', label: 'Sources' },
                         { id: 'appearance', icon: 'palette', label: 'Aesthetics' },
                         { id: 'diagnostics', icon: 'terminal', label: 'Diagnostics' },
                     ].map((t, i) => `
-                        <button data-acct-tab="${t.id}" onclick="switchAccountTab('${t.id}')" class="acct-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-semibold transition-all font-space ${i === 0 ? 'bg-brand-500/25 text-brand-300 border border-brand-500/40' : 'text-textMuted hover:text-cardTitle'}">
+                        <button data-acct-tab="${t.id}" onclick="switchAccountTab('${t.id}')" class="acct-tab-btn flex-shrink-0 whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-semibold transition-all font-space ${i === 0 ? 'bg-brand-500/25 text-brand-300 border border-brand-500/40' : 'text-textMuted hover:text-cardTitle'}">
                             <i data-lucide="${t.icon}" class="w-3.5 h-3.5"></i> ${t.label}
                         </button>
                     `).join('')}
@@ -2004,7 +2004,7 @@ function renderAccountTab() {
                             </div>
                         </div>
 
-                        <form id="connect-scan-directory-form" class="flex gap-3 mb-5">
+                        <form id="connect-scan-directory-form" class="flex flex-col sm:flex-row gap-3 mb-5">
                             <div class="relative flex-1">
                                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-textMuted pointer-events-none">
                                     <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -2013,7 +2013,7 @@ function renderAccountTab() {
                                     placeholder="Email address or 10-digit mobile"
                                     class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 pl-10 pr-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600">
                             </div>
-                            <button type="submit" class="bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs px-5 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.2)] font-space whitespace-nowrap flex items-center gap-1.5">
+                            <button type="submit" class="w-full sm:w-auto justify-center bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs px-5 py-3 sm:py-0 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.2)] font-space whitespace-nowrap flex items-center gap-1.5">
                                 <i data-lucide="zap" class="w-3.5 h-3.5"></i> Link &amp; Scan
                             </button>
                         </form>
@@ -3195,6 +3195,13 @@ function showRegisterSetup(name, email) {
 
     // Save target email in state
     state.currentUser.email = email || 'mock.user@gmail.com';
+
+    // Hide main hero content on mobile during registration
+    const heroContent = document.getElementById('login-hero-content');
+    if (heroContent) {
+        heroContent.classList.remove('flex');
+        heroContent.classList.add('hidden', 'lg:flex');
+    }
 }
 
 // Complete profile registration and trigger scan
@@ -3259,6 +3266,13 @@ function setupEventListeners() {
             const regPanel = document.getElementById('register-setup-panel');
             if (regPanel) regPanel.classList.add('hidden');
             document.getElementById('scan-form-panel').classList.remove('hidden');
+
+            // Restore hero content on mobile
+            const heroContent = document.getElementById('login-hero-content');
+            if (heroContent) {
+                heroContent.classList.remove('hidden', 'lg:flex');
+                heroContent.classList.add('flex');
+            }
         });
     }
 
