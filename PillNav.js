@@ -50,7 +50,7 @@ class PillNav {
 
     // Create Navigation Elements
     const outerDiv = document.createElement('div');
-    outerDiv.className = `absolute top-[1.2em] z-[1000] w-full left-0 md:w-auto md:left-auto flex justify-center md:block ${this.className}`;
+    outerDiv.className = `relative z-[1000] w-full flex justify-center md:inline-flex md:w-auto ${this.className}`;
     
     const nav = document.createElement('nav');
     nav.className = 'w-[90%] md:w-max flex items-center justify-between md:justify-start box-border p-[4px] rounded-full border border-glassBorder/10 backdrop-blur-md bg-black/10';

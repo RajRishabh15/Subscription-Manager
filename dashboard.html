@@ -659,7 +659,7 @@
         <section id="dashboard-view" class="hidden flex-grow flex flex-col">
 
             <!-- FLOATING NAV PILL BAR CONTAINER -->
-            <div id="nav-container" class="fixed top-5 left-0 right-0 px-4 z-40 flex justify-center"></div>
+            <div id="nav-container" class="fixed top-2 md:top-5 left-0 right-0 px-4 z-40 flex justify-center w-full"></div>
             <!-- Hidden metadata endpoints for JS updates compatibility -->
             <div class="hidden">
                 <span id="user-primary-phone">+91 00000 00000</span>
@@ -945,8 +945,26 @@
         </div>
     </div>
 
-    <!-- Modal settings replaced with full page tab content -->
+    <!-- MOBILE FILTER MODAL -->
+    <div id="mobile-filter-modal" class="fixed inset-0 z-[100] hidden flex items-end justify-center sm:hidden">
+        <div id="mobile-filter-backdrop" onclick="closeMobileFilterModal()" class="absolute inset-0 bg-[#02010a]/80 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+        <div id="mobile-filter-content" class="relative w-full bg-[#0f0e13] border-t border-glassBorder rounded-t-[28px] p-5 pb-8 transform translate-y-full transition-transform duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] flex flex-col max-h-[85vh]">
+            <div class="w-10 h-1 bg-white/10 rounded-full mx-auto mb-5 shrink-0"></div>
+            
+            <div class="flex justify-between items-center mb-5 shrink-0">
+                <h3 class="text-2xl font-serif italic text-white tracking-wide">Filter Projects</h3>
+                <button onclick="closeMobileFilterModal()" class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <div id="mobile-filter-list" class="flex flex-col gap-2 overflow-y-auto scrollbar-none flex-1 pb-4">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal settings replaced with full page tab content -->
     <!-- Script Entry -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="PillNav.js?v=3"></script>

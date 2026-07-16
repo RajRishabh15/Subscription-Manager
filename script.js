@@ -238,21 +238,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     || session.user.user_metadata?.name
                     || '';
 
-                if (savedAuthMode === 'signup') {
-                    // New user signing up — go to profile setup
-                    showRegisterSetup(googleName, email);
-                } else {
-                    // Existing user logging in — just start the app
-                    // If they haven't completed profile setup yet, send them there
-                    const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
-                    const isRegistered = registeredUsers.some(u => u.email === email);
-                    if (isRegistered) {
-                        startScanning(null, email);
-                    } else {
-                        // They logged in with Google but never completed setup — send to setup
-                        showRegisterSetup(googleName, email);
-                    }
+                const registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
+                if (!registeredUsers.some(u => u.email === email)) {
+                    registeredUsers.push({ name: googleName || email.split('@')[0], email: email, phone: '' });
+                    localStorage.setItem('subsentry_registered_users', JSON.stringify(registeredUsers));
                 }
+                startScanning(null, email);
                 return;
             }
         } catch (e) {
@@ -265,12 +256,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Load state from local storage
 function loadStateFromStorage() {
-    // Seed registered users list if empty
-    if (!localStorage.getItem('subsentry_registered_users')) {
-        const defaultUsers = [
-            { name: 'Rishabh Raj', phone: '9876543210', email: 'rishabh.raj@gmail.com' }
-        ];
-        localStorage.setItem('subsentry_registered_users', JSON.stringify(defaultUsers));
+    // Seed registered users list if empty, or ensure both mock users exist
+    let registeredUsers = JSON.parse(localStorage.getItem('subsentry_registered_users') || '[]');
+    const defaultUsers = [
+        { name: 'Rishabh Raj', phone: '9876543210', email: 'rishabh.raj@gmail.com' },
+        { name: 'John Doe', phone: '9876543211', email: 'john.doe@gmail.com' }
+    ];
+    let updated = false;
+    defaultUsers.forEach(du => {
+        if (!registeredUsers.find(u => u.email === du.email)) {
+            registeredUsers.push(du);
+            updated = true;
+        }
+    });
+    if (updated) {
+        localStorage.setItem('subsentry_registered_users', JSON.stringify(registeredUsers));
     }
 
     const savedState = sessionStorage.getItem('subsentry_state');
@@ -304,10 +304,21 @@ function initAppView() {
     // Apply theme variables immediately
     applyTheme(state.preferences.theme || 'cosmic');
     
+    const isDashboardPage = window.location.pathname.includes('dashboard.html');
+    const isIndexPage = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/');
+    const isLoginPage = window.location.pathname.includes('login.html');
+
     if (state.isLoggedIn) {
+        if (isIndexPage || isLoginPage) {
+            let basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+            if (basePath === '') basePath = '/';
+            window.location.href = basePath + 'dashboard.html';
+            return;
+        }
+
         document.documentElement.classList.add('is-logged-in');
-        scanView.classList.add('hidden');
-        dashboardView.classList.remove('hidden');
+        if (scanView) scanView.classList.add('hidden');
+        if (dashboardView) dashboardView.classList.remove('hidden');
         
         const loginBg = document.getElementById('login-glitch-bg');
         if (loginBg) loginBg.classList.add('hidden');
@@ -320,9 +331,16 @@ function initAppView() {
         
         switchTab('home');
     } else {
+        if (isDashboardPage) {
+            let basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+            if (basePath === '') basePath = '/';
+            window.location.href = basePath + 'login.html';
+            return;
+        }
+
         document.documentElement.classList.remove('is-logged-in');
-        scanView.classList.remove('hidden');
-        dashboardView.classList.add('hidden');
+        if (scanView) scanView.classList.remove('hidden');
+        if (dashboardView) dashboardView.classList.add('hidden');
         
         const loginBg = document.getElementById('login-glitch-bg');
         if (loginBg) loginBg.classList.remove('hidden');
@@ -1085,12 +1103,23 @@ function renderManageTab() {
                 class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-cardTitle focus:outline-none placeholder-slate-500 font-sans shadow-inner">
         </div>
 
-        <!-- Category Pills -->
-        <div class="flex items-center space-x-2 overflow-x-auto w-full scrollbar-none mb-4 pb-1">
+        <!-- Category Pills (Desktop) -->
+        <div class="hidden md:flex items-center space-x-2 overflow-x-auto w-full scrollbar-none mb-4 pb-1">
             ${categoriesList.map(cat => {
                 const isSelected = cat === manageCategoryFilter;
                 return `<button onclick="setManageCategory('${cat}')" class="px-5 py-2 rounded-full text-[11px] font-medium whitespace-nowrap transition-all border font-sans ${isSelected ? 'bg-brand-500/20 border-brand-500 text-cardTitle' : 'bg-[#13111a] border-glassBorder text-textMuted hover:text-cardTitle hover:bg-[#1a1723]'}">${cat}</button>`;
             }).join('')}
+        </div>
+        
+        <!-- Mobile Filter Button -->
+        <div class="md:hidden w-full mb-4">
+            <button onclick="openMobileFilterModal()" class="w-full flex items-center justify-between bg-[#13111a] border border-glassBorder px-4 py-3 rounded-2xl text-textMuted text-sm font-sans active:bg-[#1a1723] transition-colors">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="filter" class="w-4 h-4 text-brand-400"></i>
+                    <span>Category: <strong class="text-cardTitle font-semibold">${manageCategoryFilter}</strong></span>
+                </div>
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </button>
         </div>
 
         <!-- Status Filter Tabs -->
@@ -1219,6 +1248,70 @@ function renderManageTab() {
         }
     });
 }
+
+window.openMobileFilterModal = function() {
+    const modal = document.getElementById('mobile-filter-modal');
+    const backdrop = document.getElementById('mobile-filter-backdrop');
+    const content = document.getElementById('mobile-filter-content');
+    const list = document.getElementById('mobile-filter-list');
+    
+    if (!modal || !list) return;
+    
+    const categoriesList = ['All', 'Entertainment', 'Telecom & Fiber', 'Music', 'Utilities', 'Shopping', 'Other'];
+    
+    list.innerHTML = categoriesList.map(cat => {
+        const isSelected = cat === manageCategoryFilter;
+        // Count active subscriptions for this category
+        const count = state.subscriptions.filter(sub => {
+            const matchesCat = cat === 'All' || sub.category === cat;
+            return matchesCat;
+        }).length;
+        
+        return `
+            <button onclick="selectMobileCategory('${cat}')" class="flex items-center justify-between w-full p-4 rounded-2xl border transition-all duration-200 cursor-pointer ${isSelected ? 'bg-gradient-to-r from-brand-500/20 to-transparent border-brand-500/40' : 'bg-white/5 border-white/5 hover:bg-white/10'}">
+                <div class="flex items-center gap-3">
+                    <div class="w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'border-brand-400' : 'border-slate-600'}">
+                        ${isSelected ? '<div class="w-2 h-2 bg-brand-400 rounded-full shadow-[0_0_8px_rgba(20,184,166,0.8)]"></div>' : ''}
+                    </div>
+                    <span class="font-sans text-sm font-semibold ${isSelected ? 'text-white' : 'text-slate-300'}">${cat === 'All' ? 'All Projects' : cat}</span>
+                </div>
+                <div class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-slate-300">
+                    ${count}
+                </div>
+            </button>
+        `;
+    }).join('');
+    
+    modal.classList.remove('hidden');
+    // Allow DOM to update before animation
+    setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        content.classList.remove('translate-y-full');
+        content.classList.add('translate-y-0');
+    }, 10);
+};
+
+window.closeMobileFilterModal = function() {
+    const modal = document.getElementById('mobile-filter-modal');
+    const backdrop = document.getElementById('mobile-filter-backdrop');
+    const content = document.getElementById('mobile-filter-content');
+    if (!modal) return;
+    
+    backdrop.classList.remove('opacity-100');
+    backdrop.classList.add('opacity-0');
+    content.classList.remove('translate-y-0');
+    content.classList.add('translate-y-full');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+};
+
+window.selectMobileCategory = function(cat) {
+    setManageCategory(cat);
+    closeMobileFilterModal();
+};
 
 window.toggleManageSortMenu = function() {
     const menu = document.getElementById('manage-sort-menu');
@@ -2259,27 +2352,24 @@ window.switchAccountTab = function(tabId) {
     const buildModalHTML = () => {
         const av = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
         const firstChar = (state.currentUser.name || 'U')[0].toUpperCase();
-        const vibeKeys = Object.keys(AVATAR_VIBES);
         const iconCategories = Object.keys(AVATAR_ICONS);
 
-        const vibeCards = vibeKeys.map(key => {
-            const v = AVATAR_VIBES[key];
-            const active = pendingVibe === key;
-            const borderColor = active ? 'rgba(244,114,182,0.6)' : 'rgba(255,255,255,0.06)';
-            const bg = active ? 'rgba(236,72,153,0.08)' : 'rgba(255,255,255,0.02)';
-            const shadow = active ? '0 0 28px rgba(236,72,153,0.22),inset 0 0 30px rgba(236,72,153,0.04)' : 'none';
-            const dot = active ? '<div style="position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:#f472b6;box-shadow:0 0 8px #f472b6,0 0 20px rgba(244,114,182,0.6);"></div>' : '';
-            const nameColor = active ? '#f472b6' : '#94a3b8';
-            const nameWeight = active ? '700' : '500';
-            return '<button class="modal-vibe-btn" data-vibe="' + key + '" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:0;padding:0;border-radius:18px;border:1px solid ' + borderColor + ';background:' + bg + ';cursor:pointer;overflow:hidden;transition:all 0.25s;box-shadow:' + shadow + ';">' +
-                '<div style="width:100%;height:76px;background:linear-gradient(150deg,rgba(255,255,255,0.04) 0%,rgba(0,0,0,0.3) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">' +
-                    '<div class="w-12 h-12 rounded-full bg-gradient-to-tr ' + v.gradient + ' flex items-center justify-center" style="box-shadow:0 4px 16px rgba(0,0,0,0.5);z-index:1;">' +
-                        '<i data-lucide="' + v.icon + '" class="w-5 h-5 text-white"></i>' +
+        const vibeCards = Object.entries(AVATAR_VIBES).map(([id, v]) => {
+            const active = pendingVibe === id;
+            const borderClass = active ? 'border-pink-400/60' : 'border-white/5';
+            const bgClass = active ? 'bg-pink-500/10' : 'bg-white/5 hover:bg-white/10';
+            const shadowClass = active ? 'shadow-[0_0_28px_rgba(236,72,153,0.22),inset_0_0_30px_rgba(236,72,153,0.04)]' : 'shadow-none';
+            const dot = active ? '<div class="absolute top-2 right-2 w-1.5 h-1.5 sm:w-[7px] sm:h-[7px] rounded-full bg-pink-400 shadow-[0_0_8px_#f472b6,0_0_20px_rgba(244,114,182,0.6)]"></div>' : '';
+            const nameColor = active ? 'text-pink-400 font-bold' : 'text-slate-400 font-medium';
+            return '<button class="modal-vibe-btn relative flex flex-col items-center gap-0 p-0 rounded-[14px] sm:rounded-2xl border ' + borderClass + ' ' + bgClass + ' cursor-pointer overflow-hidden transition-all duration-300 ' + shadowClass + '" data-vibe="' + id + '">' +
+                '<div class="w-full h-14 sm:h-[76px] bg-gradient-to-br from-white/5 to-black/30 flex items-center justify-center relative overflow-hidden">' +
+                    '<div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-gradient-to-tr ' + v.gradient + ' flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.5)] z-10 transition-transform duration-300 ' + (active ? 'scale-110' : 'scale-100') + '">' +
+                        '<i data-lucide="' + v.icon + '" class="w-4 h-4 sm:w-5 sm:h-5 text-white"></i>' +
                     '</div>' +
                     dot +
                 '</div>' +
-                '<div style="padding:9px 8px 11px;text-align:center;width:100%;border-top:1px solid rgba(255,255,255,0.04);">' +
-                    '<span style="font-size:11px;font-weight:' + nameWeight + ';color:' + nameColor + ';font-family:Space Grotesk,sans-serif;">' + v.name + '</span>' +
+                '<div class="py-1.5 sm:py-2.5 px-2 text-center w-full border-t border-white/5">' +
+                    '<span class="text-[9px] sm:text-[11px] font-space ' + nameColor + '">' + v.name + '</span>' +
                 '</div>' +
             '</button>';
         }).join('');
@@ -2287,25 +2377,23 @@ window.switchAccountTab = function(tabId) {
         const iconGrid = iconCategories.map(category => {
             const btns = AVATAR_ICONS[category].map(opt => {
                 const isActive = pendingIcon === opt.id;
-                const borderColor = isActive ? 'rgba(244,114,182,0.6)' : 'rgba(255,255,255,0.06)';
-                const bg = isActive ? 'linear-gradient(135deg,rgba(236,72,153,0.18),rgba(139,92,246,0.12))' : 'rgba(255,255,255,0.02)';
-                const shadow = isActive ? '0 0 14px rgba(236,72,153,0.3),inset 0 1px 0 rgba(255,255,255,0.1)' : 'none';
-                const transform = isActive ? 'scale(1.06)' : 'scale(1)';
-                const iconColor = isActive ? '#f472b6' : '#475569';
-                const labelColor = isActive ? '#f472b6' : '#475569';
-                const labelWeight = isActive ? '700' : '500';
-                return '<button class="modal-icon-btn" data-icon="' + opt.id + '" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:14px;border:1px solid ' + borderColor + ';background:' + bg + ';cursor:pointer;transition:all 0.18s;box-shadow:' + shadow + ';transform:' + transform + ';">' +
-                    '<i data-lucide="' + opt.icon + '" style="width:20px;height:20px;color:' + iconColor + ';"></i>' +
-                    '<span style="font-size:8px;font-weight:' + labelWeight + ';color:' + labelColor + ';font-family:Space Grotesk,sans-serif;line-height:1;">' + opt.label + '</span>' +
+                const borderClass = isActive ? 'border-pink-400/60' : 'border-white/5';
+                const bgClass = isActive ? 'bg-gradient-to-br from-pink-500/20 to-purple-500/10' : 'bg-white/5 hover:bg-white/10';
+                const shadowClass = isActive ? 'shadow-[0_0_14px_rgba(236,72,153,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]' : 'shadow-none';
+                const transformClass = isActive ? 'scale-[1.06]' : 'scale-100';
+                const colorClass = isActive ? 'text-pink-400 font-bold' : 'text-slate-500 font-medium';
+                return '<button class="modal-icon-btn flex flex-col items-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border ' + borderClass + ' ' + bgClass + ' ' + shadowClass + ' cursor-pointer transition-all duration-200 ' + transformClass + '" data-icon="' + opt.id + '">' +
+                    '<i data-lucide="' + opt.icon + '" class="w-4 h-4 sm:w-5 sm:h-5 ' + (isActive ? 'text-pink-400' : 'text-slate-400') + '"></i>' +
+                    '<span class="text-[7px] sm:text-[8px] leading-none text-center font-space ' + colorClass + '">' + opt.label + '</span>' +
                 '</button>';
             }).join('');
-            return '<div style="margin-bottom:20px;">' +
-                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">' +
-                    '<div style="height:1px;width:16px;background:linear-gradient(90deg,rgba(244,114,182,0.5),transparent);"></div>' +
-                    '<p style="font-size:8px;font-weight:700;color:rgba(244,114,182,0.5);text-transform:uppercase;letter-spacing:0.15em;margin:0;">' + category + '</p>' +
-                    '<div style="height:1px;flex:1;background:linear-gradient(90deg,rgba(244,114,182,0.1),transparent);"></div>' +
+            return '<div class="mb-4 sm:mb-5">' +
+                '<div class="flex items-center gap-2 mb-2 sm:mb-3">' +
+                    '<div class="h-px w-4 bg-gradient-to-r from-pink-400/50 to-transparent"></div>' +
+                    '<p class="text-[8px] font-bold text-pink-400/50 uppercase tracking-widest m-0">' + category + '</p>' +
+                    '<div class="h-px flex-1 bg-gradient-to-r from-pink-400/10 to-transparent"></div>' +
                 '</div>' +
-                '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;">' + btns + '</div>' +
+                '<div class="grid grid-cols-4 sm:grid-cols-5 gap-1.5 sm:gap-2">' + btns + '</div>' +
             '</div>';
         }).join('');
 
@@ -2314,63 +2402,65 @@ window.switchAccountTab = function(tabId) {
             : '<span style="font-size:36px;font-weight:900;font-family:Space Grotesk,sans-serif;">' + firstChar + '</span>';
 
         return `
-        <div id="avatar-modal" style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Space Grotesk',sans-serif;">
-            <div id="avatar-modal-backdrop" style="position:absolute;inset:0;background:rgba(2,1,10,0.94);backdrop-filter:blur(24px) saturate(160%);"></div>
-            <div style="position:relative;z-index:1;width:100%;max-width:780px;background:linear-gradient(145deg,#0e0c1a 0%,#0b0917 50%,#0d0b1c 100%);border-radius:28px;box-shadow:0 40px 100px rgba(0,0,0,0.9),0 0 0 1px rgba(255,255,255,0.07),inset 0 1px 0 rgba(255,255,255,0.07);display:flex;flex-direction:column;max-height:90vh;overflow:hidden;">
-                <div style="height:2px;background:linear-gradient(90deg,transparent 0%,rgba(236,72,153,0.7) 25%,rgba(139,92,246,0.9) 50%,rgba(59,130,246,0.7) 75%,transparent 100%);flex-shrink:0;"></div>
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 28px 18px;flex-shrink:0;">
-                    <div style="display:flex;align-items:center;gap:14px;">
-                        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(139,92,246,0.2));border:1px solid rgba(236,72,153,0.3);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(236,72,153,0.2),inset 0 1px 0 rgba(255,255,255,0.1);">
-                            <i data-lucide="sparkles" style="width:20px;height:20px;color:#f472b6;"></i>
+        <div id="avatar-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-5 font-space">
+            <div id="avatar-modal-backdrop" class="absolute inset-0 bg-[#02010a]/95 backdrop-blur-2xl"></div>
+            <div class="relative z-10 w-full max-w-[780px] bg-gradient-to-br from-[#0e0c1a] via-[#0b0917] to-[#0d0b1c] rounded-3xl shadow-[0_40px_100px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.07),inset_0_1px_0_rgba(255,255,255,0.07)] flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden">
+                <div class="h-[2px] shrink-0 bg-gradient-to-r from-transparent via-pink-500/70 via-purple-500/90 via-blue-500/70 to-transparent"></div>
+                <div class="flex items-start sm:items-center justify-between p-5 sm:p-6 sm:px-7 shrink-0 gap-3">
+                    <div class="flex items-center gap-3 sm:gap-4">
+                        <div class="hidden sm:flex w-11 h-11 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 items-center justify-center shadow-[0_0_20px_rgba(236,72,153,0.2),inset_0_1px_0_rgba(255,255,255,0.1)]">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-pink-400"></i>
                         </div>
                         <div>
-                            <div style="display:flex;align-items:center;gap:8px;">
-                                <h3 style="font-size:18px;font-weight:800;color:#fff;margin:0;letter-spacing:-0.3px;">Customise Profile</h3>
-                                <span style="font-size:9px;font-weight:700;color:#f472b6;background:rgba(236,72,153,0.15);border:1px solid rgba(236,72,153,0.3);padding:2px 7px;border-radius:20px;letter-spacing:0.05em;text-transform:uppercase;">LIVE</span>
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                                <h3 class="text-base sm:text-lg font-extrabold text-white m-0 tracking-tight">Customise Profile</h3>
+                                <span class="text-[9px] font-bold text-pink-400 bg-pink-500/15 border border-pink-500/30 px-2 py-0.5 rounded-full tracking-widest uppercase w-max">LIVE</span>
                             </div>
-                            <p style="font-size:11px;color:#64748b;margin:3px 0 0;letter-spacing:0.01em;">Shape your avatar with a colour vibe and personal icon</p>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 m-0 mt-1 sm:mt-0.5">Shape your avatar with a colour vibe and personal icon</p>
                         </div>
                     </div>
-                    <button id="avatar-modal-close" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#64748b;cursor:pointer;">
-                        <i data-lucide="x" style="width:16px;height:16px;"></i>
+                    <button id="avatar-modal-close" class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 cursor-pointer hover:bg-white/10 transition-colors">
+                        <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
-                <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);margin:0 28px;flex-shrink:0;"></div>
-                <div style="display:flex;flex:1;overflow:hidden;min-height:0;">
+                <div class="h-[1px] shrink-0 mx-5 sm:mx-7 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+                <div class="flex flex-col sm:flex-row flex-1 overflow-hidden min-h-0">
                     <!-- Preview column -->
-                    <div style="width:210px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px 20px;border-right:1px solid rgba(255,255,255,0.05);background:rgba(4,3,14,0.6);position:relative;">
-                        <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.012) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>
-                        <div style="font-size:8px;color:#475569;text-transform:uppercase;letter-spacing:0.15em;font-weight:700;position:relative;">Live Preview</div>
-                        <div style="position:relative;">
-                            <div style="position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,rgba(236,72,153,0.35),rgba(139,92,246,0.35),rgba(59,130,246,0.35),rgba(236,72,153,0.35));filter:blur(6px);opacity:0.7;"></div>
-                            <div id="modal-avatar-ring" class="w-24 h-24 rounded-full bg-gradient-to-tr ${av.gradient} flex items-center justify-center text-white border-2 border-white/10" style="position:relative;box-shadow:0 0 40px rgba(236,72,153,0.2);">
+                    <div class="w-full sm:w-[210px] shrink-0 flex sm:flex-col items-center justify-start sm:justify-center gap-4 sm:gap-4 p-5 sm:p-7 border-b sm:border-b-0 sm:border-r border-white/5 bg-[#04030e]/60 relative">
+                        <div class="absolute inset-0 opacity-50 sm:opacity-100 pointer-events-none" style="background-image:radial-gradient(rgba(255,255,255,0.02) 1px,transparent 1px);background-size:22px 22px;"></div>
+                        <div class="hidden sm:block text-[8px] text-slate-500 uppercase tracking-widest font-bold relative">Live Preview</div>
+                        <div class="relative shrink-0">
+                            <div class="absolute -inset-1.5 rounded-full bg-[conic-gradient(from_0deg,rgba(236,72,153,0.35),rgba(139,92,246,0.35),rgba(59,130,246,0.35),rgba(236,72,153,0.35))] blur-md opacity-70"></div>
+                            <div id="modal-avatar-ring" class="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr ${av.gradient} flex items-center justify-center text-white border-2 border-white/10 relative shadow-[0_0_40px_rgba(236,72,153,0.2)]">
                                 ${previewInner}
                             </div>
                         </div>
-                        <div style="text-align:center;position:relative;">
-                            <p style="font-size:14px;font-weight:800;color:#fff;margin:0;">${state.currentUser.name || 'User'}</p>
-                            <p id="modal-preview-vibe" style="font-size:9px;font-weight:700;color:#f472b6;text-transform:uppercase;letter-spacing:0.12em;margin:6px 0 0;background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.2);padding:3px 10px;border-radius:20px;display:inline-block;">${av.name}</p>
+                        <div class="text-left sm:text-center relative flex-1 sm:flex-none">
+                            <p class="text-sm sm:text-sm font-extrabold text-white m-0">${state.currentUser.name || 'User'}</p>
+                            <p id="modal-preview-vibe" class="text-[9px] font-bold text-pink-400 uppercase tracking-widest mt-1.5 bg-pink-500/10 border border-pink-500/20 px-2.5 py-1 rounded-full inline-block m-0">${av.name}</p>
                         </div>
-                        <button id="avatar-modal-apply" style="width:100%;background:linear-gradient(135deg,#be185d,#7c3aed);color:#fff;font-weight:800;font-size:12px;padding:12px;border-radius:14px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:0 6px 24px rgba(190,24,93,0.4),inset 0 1px 0 rgba(255,255,255,0.15);letter-spacing:0.04em;">✦ Apply Changes</button>
-                        <button id="avatar-modal-clear" style="width:100%;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);color:#475569;font-size:10px;padding:9px;border-radius:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif;">× Clear Icon</button>
+                        <div class="flex flex-col gap-2 shrink-0 relative z-10 w-28 sm:w-full">
+                            <button id="avatar-modal-apply" class="w-full bg-gradient-to-br from-pink-700 to-purple-600 text-white font-extrabold text-[10px] sm:text-xs py-2 sm:py-3 rounded-xl border-none cursor-pointer shadow-[0_6px_24px_rgba(190,24,93,0.4),inset_0_1px_0_rgba(255,255,255,0.15)] tracking-wide">✦ Apply</button>
+                            <button id="avatar-modal-clear" class="w-full bg-white/5 border border-dashed border-white/10 text-slate-400 text-[9px] sm:text-[10px] py-1.5 sm:py-2.5 rounded-xl cursor-pointer">× Clear Icon</button>
+                        </div>
                     </div>
                     <!-- Options panel -->
-                    <div style="flex:1;overflow-y:auto;min-width:0;" class="scrollbar-thin">
-                        <div style="position:sticky;top:0;z-index:10;padding:16px 24px 12px;background:linear-gradient(to bottom,#0e0c1a 60%,transparent);backdrop-filter:blur(10px);">
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:4px;">
-                                <button id="modal-tab-vibe" style="padding:9px 12px;border-radius:10px;background:linear-gradient(135deg,rgba(236,72,153,0.25),rgba(139,92,246,0.25));color:#f472b6;border:1px solid rgba(236,72,153,0.35);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.04em;">🎨 Colour Vibe</button>
-                                <button id="modal-tab-icon" style="padding:9px 12px;border-radius:10px;background:none;color:#475569;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;">🪄 Avatar Icon</button>
+                    <div class="flex-1 overflow-y-auto min-w-0 scrollbar-thin relative">
+                        <div class="sticky top-0 z-10 px-5 sm:px-6 pt-4 sm:pt-4 pb-3 bg-gradient-to-b from-[#0e0c1a] to-transparent backdrop-blur-md">
+                            <div class="grid grid-cols-2 gap-1 bg-white/5 border border-white/10 rounded-2xl p-1">
+                                <button id="modal-tab-vibe" class="py-2.5 px-3 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 text-pink-400 border border-pink-500/30 cursor-pointer text-[10px] sm:text-[11px] font-bold tracking-wide transition-all">🎨 Colour Vibe</button>
+                                <button id="modal-tab-icon" class="py-2.5 px-3 rounded-xl bg-transparent text-slate-400 border border-transparent cursor-pointer text-[10px] sm:text-[11px] font-semibold transition-all hover:bg-white/5">🪄 Avatar Icon</button>
                             </div>
                         </div>
-                        <div id="modal-panel-vibe" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 24px 24px;">
+                        <div id="modal-panel-vibe" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 px-5 sm:px-6 pb-6">
                             ${vibeCards}
                         </div>
-                        <div id="modal-panel-icon" style="display:none;padding:4px 24px 24px;">
+                        <div id="modal-panel-icon" class="px-5 sm:px-6 pb-6 hidden">
                             ${iconGrid}
                         </div>
                     </div>
                 </div>
-                <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.2),transparent);flex-shrink:0;"></div>
+                <div class="h-[1px] shrink-0 bg-gradient-to-r from-transparent via-purple-500/20 to-transparent"></div>
             </div>
         </div>`;
     };
@@ -2448,14 +2538,14 @@ window.switchAccountTab = function(tabId) {
             modalTabVibe.addEventListener('click', () => {
                 modalPanelVibe.style.display = 'grid';
                 modalPanelIcon.style.display = 'none';
-                modalTabVibe.style.cssText = 'flex:1;font-size:10px;font-weight:700;padding:6px;border-radius:8px;background:rgba(236,72,153,0.2);color:#f472b6;border:1px solid rgba(236,72,153,0.3);cursor:pointer;font-family:Space Grotesk,sans-serif;';
-                modalTabIcon.style.cssText = 'flex:1;font-size:10px;font-weight:700;padding:6px;border-radius:8px;background:none;color:#64748b;border:none;cursor:pointer;font-family:Space Grotesk,sans-serif;';
+                modalTabVibe.className = 'py-2.5 px-3 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 text-pink-400 border border-pink-500/30 cursor-pointer text-[10px] sm:text-[11px] font-bold tracking-wide transition-all';
+                modalTabIcon.className = 'py-2.5 px-3 rounded-xl bg-transparent text-slate-400 border border-transparent cursor-pointer text-[10px] sm:text-[11px] font-semibold transition-all hover:bg-white/5';
             });
             modalTabIcon.addEventListener('click', () => {
                 modalPanelVibe.style.display = 'none';
                 modalPanelIcon.style.display = 'block';
-                modalTabIcon.style.cssText = 'flex:1;font-size:10px;font-weight:700;padding:6px;border-radius:8px;background:rgba(236,72,153,0.2);color:#f472b6;border:1px solid rgba(236,72,153,0.3);cursor:pointer;font-family:Space Grotesk,sans-serif;';
-                modalTabVibe.style.cssText = 'flex:1;font-size:10px;font-weight:700;padding:6px;border-radius:8px;background:none;color:#64748b;border:none;cursor:pointer;font-family:Space Grotesk,sans-serif;';
+                modalTabIcon.className = 'py-2.5 px-3 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 text-pink-400 border border-pink-500/30 cursor-pointer text-[10px] sm:text-[11px] font-bold tracking-wide transition-all';
+                modalTabVibe.className = 'py-2.5 px-3 rounded-xl bg-transparent text-slate-400 border border-transparent cursor-pointer text-[10px] sm:text-[11px] font-semibold transition-all hover:bg-white/5';
             });
         }
 
@@ -2464,7 +2554,7 @@ window.switchAccountTab = function(tabId) {
             const ring = document.getElementById('modal-avatar-ring');
             if (!ring) return;
             const vibe = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
-            ring.className = `w-24 h-24 rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-white shadow-[0_0_40px_rgba(236,72,153,0.3)] border-2 border-white/10`;
+            ring.className = `w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-white border-2 border-white/10 relative shadow-[0_0_40px_rgba(236,72,153,0.2)]`;
             ring.innerHTML = pendingIcon
                 ? `<i data-lucide="${pendingIcon}" class="w-11 h-11"></i>`
                 : `<span class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
@@ -2480,8 +2570,19 @@ window.switchAccountTab = function(tabId) {
                 updatePreview();
                 document.querySelectorAll('.modal-vibe-btn').forEach(b => {
                     const isNow = b.getAttribute('data-vibe') === pendingVibe;
-                    b.style.border = `1px solid ${isNow ? 'rgba(236,72,153,0.6)' : 'rgba(255,255,255,0.08)'}`;
-                    b.style.background = isNow ? 'rgba(236,72,153,0.1)' : 'rgba(255,255,255,0.02)';
+                    const shadowClass = isNow ? 'shadow-[0_0_28px_rgba(236,72,153,0.22),inset_0_0_30px_rgba(236,72,153,0.04)]' : 'shadow-none';
+                    b.className = 'modal-vibe-btn relative flex flex-col items-center gap-0 p-0 rounded-[14px] sm:rounded-2xl border cursor-pointer overflow-hidden transition-all duration-300 ' + 
+                        (isNow ? 'border-pink-400/60 bg-pink-500/10 ' + shadowClass : 'border-white/5 bg-white/5 hover:bg-white/10 shadow-none');
+                    const innerWrapper = b.querySelector('.w-full.h-14');
+                    const dot = innerWrapper ? innerWrapper.querySelector('.absolute.top-2') : null;
+                    if (isNow && !dot && innerWrapper) {
+                        innerWrapper.insertAdjacentHTML('beforeend', '<div class="absolute top-2 right-2 w-1.5 h-1.5 sm:w-[7px] sm:h-[7px] rounded-full bg-pink-400 shadow-[0_0_8px_#f472b6,0_0_20px_rgba(244,114,182,0.6)]"></div>');
+                    }
+                    if (!isNow && dot) dot.remove();
+                    const ring = b.querySelector('.rounded-full.bg-gradient-to-tr');
+                    if (ring) ring.className = ring.className.replace(/scale-\d+/, isNow ? 'scale-110' : 'scale-100');
+                    const text = b.querySelector('span');
+                    if (text) text.className = 'text-[9px] sm:text-[11px] font-space ' + (isNow ? 'text-pink-400 font-bold' : 'text-slate-400 font-medium');
                 });
             });
         });
@@ -2493,15 +2594,12 @@ window.switchAccountTab = function(tabId) {
                 updatePreview();
                 document.querySelectorAll('.modal-icon-btn').forEach(b => {
                     const isNow = b.getAttribute('data-icon') === pendingIcon;
-                    b.style.border = `1px solid ${isNow ? 'rgba(236,72,153,0.7)' : 'rgba(255,255,255,0.08)'}`;
-                    b.style.background = isNow ? 'rgba(236,72,153,0.18)' : 'rgba(255,255,255,0.02)';
-                    b.style.boxShadow = isNow ? '0 0 12px rgba(236,72,153,0.35)' : 'none';
-                    b.style.transform = isNow ? 'scale(1.06)' : 'scale(1)';
-                    // Lucide replaces <i> with <svg> — target both
+                    b.className = 'modal-icon-btn flex flex-col items-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border cursor-pointer transition-all duration-200 ' + 
+                        (isNow ? 'border-pink-400/60 bg-gradient-to-br from-pink-500/20 to-purple-500/10 shadow-[0_0_14px_rgba(236,72,153,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] scale-[1.06]' : 'border-white/5 bg-white/5 hover:bg-white/10 shadow-none scale-100');
                     const iconEl = b.querySelector('svg') || b.querySelector('i');
-                    if (iconEl) iconEl.style.color = isNow ? '#f472b6' : '#64748b';
+                    if (iconEl) iconEl.className = 'w-4 h-4 sm:w-5 sm:h-5 ' + (isNow ? 'text-pink-400' : 'text-slate-400');
                     const labelEl = b.querySelector('span');
-                    if (labelEl) labelEl.style.color = isNow ? '#f472b6' : '#64748b';
+                    if (labelEl) labelEl.className = 'text-[7px] sm:text-[8px] leading-none text-center font-space ' + (isNow ? 'text-pink-400 font-bold' : 'text-slate-500 font-medium');
                 });
             });
         });
@@ -2512,8 +2610,11 @@ window.switchAccountTab = function(tabId) {
                 pendingIcon = null;
                 updatePreview();
                 document.querySelectorAll('.modal-icon-btn').forEach(b => {
-                    b.style.border = '1px solid rgba(255,255,255,0.08)';
-                    b.style.background = 'rgba(255,255,255,0.02)';
+                    b.className = 'modal-icon-btn flex flex-col items-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 shadow-none scale-100 cursor-pointer transition-all duration-200';
+                    const iconEl = b.querySelector('svg') || b.querySelector('i');
+                    if (iconEl) iconEl.className = 'w-4 h-4 sm:w-5 sm:h-5 text-slate-400';
+                    const labelEl = b.querySelector('span');
+                    if (labelEl) labelEl.className = 'text-[7px] sm:text-[8px] leading-none text-center font-space text-slate-500 font-medium';
                 });
             });
         }
@@ -2930,13 +3031,17 @@ function showModernLogoutOverlay(type) {
         setTimeout(() => {
             clearInterval(logInterval);
             closeOverlay();
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (diagnosticInterval) {
                     clearInterval(diagnosticInterval);
                     diagnosticInterval = null;
                 }
                 if (isSupabaseConfigured) {
-                    supabaseClient.auth.signOut().catch(e => console.error("Sign out error:", e));
+                    try {
+                        await supabaseClient.auth.signOut();
+                    } catch (e) {
+                        console.error("Sign out error:", e);
+                    }
                 }
                 
                 if (isDelete) {
@@ -2953,7 +3058,7 @@ function showModernLogoutOverlay(type) {
                     localStorage.setItem('subsentry_registered_users', JSON.stringify(updatedUsers));
                 }
                 
-                localStorage.removeItem('subsentry_state');
+                sessionStorage.clear();
                 document.documentElement.classList.remove('is-logged-in'); 
                 
                 state = {
@@ -3174,10 +3279,12 @@ async function signInWithGmail() {
     localStorage.setItem('auth_mode_redirect', authMode);
     if (isSupabaseConfigured) {
         try {
+            let basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+            if (basePath === '') basePath = '/';
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + window.location.pathname,
+                    redirectTo: window.location.origin + basePath + 'dashboard.html',
                     queryParams: {
                         prompt: 'select_account' // Always show account chooser
                     }
@@ -3192,7 +3299,8 @@ async function signInWithGmail() {
     } else {
         // Simulated mock redirect to our Google Auth mock page
         let basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-        window.location.href = window.location.origin + basePath + 'google-auth.html?redirect_uri=' + encodeURIComponent(window.location.pathname) + '&auth_mode=' + encodeURIComponent(authMode);
+        if (basePath === '') basePath = '/';
+        window.location.href = window.location.origin + basePath + 'google-auth.html?redirect_uri=' + encodeURIComponent(basePath + 'dashboard.html') + '&auth_mode=' + encodeURIComponent(authMode);
     }
 }
 
