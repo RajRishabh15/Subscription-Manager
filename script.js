@@ -462,7 +462,9 @@ function renderPillNav() {
         const activeAvatarVibe = AVATAR_VIBES[avatarName] || AVATAR_VIBES.nebula;
         avatarEl.style.background = '';
         avatarEl.className = `w-full h-full rounded-full flex items-center justify-center text-xs font-black font-space select-none bg-gradient-to-tr ${activeAvatarVibe.gradient}`;
-        if (state.currentUser.avatarIcon) {
+        if (state.currentUser.avatarBase64) {
+            avatarEl.innerHTML = `<img src="${state.currentUser.avatarBase64}" class="w-full h-full object-cover rounded-full">`;
+        } else if (state.currentUser.avatarIcon) {
             avatarEl.innerHTML = `<i data-lucide="${state.currentUser.avatarIcon}" class="w-4 h-4"></i>`;
             lucide.createIcons({ nodes: [avatarEl] });
         } else {
@@ -1860,10 +1862,14 @@ function syncAvatarUI() {
     if (ring) {
         const vibe = AVATAR_VIBES[state.currentUser.avatar || 'nebula'] || AVATAR_VIBES.nebula;
         ring.className = `absolute inset-[3px] rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl`;
-        ring.innerHTML = state.currentUser.avatarIcon
-            ? `<i id="account-large-avatar-icon" data-lucide="${state.currentUser.avatarIcon}" class="w-11 h-11"></i>`
-            : `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
-        lucide.createIcons({ nodes: [ring] });
+        if (state.currentUser.avatarBase64) {
+            ring.innerHTML = `<img src="${state.currentUser.avatarBase64}" class="w-full h-full object-cover rounded-full">`;
+        } else if (state.currentUser.avatarIcon) {
+            ring.innerHTML = `<i id="account-large-avatar-icon" data-lucide="${state.currentUser.avatarIcon}" class="w-11 h-11"></i>`;
+            lucide.createIcons({ nodes: [ring] });
+        } else {
+            ring.innerHTML = `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
+        }
     }
 
     // 4. Update left profile card linked sources count
@@ -2344,6 +2350,7 @@ window.switchAccountTab = function(tabId) {
 
     let pendingVibe = state.currentUser.avatar || 'nebula';
     let pendingIcon = state.currentUser.avatarIcon || null;
+    let pendingCustomImage = state.currentUser.avatarBase64 || null;
 
     const curAvatar = state.currentUser.avatar || 'nebula';
     const activeAvatarVibe = AVATAR_VIBES[curAvatar] || AVATAR_VIBES.nebula;
@@ -2397,9 +2404,11 @@ window.switchAccountTab = function(tabId) {
             '</div>';
         }).join('');
 
-        const previewInner = pendingIcon
-            ? '<i data-lucide="' + pendingIcon + '" class="w-11 h-11"></i>'
-            : '<span style="font-size:36px;font-weight:900;font-family:Space Grotesk,sans-serif;">' + firstChar + '</span>';
+        const previewInner = pendingCustomImage
+            ? `<img src="${pendingCustomImage}" class="w-full h-full object-cover rounded-full">`
+            : (pendingIcon
+                ? '<i data-lucide="' + pendingIcon + '" class="w-11 h-11"></i>'
+                : '<span style="font-size:36px;font-weight:900;font-family:Space Grotesk,sans-serif;">' + firstChar + '</span>');
 
         return `
         <div id="avatar-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-5 font-space">
@@ -2441,7 +2450,11 @@ window.switchAccountTab = function(tabId) {
                         </div>
                         <div class="flex flex-col gap-2 shrink-0 relative z-10 w-28 sm:w-full">
                             <button id="avatar-modal-apply" class="w-full bg-gradient-to-br from-pink-700 to-purple-600 text-white font-extrabold text-[10px] sm:text-xs py-2 sm:py-3 rounded-xl border-none cursor-pointer shadow-[0_6px_24px_rgba(190,24,93,0.4),inset_0_1px_0_rgba(255,255,255,0.15)] tracking-wide">✦ Apply</button>
-                            <button id="avatar-modal-clear" class="w-full bg-white/5 border border-dashed border-white/10 text-slate-400 text-[9px] sm:text-[10px] py-1.5 sm:py-2.5 rounded-xl cursor-pointer">× Clear Icon</button>
+                            <div class="flex gap-1.5 w-full">
+                                <button id="avatar-modal-upload-btn" onclick="document.getElementById('avatar-modal-upload').click()" class="flex-1 bg-white/5 border border-dashed border-white/10 text-slate-400 hover:text-white text-[9px] sm:text-[10px] py-1.5 sm:py-2.5 rounded-xl cursor-pointer transition-colors flex items-center justify-center gap-1"><i data-lucide="image" class="w-3 h-3"></i> Upload</button>
+                                <button id="avatar-modal-clear" class="flex-1 bg-white/5 border border-dashed border-white/10 text-slate-400 hover:text-white text-[9px] sm:text-[10px] py-1.5 sm:py-2.5 rounded-xl cursor-pointer transition-colors flex items-center justify-center gap-1"><i data-lucide="x" class="w-3 h-3"></i> Clear</button>
+                            </div>
+                            <input type="file" id="avatar-modal-upload" accept="image/*" class="hidden">
                         </div>
                     </div>
                     <!-- Options panel -->
@@ -2469,6 +2482,7 @@ window.switchAccountTab = function(tabId) {
     const openModal = () => {
         pendingVibe = state.currentUser.avatar || 'nebula';
         pendingIcon = state.currentUser.avatarIcon || null;
+        pendingCustomImage = state.currentUser.avatarBase64 || null;
         // Remove any existing modal
         const existing = document.getElementById('avatar-modal');
         if (existing) existing.remove();
@@ -2555,10 +2569,16 @@ window.switchAccountTab = function(tabId) {
             if (!ring) return;
             const vibe = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
             ring.className = `w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-white border-2 border-white/10 relative shadow-[0_0_40px_rgba(236,72,153,0.2)]`;
-            ring.innerHTML = pendingIcon
-                ? `<i data-lucide="${pendingIcon}" class="w-11 h-11"></i>`
-                : `<span class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
-            lucide.createIcons({ nodes: [ring] });
+            
+            if (pendingCustomImage) {
+                ring.innerHTML = `<img src="${pendingCustomImage}" class="w-full h-full object-cover rounded-full">`;
+            } else if (pendingIcon) {
+                ring.innerHTML = `<i data-lucide="${pendingIcon}" class="w-11 h-11"></i>`;
+                lucide.createIcons({ nodes: [ring] });
+            } else {
+                ring.innerHTML = `<span class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
+            }
+            
             const vibeLabel = document.getElementById('modal-preview-vibe');
             if (vibeLabel) vibeLabel.textContent = vibe.name;
         };
@@ -2608,6 +2628,7 @@ window.switchAccountTab = function(tabId) {
         if (clearBtn) {
             clearBtn.addEventListener('click', () => {
                 pendingIcon = null;
+                pendingCustomImage = null;
                 updatePreview();
                 document.querySelectorAll('.modal-icon-btn').forEach(b => {
                     b.className = 'modal-icon-btn flex flex-col items-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 shadow-none scale-100 cursor-pointer transition-all duration-200';
@@ -2618,39 +2639,55 @@ window.switchAccountTab = function(tabId) {
                 });
             });
         }
+        
+        // Upload Custom Image
+        const uploadInput = document.getElementById('avatar-modal-upload');
+        if (uploadInput) {
+            uploadInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        pendingCustomImage = evt.target.result;
+                        pendingIcon = null;
+                        updatePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
 
         // Apply
         if (applyBtn) {
             applyBtn.addEventListener('click', () => {
                 state.currentUser.avatar = pendingVibe;
                 state.currentUser.avatarIcon = pendingIcon;
+                state.currentUser.avatarBase64 = pendingCustomImage;
                 saveStateToStorage();
-                // Sync account avatar card
-                const ring = document.getElementById('account-avatar-ring');
-                if (ring) {
-                    const vibe = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
-                    ring.className = `absolute inset-[3px] rounded-full bg-gradient-to-tr ${vibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl`;
-                    ring.innerHTML = pendingIcon
-                        ? `<i id="account-large-avatar-icon" data-lucide="${pendingIcon}" class="w-11 h-11"></i>`
-                        : `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
-                    lucide.createIcons({ nodes: [ring] });
-                }
+                
+                syncAvatarUI();
                 
                 // Sync register avatar preview
                 const regRing = document.getElementById('register-avatar-preview');
                 if (regRing) {
                     const vibe = AVATAR_VIBES[pendingVibe] || AVATAR_VIBES.nebula;
-                    regRing.className = `w-14 h-14 rounded-full bg-gradient-to-tr ${vibe.gradient} border border-white/10 flex items-center justify-center text-white shadow-lg flex-shrink-0`;
-                    regRing.innerHTML = pendingIcon
-                        ? `<i data-lucide="${pendingIcon}" class="w-7 h-7 text-white"></i>`
-                        : `<span class="text-xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
-                    lucide.createIcons({ nodes: [regRing] });
+                    regRing.className = `w-14 h-14 rounded-full bg-gradient-to-tr ${vibe.gradient} border border-white/10 flex items-center justify-center text-white shadow-lg flex-shrink-0 relative overflow-hidden`;
+                    if (pendingCustomImage) {
+                        regRing.innerHTML = `<img src="${pendingCustomImage}" class="w-full h-full object-cover">`;
+                    } else if (pendingIcon) {
+                        regRing.innerHTML = `<i data-lucide="${pendingIcon}" class="w-7 h-7 text-white"></i>`;
+                        lucide.createIcons({ nodes: [regRing] });
+                    } else {
+                        regRing.innerHTML = `<span class="text-xl font-black font-space">${(state.currentUser.name || 'U')[0].toUpperCase()}</span>`;
+                    }
                     if (typeof selectedRegisterAvatar !== 'undefined') {
                         selectedRegisterAvatar = pendingVibe;
                     }
+                    if (typeof selectedRegisterIcon !== 'undefined') {
+                        selectedRegisterIcon = pendingIcon;
+                    }
                 }
 
-                syncAvatarUI();
                 closeModal();
             });
         }
