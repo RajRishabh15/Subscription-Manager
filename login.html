@@ -156,10 +156,10 @@
         <!-- 1. LANDING & SCAN VIEW -->
         <section id="scan-view" class="min-h-screen relative flex flex-col items-center">
             <!-- TOP NAVIGATION HEADER -->
-            <!-- TopAppBar Pill Nav -->
-            <header
-                class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] max-w-2xl z-50 transition-all duration-700 nav-hidden bg-[#151b2d]/80 backdrop-blur-[40px] border border-white/30 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_40px_rgba(137,206,255,0.1)]"
-                id="main-nav">
+            <!-- TopAppBar -->
+    <header
+        class="fixed top-2 md:top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] max-w-2xl z-50 transition-all duration-700 nav-hidden bg-[#151b2d]/80 backdrop-blur-[40px] border border-white/30 rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_40px_rgba(137,206,255,0.1)]"
+        id="main-nav">
                 <div class="flex justify-between items-center px-4 sm:px-8 py-3 sm:py-4">
                     <div class="flex items-center gap-2 sm:gap-3">
                         <img src="favicon.png" alt="SubEasy"
@@ -659,7 +659,7 @@
         <section id="dashboard-view" class="hidden flex-grow flex flex-col">
 
             <!-- FLOATING NAV PILL BAR CONTAINER -->
-            <div id="nav-container" class="fixed top-5 left-0 right-0 px-4 z-40 flex justify-center"></div>
+            <div id="nav-container" class="fixed top-1 md:top-5 left-0 right-0 px-2 sm:px-4 z-40 flex justify-center w-full"></div>
             <!-- Hidden metadata endpoints for JS updates compatibility -->
             <div class="hidden">
                 <span id="user-primary-phone">+91 00000 00000</span>
@@ -668,7 +668,7 @@
             </div>
 
             <!-- Content Area - Extra Padding Top to clear floating bar -->
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 flex-grow w-full">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 md:pt-28 pb-20 md:pb-12 flex-grow w-full">
 
                 <!-- TAB ZONE: HOME -->
                 <div id="tab-content-home" class="tab-pane space-y-8">
