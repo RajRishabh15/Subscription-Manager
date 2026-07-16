@@ -87,7 +87,10 @@
     <!-- Prevent Login Flash -->
     <script>
         try {
-            const saved = localStorage.getItem('subsentry_state');
+            // Clean up old localStorage state if it exists from previous versions
+            localStorage.removeItem('subsentry_state');
+            
+            const saved = sessionStorage.getItem('subsentry_state');
             if (saved && JSON.parse(saved).isLoggedIn) {
                 document.documentElement.classList.add('is-logged-in');
             }

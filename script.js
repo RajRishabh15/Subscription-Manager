@@ -305,6 +305,7 @@ function initAppView() {
     applyTheme(state.preferences.theme || 'cosmic');
     
     if (state.isLoggedIn) {
+        document.documentElement.classList.add('is-logged-in');
         scanView.classList.add('hidden');
         dashboardView.classList.remove('hidden');
         
@@ -319,6 +320,7 @@ function initAppView() {
         
         switchTab('home');
     } else {
+        document.documentElement.classList.remove('is-logged-in');
         scanView.classList.remove('hidden');
         dashboardView.classList.add('hidden');
         
