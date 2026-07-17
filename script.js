@@ -2100,8 +2100,9 @@ function renderAccountTab() {
     const html = `
         <!-- Page Header -->
         <div class="mb-6 md:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-3 px-2 md:px-0">
-            <div>
-                <h1 class="text-3xl md:text-[40px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-purple-400 to-indigo-400 tracking-tight mb-1" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;">Account</h1>
+            <div class="flex flex-col">
+                <h1 class="text-[38px] md:text-[48px] font-extrabold tracking-tight leading-none" style="font-family: 'Plus Jakarta Sans', 'Outfit', 'Inter', 'SF Pro Display', -apple-system, sans-serif; background: linear-gradient(to right, #8b80f9, #cf7bfe, #20d2eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; padding-bottom: 2px;">Account</h1>
+                <p class="text-[14px] md:text-[15px] font-medium text-white/50 mt-1" style="font-family: 'Plus Jakarta Sans', 'Outfit', 'Inter', 'SF Pro Text', -apple-system, sans-serif;">and other settings</p>
             </div>
             <div id="account-save-indicator" class="hidden self-start md:self-auto items-center gap-1.5 text-xs text-white font-medium bg-emerald-500/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg">
                 <i data-lucide="check" class="w-4 h-4"></i> Saved
@@ -2499,36 +2500,36 @@ window.openProfileEditModal = function() {
 
     const html = `
         <div id="profile-edit-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-5">
-            <div class="absolute inset-0 bg-[#02010a]/80 backdrop-blur-md" id="profile-edit-backdrop"></div>
-            <div class="relative z-10 w-full max-w-[400px] bg-[#1c1c1e] rounded-[24px] shadow-2xl flex flex-col overflow-hidden border border-white/10" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
-                <div class="flex items-center justify-between p-5 border-b border-white/[0.08]">
-                    <h2 class="text-[17px] font-semibold text-white">Edit Profile</h2>
-                    <button id="btn-close-profile-modal" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="profile-edit-backdrop"></div>
+            <div class="relative z-10 w-full max-w-[400px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col overflow-hidden border border-white/20" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                <div class="flex items-center justify-between p-5 sm:p-6 border-b border-white/[0.08]">
+                    <h2 class="text-[20px] font-semibold text-white tracking-tight m-0">Edit Profile</h2>
+                    <button id="btn-close-profile-modal" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/70 hover:text-white transition-colors border border-white/10 shadow-sm shrink-0">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
-                <div class="p-5 space-y-4">
+                <div class="p-5 sm:p-6 space-y-5">
                     <div>
                         <label class="block text-[13px] text-white/50 uppercase tracking-wide font-semibold mb-2">Name</label>
                         <input type="text" id="modal-input-name" value="${state.currentUser.name || ''}"
-                            class="w-full bg-white/[0.05] border border-white/10 rounded-[12px] px-4 py-3 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors"
+                            class="w-full bg-black/20 border border-white/10 rounded-[14px] px-4 py-3.5 text-[15px] text-white focus:outline-none focus:border-brand-500 focus:bg-black/40 transition-all shadow-inner"
                             placeholder="Your name">
                     </div>
                     <div>
                         <label class="block text-[13px] text-white/50 uppercase tracking-wide font-semibold mb-2">Phone</label>
                         <input type="tel" id="modal-input-phone" value="${state.currentUser.phone || ''}"
-                            class="w-full bg-white/[0.05] border border-white/10 rounded-[12px] px-4 py-3 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors"
+                            class="w-full bg-black/20 border border-white/10 rounded-[14px] px-4 py-3.5 text-[15px] text-white focus:outline-none focus:border-brand-500 focus:bg-black/40 transition-all shadow-inner"
                             placeholder="Phone number">
                     </div>
                     <div>
                         <label class="block text-[13px] text-white/50 uppercase tracking-wide font-semibold mb-2">Email</label>
                         <input type="email" id="modal-input-email" value="${state.currentUser.email || ''}"
-                            class="w-full bg-white/[0.05] border border-white/10 rounded-[12px] px-4 py-3 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors"
+                            class="w-full bg-black/20 border border-white/10 rounded-[14px] px-4 py-3.5 text-[15px] text-white focus:outline-none focus:border-brand-500 focus:bg-black/40 transition-all shadow-inner"
                             placeholder="Email address">
                     </div>
                 </div>
-                <div class="p-5 pt-0 mt-2">
-                    <button id="btn-save-modal-profile" class="w-full bg-brand-500 hover:bg-brand-400 text-white font-semibold text-[15px] py-3 rounded-[12px] transition-colors shadow-sm">
+                <div class="p-5 sm:p-6 pt-0 mt-2">
+                    <button id="btn-save-modal-profile" class="w-full bg-brand-500 hover:bg-brand-400 text-white font-semibold text-[15px] py-3.5 rounded-[14px] transition-all shadow-sm">
                         Save Changes
                     </button>
                 </div>
@@ -2638,13 +2639,17 @@ window.openProfileEditModal = function() {
 
         return `
         <div id="avatar-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-5">
+            <style>
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            </style>
             <div id="avatar-modal-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
             <div id="avatar-modal-card" class="relative z-10 w-full max-w-[800px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl rounded-[32px] border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col sm:flex-row max-h-[90vh] overflow-hidden" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
                 <!-- Left Sidebar (Live Preview) -->
-                <div class="w-full sm:w-[280px] bg-white/[0.03] border-b sm:border-b-0 sm:border-r border-white/20 p-5 sm:p-6 flex flex-col relative shrink-0">
+                <div class="w-full sm:w-[280px] bg-white/[0.03] border-b sm:border-b-0 sm:border-r border-white/20 p-4 sm:p-6 flex flex-col relative shrink-0">
                     
                     <!-- Header Row with Close Button (Mobile Only) -->
-                    <div class="flex sm:hidden justify-between items-center mb-6">
+                    <div class="flex sm:hidden justify-between items-center mb-4">
                         <h3 class="text-[20px] font-semibold text-white tracking-tight m-0">Edit Avatar</h3>
                         <button class="avatar-modal-close-btn w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 transition-colors z-20 shadow-sm border border-white/10 shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
@@ -2654,8 +2659,8 @@ window.openProfileEditModal = function() {
                     <h3 class="hidden sm:block text-[20px] font-semibold text-white tracking-tight mb-8">Edit Avatar</h3>
                     
                     <div class="flex-1 flex flex-col items-center justify-center">
-                        <div class="relative mb-5 sm:mb-6">
-                            <div id="modal-avatar-ring" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr ${av.gradient} flex items-center justify-center text-white shadow-xl relative z-10">
+                        <div class="relative mb-3 sm:mb-6">
+                            <div id="modal-avatar-ring" class="w-20 h-20 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr ${av.gradient} flex items-center justify-center text-white shadow-xl relative z-10">
                                 ${previewInner}
                             </div>
                         </div>
@@ -2663,7 +2668,7 @@ window.openProfileEditModal = function() {
                         <span id="modal-preview-vibe" class="text-[11px] font-semibold text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full uppercase tracking-wider">${av.name}</span>
                     </div>
 
-                    <div class="mt-6 sm:mt-8 flex flex-col gap-3">
+                    <div class="mt-4 sm:mt-8 flex flex-col gap-2 sm:gap-3">
                         <div class="flex gap-2">
                             <button id="avatar-modal-upload-btn" onclick="document.getElementById('avatar-modal-upload').click()" class="flex-1 bg-white/[0.06] hover:bg-white/[0.1] text-white/80 text-[13px] font-semibold py-2.5 rounded-[12px] transition-colors flex justify-center items-center gap-1.5"><i data-lucide="image" class="w-4 h-4"></i> Upload</button>
                             <button id="avatar-modal-clear" class="flex-1 bg-white/[0.06] hover:bg-white/[0.1] text-white/80 text-[13px] font-semibold py-2.5 rounded-[12px] transition-colors flex justify-center items-center gap-1.5"><i data-lucide="x" class="w-4 h-4"></i> Clear</button>
@@ -2674,22 +2679,27 @@ window.openProfileEditModal = function() {
                 </div>
 
                 <!-- Right Content Area -->
-                <div class="flex-1 flex flex-col min-w-0 bg-transparent relative">
+                <div class="flex-1 flex flex-col min-w-0 min-h-0 bg-transparent relative">
                     <!-- Close Button (Absolute to right area, hidden on mobile) -->
                     <button class="avatar-modal-close-btn hidden sm:flex absolute top-5 right-5 w-8 h-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 transition-colors z-20 shadow-sm border border-white/10 shrink-0">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
 
-                    <div class="p-5 sm:p-6 sm:pt-16 pb-2">
+                    <div class="p-4 sm:p-6 sm:pt-16 pb-2 shrink-0 relative">
                         <!-- iOS Segmented Control -->
                         <div class="flex bg-white/5 p-1 rounded-[14px] border border-white/[0.06]">
                             <button id="modal-tab-vibe" class="flex-1 py-2 rounded-[10px] bg-white/10 text-white text-[13px] font-semibold shadow-sm border border-white/[0.08] transition-all">Colour Vibe</button>
                             <button id="modal-tab-icon" class="flex-1 py-2 rounded-[10px] bg-transparent text-white/50 hover:text-white/80 text-[13px] font-semibold transition-all">Avatar Icon</button>
                         </div>
+                        
+                        <!-- Top Progressive Bar -->
+                        <div id="modal-scroll-track" class="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5 opacity-0 transition-opacity duration-300">
+                            <div id="modal-scroll-progress" class="h-full bg-gradient-to-r from-brand-400 to-purple-400 w-0 rounded-r-full"></div>
+                        </div>
                     </div>
                     
-                    <div class="flex-1 overflow-y-auto px-6 pb-8 scrollbar-thin">
-                        <div id="modal-panel-vibe" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div id="modal-scroll-container" class="flex-1 overflow-y-auto px-4 sm:px-6 pb-6 sm:pb-8 no-scrollbar min-h-0">
+                        <div id="modal-panel-vibe" class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                             ${vibeCards}
                         </div>
                         <div id="modal-panel-icon" class="hidden">
@@ -2771,8 +2781,31 @@ window.openProfileEditModal = function() {
         const modalPanelVibe = document.getElementById('modal-panel-vibe');
         const modalPanelIcon = document.getElementById('modal-panel-icon');
 
-
         if (backdrop) backdrop.addEventListener('click', closeModal);
+
+        // Scroll Progress Bar Logic
+        const scrollContainer = document.getElementById('modal-scroll-container');
+        const scrollProgress = document.getElementById('modal-scroll-progress');
+        const scrollTrack = document.getElementById('modal-scroll-track');
+        
+        const updateScrollProgress = () => {
+            if (!scrollContainer || !scrollProgress || !scrollTrack) return;
+            const scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+            if (scrollHeight > 0) {
+                const scrollPercentage = (scrollContainer.scrollTop / scrollHeight) * 100;
+                scrollProgress.style.width = `${scrollPercentage}%`;
+                scrollTrack.classList.remove('opacity-0');
+            } else {
+                scrollTrack.classList.add('opacity-0');
+                scrollProgress.style.width = '0%';
+            }
+        };
+
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', updateScrollProgress, { passive: true });
+            // Initial check
+            setTimeout(updateScrollProgress, 100);
+        }
 
         // Tab switching
         if (modalTabVibe && modalTabIcon) {
@@ -2781,12 +2814,16 @@ window.openProfileEditModal = function() {
                 modalPanelIcon.style.display = 'none';
                 modalTabVibe.className = 'flex-1 py-2 rounded-[10px] bg-white/10 text-white text-[13px] font-semibold shadow-sm border border-white/[0.08] transition-all';
                 modalTabIcon.className = 'flex-1 py-2 rounded-[10px] bg-transparent text-white/50 hover:text-white/80 text-[13px] font-semibold transition-all';
+                if (scrollContainer) scrollContainer.scrollTop = 0;
+                updateScrollProgress();
             });
             modalTabIcon.addEventListener('click', () => {
                 modalPanelVibe.style.display = 'none';
                 modalPanelIcon.style.display = 'block';
                 modalTabIcon.className = 'flex-1 py-2 rounded-[10px] bg-white/10 text-white text-[13px] font-semibold shadow-sm border border-white/[0.08] transition-all';
                 modalTabVibe.className = 'flex-1 py-2 rounded-[10px] bg-transparent text-white/50 hover:text-white/80 text-[13px] font-semibold transition-all';
+                if (scrollContainer) scrollContainer.scrollTop = 0;
+                updateScrollProgress();
             });
         }
 
