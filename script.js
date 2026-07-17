@@ -2196,13 +2196,13 @@ function renderAccountTab() {
                     
                     <!-- Profile Info Group -->
                     <div>
-                        <div class="flex items-center justify-between px-4 mb-2">
-                            <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Profile Information</h3>
-                            <button id="btn-edit-profile-modal" class="text-[12px] font-bold text-brand-400 bg-brand-500/10 hover:bg-brand-500/20 px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1.5 border border-brand-500/20 shadow-sm shadow-brand-500/5 active:bg-brand-500/30" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
-                                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i> Edit Info
-                            </button>
-                        </div>
                         <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                            <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.08] bg-white/[0.02]">
+                                <h3 class="text-[13px] font-bold text-white/60 uppercase tracking-wide m-0" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Profile Information</h3>
+                                <button id="btn-edit-profile-modal" class="text-[12px] font-bold text-brand-400 bg-brand-500/10 hover:bg-brand-500/20 px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1.5 border border-brand-500/20 shadow-sm shadow-brand-500/5 active:bg-brand-500/30" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                                    <i data-lucide="edit-2" class="w-3.5 h-3.5"></i> Edit Info
+                                </button>
+                            </div>
                             
                             <!-- Display Name -->
                             <div class="flex items-center justify-between p-4 border-b border-white/[0.06]">
@@ -2225,11 +2225,13 @@ function renderAccountTab() {
                     </div>
 
                     <!-- Currency & Alerts Row -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-0">
                         <!-- Currency Group -->
                         <div>
-                            <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Currency</h3>
-                            <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col">
+                            <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col h-full">
+                                <div class="px-5 py-4 border-b border-white/[0.08] bg-white/[0.02]">
+                                    <h3 class="text-[13px] font-bold text-white/60 uppercase tracking-wide m-0" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Currency</h3>
+                                </div>
                                 ${['INR', 'USD', 'EUR', 'GBP'].map((c, i, arr) => {
                                     const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
                                     const names = { INR: 'Indian Rupee', USD: 'US Dollar', EUR: 'Euro', GBP: 'Pound' };
@@ -2251,8 +2253,10 @@ function renderAccountTab() {
 
                         <!-- Alerts Group -->
                         <div>
-                            <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Notifications</h3>
-                            <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col">
+                            <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col h-full">
+                                <div class="px-5 py-4 border-b border-white/[0.08] bg-white/[0.02]">
+                                    <h3 class="text-[13px] font-bold text-white/60 uppercase tracking-wide m-0" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Notifications</h3>
+                                </div>
                                 ${[
                                     { id: 'chk-billing-alerts', pref: 'billingAlerts', label: 'Billing Warnings', icon: 'alert-circle', color: 'bg-orange-500' },
                                     { id: 'chk-sms-alerts', pref: 'smsAlerts', label: 'SMS Notifications', icon: 'message-square', color: 'bg-green-500' },
@@ -2280,26 +2284,30 @@ function renderAccountTab() {
                 <div id="acct-panel-sources" class="acct-panel hidden space-y-6">
                     
                     <div>
-                        <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Linked Accounts</h3>
-                        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] p-4 mb-4">
-                            <form id="connect-scan-directory-form" class="flex flex-col sm:flex-row gap-3">
-                                <div class="relative flex-1">
-                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-white/40 pointer-events-none">
-                                        <i data-lucide="plus" class="w-4 h-4"></i>
-                                    </span>
-                                    <input type="text" id="scan-directory-input-field" required
-                                        placeholder="Email or Phone Number"
-                                        class="w-full bg-black/20 border border-white/10 rounded-[14px] py-3 pl-10 pr-4 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors placeholder-white/30 shadow-inner"
-                                        style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
-                                </div>
-                                <button type="submit" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-400 text-white font-medium text-[15px] px-5 py-3 sm:py-0 rounded-[14px] transition-colors shadow-sm whitespace-nowrap" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
-                                    Link Account
-                                </button>
-                            </form>
+                        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] mb-4 flex flex-col">
+                            <div class="px-5 py-4 border-b border-white/[0.08] bg-white/[0.02]">
+                                <h3 class="text-[13px] font-bold text-white/60 uppercase tracking-wide m-0" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Linked Accounts</h3>
+                            </div>
+                            <div class="p-5">
+                                <form id="connect-scan-directory-form" class="flex flex-col sm:flex-row gap-3">
+                                    <div class="relative flex-1">
+                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-white/40 pointer-events-none">
+                                            <i data-lucide="plus" class="w-4 h-4"></i>
+                                        </span>
+                                        <input type="text" id="scan-directory-input-field" required
+                                            placeholder="Email or Phone Number"
+                                            class="w-full bg-black/20 border border-white/10 rounded-[14px] py-3 pl-10 pr-4 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors placeholder-white/30 shadow-inner"
+                                            style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                                    </div>
+                                    <button type="submit" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-400 text-white font-medium text-[15px] px-5 py-3 sm:py-0 rounded-[14px] transition-colors shadow-sm whitespace-nowrap" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                                        Link Account
+                                    </button>
+                                </form>
+                            </div>
                         </div>
 
                         ${state.currentUser.linkedCredentials.length > 0 ? `
-                        <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm">
+                        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)]">
                             ${state.currentUser.linkedCredentials.map((cred, idx, arr) => {
                                 const isEmail = cred.type === 'Email';
                                 return `
@@ -2335,9 +2343,11 @@ function renderAccountTab() {
                 <!-- APPEARANCE TAB -->
                 <div id="acct-panel-appearance" class="acct-panel hidden space-y-6">
                     <div>
-                        <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">App Theme</h3>
-                        <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm p-4">
-                            <div class="grid grid-cols-3 gap-4">
+                        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col">
+                            <div class="px-5 py-4 border-b border-white/[0.08] bg-white/[0.02]">
+                                <h3 class="text-[13px] font-bold text-white/60 uppercase tracking-wide m-0" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">App Theme</h3>
+                            </div>
+                            <div class="p-5 grid grid-cols-3 gap-4">
                                 ${Object.keys(THEMES).map(themeName => {
                                     const isSelected = state.preferences.theme === themeName;
                                     const colors = THEMES[themeName];
@@ -2361,9 +2371,12 @@ function renderAccountTab() {
                 <!-- DIAGNOSTICS TAB -->
                 <div id="acct-panel-diagnostics" class="acct-panel hidden space-y-6">
                     <div>
-                        <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">System Logs</h3>
-                        <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm p-4">
-                            <div id="diagnostic-console" class="w-full h-48 bg-black/40 rounded-[14px] p-4 overflow-y-auto scrollbar-thin text-left flex flex-col gap-1.5 font-mono select-text shadow-inner border border-white/5">
+                        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col h-full">
+                            <div class="px-5 py-4 border-b border-white/[0.08] bg-white/[0.02]">
+                                <h3 class="text-[13px] font-bold text-white/60 uppercase tracking-wide m-0" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">System Logs</h3>
+                            </div>
+                            <div class="p-5">
+                                <div id="diagnostic-console" class="w-full h-48 bg-black/40 rounded-[14px] p-4 overflow-y-auto scrollbar-thin text-left flex flex-col gap-1.5 font-mono select-text shadow-inner border border-white/5">
                                 ${logHtml}
                             </div>
                         </div>
