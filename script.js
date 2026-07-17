@@ -1319,7 +1319,7 @@ window.openMobileFilterModal = function() {
                     <div class="w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'border-brand-400' : 'border-slate-600'}">
                         ${isSelected ? '<div class="w-2 h-2 bg-brand-400 rounded-full shadow-[0_0_8px_rgba(20,184,166,0.8)]"></div>' : ''}
                     </div>
-                    <span class="font-sans text-sm font-semibold ${isSelected ? 'text-white' : 'text-slate-300'}">${cat === 'All' ? 'All Projects' : cat}</span>
+                    <span class="font-sans text-sm font-semibold ${isSelected ? 'text-white' : 'text-slate-300'}">${cat === 'All' ? 'All Categories' : cat}</span>
                 </div>
                 <div class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-slate-300">
                     ${count}
@@ -2099,209 +2099,174 @@ function renderAccountTab() {
 
     const html = `
         <!-- Page Header -->
-        <div class="mb-8 flex items-end justify-between">
+        <div class="mb-6 md:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-3 px-2 md:px-0">
             <div>
-                <h1 class="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 font-space tracking-wide mb-1">Account</h1>
-                <p class="text-sm text-textMuted font-sans mt-1">Profile &amp; Settings</p>
+                <h1 class="text-3xl md:text-[40px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-purple-400 to-indigo-400 tracking-tight mb-1" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;">Account</h1>
             </div>
-            <div id="account-save-indicator" class="hidden items-center gap-2 text-xs text-emerald-400 font-space font-bold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
-                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Saved
+            <div id="account-save-indicator" class="hidden self-start md:self-auto items-center gap-1.5 text-xs text-white font-medium bg-emerald-500/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg">
+                <i data-lucide="check" class="w-4 h-4"></i> Saved
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="flex flex-col lg:grid lg:grid-cols-12 gap-6 items-start px-2 md:px-0 max-w-6xl mx-auto">
 
-            <!-- LEFT: Hero Profile Card -->
-            <div class="lg:col-span-4 space-y-5">
+            <!-- LEFT: Profile & Navigation Sidebar (macOS/iPadOS Style) -->
+            <div class="lg:col-span-4 flex flex-col gap-4 w-full order-1 lg:order-none">
 
-                <!-- Avatar card -->
-                <div class="relative bg-gradient-to-b from-[#11101a] to-[#0a0910] border border-glassBorder rounded-[28px] overflow-hidden group">
-                    <!-- Top shimmer bar -->
-                    <div class="h-[2px] bg-gradient-to-r from-transparent via-brand-500 to-transparent"></div>
-                    <!-- Ambient glow -->
-                    <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 rounded-full blur-[80px] opacity-30 pointer-events-none" style="background: radial-gradient(circle, ${activeAvatarVibe.glowColor || '#ec4899'} 0%, transparent 70%);"></div>
-
-                    <div class="p-6 text-center relative z-10">
-                        <!-- Avatar ring with animated border -->
-                        <div class="relative w-28 h-28 mx-auto mb-4 cursor-pointer group/avatar" id="account-avatar-click-zone">
-                            <!-- Rotating conic border -->
-                            <div class="absolute inset-0 rounded-full p-[2px] animate-spin" style="animation-duration:4s;background:conic-gradient(from 0deg, rgba(236,72,153,0.8), rgba(139,92,246,0.8), rgba(59,130,246,0.6), rgba(236,72,153,0.8));border-radius:9999px;">
-                                <div class="w-full h-full rounded-full bg-[#0a0910]"></div>
+                <!-- Profile Card -->
+                <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] p-6 text-center relative overflow-hidden group shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-500/20 to-purple-500/20 opacity-60 blur-3xl mix-blend-screen"></div>
+                    
+                    <div class="relative z-10 flex flex-col items-center">
+                        <div class="relative w-20 h-20 mb-4 cursor-pointer group/avatar" id="account-avatar-click-zone">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-500 to-purple-500 p-[2px] shadow-lg">
+                                <div class="w-full h-full rounded-full bg-[#1c1c1e] flex items-center justify-center text-white">
+                                    ${state.currentUser.avatarIcon
+                                        ? `<i id="account-large-avatar-icon" data-lucide="${state.currentUser.avatarIcon}" class="w-8 h-8"></i>`
+                                        : `<span id="account-large-avatar-char" class="text-3xl font-medium font-sans">${firstChar}</span>`
+                                    }
+                                </div>
                             </div>
-                            <!-- Avatar itself -->
-                            <div id="account-avatar-ring" class="absolute inset-[3px] rounded-full bg-gradient-to-tr ${activeAvatarVibe.gradient} flex items-center justify-center text-cardTitle shadow-2xl">
-                                ${state.currentUser.avatarIcon
-                                    ? `<i id="account-large-avatar-icon" data-lucide="${state.currentUser.avatarIcon}" class="w-11 h-11"></i>`
-                                    : `<span id="account-large-avatar-char" class="text-4xl font-black font-space">${firstChar}</span>`
-                                }
-                            </div>
-                            <!-- Camera overlay on hover -->
-                            <div class="absolute inset-[3px] rounded-full bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center">
+                            <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                                 <i data-lucide="camera" class="w-6 h-6 text-white"></i>
                             </div>
                         </div>
 
-                        <h3 id="account-large-avatar-name" class="text-xl font-extrabold text-cardTitle font-space mb-0.5">${state.currentUser.name || 'User'}</h3>
-                        <p id="account-large-avatar-email" class="text-xs text-textMuted font-sans mb-1">${state.currentUser.email || '—'}</p>
-                    </div>
-
-                    <!-- System Security/Integrity Bar -->
-                    <div class="grid grid-cols-3 divide-x divide-glassBorder border-t border-glassBorder">
-                        <div class="py-4 text-center">
-                            <div class="text-xs font-black text-emerald-450 font-space flex items-center justify-center gap-1">
-                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-450"></i> SECURE
-                            </div>
-                            <div class="text-[8px] text-textMuted uppercase tracking-widest font-sans mt-0.5">Integrity</div>
-                        </div>
-                        <div class="py-4 text-center">
-                            <div class="text-xs font-black text-brand-400 font-space" id="account-stat-linked-count">
-                                ${state.currentUser.linkedCredentials.length} Linked
-                            </div>
-                            <div class="text-[8px] text-textMuted uppercase tracking-widest font-sans mt-0.5">Sources</div>
-                        </div>
-                        <div class="py-4 text-center">
-                            <div class="text-xs font-black text-cyan-400 font-space flex items-center justify-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span> ONLINE
-                            </div>
-                            <div class="text-[8px] text-textMuted uppercase tracking-widest font-sans mt-0.5">Session</div>
-                        </div>
+                        <h3 id="account-large-avatar-name" class="text-xl font-semibold text-white tracking-tight mb-1" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${state.currentUser.name || 'User'}</h3>
+                        <p id="account-large-avatar-email" class="text-[13px] text-white/50 mb-5" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${state.currentUser.email || 'Apple ID'}</p>
+                        
+                        <button id="btn-open-avatar-modal" class="bg-white/10 hover:bg-white/15 text-white font-medium text-[13px] px-4 py-1.5 rounded-full transition-colors font-sans">
+                            Change Photo
+                        </button>
                     </div>
                 </div>
 
-                <!-- Action buttons -->
-                <div class="space-y-2.5">
-                    <button id="btn-open-avatar-modal" class="w-full relative overflow-hidden bg-gradient-to-r from-brand-500/15 to-purple-500/15 border border-brand-500/35 hover:border-brand-500/70 hover:from-brand-500/25 hover:to-purple-500/25 text-brand-400 font-semibold text-xs py-3.5 rounded-2xl transition-all flex items-center justify-center gap-2 font-space group">
-                        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style="background: radial-gradient(circle at center, rgba(236,72,153,0.08) 0%, transparent 70%)"></div>
-                        <i data-lucide="sparkles" class="w-4 h-4 group-hover:scale-125 transition-transform"></i>
-                        <span>Customise Avatar</span>
+                <!-- Desktop Sidebar Navigation (Hidden on mobile, mobile uses dropdown or continuous) -->
+                <div class="hidden lg:flex flex-col bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)]" id="account-tab-bar">
+                    ${[
+                        { id: 'identity', icon: 'user', iconColor: 'bg-gray-500', label: 'Profile' },
+                        { id: 'sources',  icon: 'link', iconColor: 'bg-blue-500', label: 'Linked Accounts' },
+                        { id: 'appearance', icon: 'sun', iconColor: 'bg-indigo-500', label: 'Appearance' },
+                        { id: 'diagnostics', icon: 'terminal', iconColor: 'bg-slate-600', label: 'Advanced' },
+                    ].map((t, i, arr) => `
+                        <button data-acct-tab="${t.id}" onclick="switchAccountTab('${t.id}')" class="acct-tab-btn flex items-center justify-between w-full px-4 py-3.5 transition-all group ${i === 0 ? 'bg-white/10' : 'hover:bg-white/5'} ${i !== arr.length - 1 ? 'border-b border-white/[0.06]' : ''}">
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-7 h-7 rounded-lg ${t.iconColor} flex items-center justify-center text-white shadow-sm">
+                                    <i data-lucide="${t.icon}" class="w-4 h-4"></i>
+                                </div>
+                                <span class="text-[15px] ${i === 0 ? 'font-medium text-white' : 'text-slate-300 group-hover:text-white'} transition-colors" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${t.label}</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-white/30"></i>
+                        </button>
+                    `).join('')}
+                </div>
+                
+                <!-- Desktop Destructive Actions -->
+                <div class="hidden lg:flex flex-col bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] mt-2">
+                    <button onclick="triggerAccountReset()" class="flex items-center justify-center w-full px-4 py-3.5 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors active:bg-white/10 group">
+                        <i data-lucide="log-out" class="w-4 h-4 text-red-500 mr-2 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-[15px] text-red-500" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Log Out</span>
                     </button>
-                    <button onclick="triggerAccountReset()" class="w-full bg-[#13111a] border border-glassBorder hover:border-white/20 text-textMuted hover:text-cardTitle font-semibold text-xs py-3.5 rounded-2xl transition-all flex items-center justify-center gap-2 font-sans">
-                        <i data-lucide="log-out" class="w-4 h-4"></i> Log Out
-                    </button>
-                    <button onclick="triggerDeleteAccount()" class="w-full bg-red-500/8 border border-red-500/20 hover:bg-red-500/15 hover:border-red-500/40 text-red-400/80 hover:text-red-400 font-semibold text-xs py-3 rounded-2xl transition-all flex items-center justify-center gap-2 font-sans">
-                        <i data-lucide="user-x" class="w-4 h-4"></i> Delete Account
+                    <button onclick="triggerDeleteAccount()" class="flex items-center justify-center w-full px-4 py-3.5 hover:bg-white/[0.02] transition-colors active:bg-white/10 group">
+                        <i data-lucide="user-x" class="w-4 h-4 text-red-500 font-semibold mr-2 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-[15px] text-red-500 font-semibold" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Delete Account</span>
                     </button>
                 </div>
             </div>
 
-            <!-- RIGHT: Tabbed settings panel -->
-            <div class="lg:col-span-8 space-y-5">
+            <!-- RIGHT: Content panel (iOS Grouped Lists) -->
+            <div class="lg:col-span-8 space-y-6 w-full order-2 lg:order-none">
 
-                <!-- Tab switcher -->
-                
-                <!-- Mobile Account Tab Button -->
-                <div class="md:hidden w-full mb-4">
-                    <button onclick="openMobileAccountFilter()" class="w-full flex items-center justify-between bg-[#13111a] border border-glassBorder px-4 py-3 rounded-2xl text-textMuted text-sm font-sans active:bg-[#1a1723] transition-colors">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="layout-dashboard" class="w-4 h-4 text-brand-400"></i>
-                            <span class="text-xs">Section: <strong id="mobile-account-current-tab" class="text-cardTitle font-semibold">Identity & Prefs</strong></span>
+                <!-- Mobile Account Tab Button (macOS/iOS style dropdown for mobile) -->
+                <div class="md:hidden w-full mb-2">
+                    <button onclick="openMobileAccountFilter()" class="w-full flex items-center justify-between bg-white/[0.06] border border-white/[0.08] px-4 py-3.5 rounded-[16px] text-white/70 text-[15px] active:bg-white/[0.1] transition-colors shadow-sm" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-md bg-gray-500 flex items-center justify-center text-white shadow-sm">
+                                <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                            </div>
+                            <span><strong id="mobile-account-current-tab" class="font-medium text-white">Profile</strong></span>
                         </div>
                         <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </button>
                 </div>
 
-                <!-- Desktop Account Tabs -->
-                <div class="hidden md:flex items-center gap-1 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-full max-w-full overflow-x-auto scrollbar-hide" id="account-tab-bar">
-                    ${[
-                        { id: 'identity', icon: 'user', label: 'Identity & Prefs' },
-                        { id: 'sources',  icon: 'link', label: 'Sources' },
-                        { id: 'appearance', icon: 'palette', label: 'Aesthetics' },
-                        { id: 'diagnostics', icon: 'terminal', label: 'Diagnostics' },
-                    ].map((t, i) => `
-                        <button data-acct-tab="${t.id}" onclick="switchAccountTab('${t.id}')" class="acct-tab-btn flex-shrink-0 whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-semibold transition-all font-space ${i === 0 ? 'bg-brand-500/25 text-brand-300 border border-brand-500/40' : 'text-textMuted hover:text-cardTitle'}">
-                            <i data-lucide="${t.icon}" class="w-3.5 h-3.5"></i> ${t.label}
-                        </button>
-                    `).join('')}
-                </div>
-
                 <!-- IDENTITY TAB -->
-                <div id="acct-panel-identity" class="acct-panel space-y-5">
-                    <!-- Profile Identity card -->
-                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-6 space-y-5">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="p-2.5 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
-                                <i data-lucide="user-round" class="w-5 h-5"></i>
+                <div id="acct-panel-identity" class="acct-panel space-y-6">
+                    
+                    <!-- Profile Info Group -->
+                    <div>
+                        <div class="flex items-center justify-between px-4 mb-2">
+                            <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Profile Information</h3>
+                            <button id="btn-edit-profile-modal" class="text-[12px] font-bold text-brand-400 bg-brand-500/10 hover:bg-brand-500/20 px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1.5 border border-brand-500/20 shadow-sm shadow-brand-500/5 active:bg-brand-500/30" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i> Edit Info
+                            </button>
+                        </div>
+                        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)]">
+                            
+                            <!-- Display Name -->
+                            <div class="flex items-center justify-between p-4 border-b border-white/[0.06]">
+                                <span class="w-1/3 text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Name</span>
+                                <span class="w-2/3 text-right text-[15px] text-white/70 truncate" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${state.currentUser.name || 'Not set'}</span>
                             </div>
-                            <div>
-                                <h3 class="text-sm font-bold text-cardTitle font-space">Profile Identity</h3>
-                                <p class="text-[11px] text-textMuted font-sans">Your name, contact and display preferences</p>
+                            
+                            <!-- Primary Mobile -->
+                            <div class="flex items-center justify-between p-4 border-b border-white/[0.06]">
+                                <span class="w-1/3 text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Phone</span>
+                                <span class="w-2/3 text-right text-[15px] text-white/70 truncate" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${state.currentUser.phone || 'Not set'}</span>
+                            </div>
+                            
+                            <!-- Primary Email -->
+                            <div class="flex items-center justify-between p-4">
+                                <span class="w-1/3 text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Email</span>
+                                <span class="w-2/3 text-right text-[15px] text-white/70 truncate" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${state.currentUser.email || 'Not set'}</span>
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[9px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Display Name</label>
-                                <input type="text" id="profile-input-name" value="${state.currentUser.name || ''}"
-                                    class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 focus:shadow-[0_0_0_3px_rgba(236,72,153,0.12)] rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600"
-                                    placeholder="Your name">
-                            </div>
-                            <div>
-                                <label class="block text-[9px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Primary Mobile</label>
-                                <input type="tel" id="profile-input-phone" value="${state.currentUser.phone || ''}"
-                                    class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 focus:shadow-[0_0_0_3px_rgba(236,72,153,0.12)] rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600"
-                                    placeholder="98765 43210">
-                            </div>
-                            <div class="sm:col-span-2">
-                                <label class="block text-[9px] font-bold text-textMuted uppercase tracking-widest mb-2 font-space">Primary Email</label>
-                                <input type="email" id="profile-input-email" value="${state.currentUser.email || ''}"
-                                    class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 focus:shadow-[0_0_0_3px_rgba(236,72,153,0.12)] rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600"
-                                    placeholder="name@domain.com">
-                            </div>
-                        </div>
-                        <button id="btn-save-profile" class="w-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs py-3.5 rounded-xl transition-all shadow-[0_4px_20px_rgba(236,72,153,0.25)] font-space flex items-center justify-center gap-2">
-                            <i data-lucide="save" class="w-3.5 h-3.5"></i> Save Profile Changes
-                        </button>
                     </div>
 
                     <!-- Currency & Alerts Row -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <!-- Currency Card -->
-                        <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-5">
-                            <div class="flex items-center gap-2.5 mb-4">
-                                <div class="p-2 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
-                                    <i data-lucide="circle-dollar-sign" class="w-4 h-4"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-cardTitle font-space">Currency</h3>
-                            </div>
-                            <div class="grid grid-cols-2 gap-2.5">
-                                ${['INR', 'USD', 'EUR', 'GBP'].map(c => {
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                        <!-- Currency Group -->
+                        <div>
+                            <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Currency</h3>
+                            <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col">
+                                ${['INR', 'USD', 'EUR', 'GBP'].map((c, i, arr) => {
                                     const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
                                     const names = { INR: 'Indian Rupee', USD: 'US Dollar', EUR: 'Euro', GBP: 'Pound' };
                                     const isSel = state.preferences.currency === c;
                                     return `
-                                        <button data-currency="${c}" class="currency-btn flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${isSel ? 'bg-brand-500/12 border-brand-500/50 text-brand-400 shadow-[0_0_16px_rgba(236,72,153,0.12)]' : 'bg-[#13111a] border-glassBorder text-textMuted hover:border-brand-500/30 hover:bg-[#1a1723] hover:text-cardTitle'}">
-                                            <div>
-                                                <div class="font-bold text-xs font-space">${c}</div>
-                                                <div class="text-[9px] opacity-60 font-sans">${names[c]}</div>
+                                        <button data-currency="${c}" class="currency-btn flex items-center justify-between p-4 transition-colors ${i !== arr.length - 1 ? 'border-b border-white/[0.06]' : ''} ${isSel ? 'bg-white/5' : 'hover:bg-white/[0.02]'}">
+                                            <div class="text-left">
+                                                <div class="font-medium text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${names[c]}</div>
                                             </div>
-                                            <span class="text-xl font-black font-space opacity-80">${symbols[c]}</span>
+                                            <div class="flex items-center gap-3">
+                                                <span class="text-[15px] text-white/50">${c}</span>
+                                                ${isSel ? '<i data-lucide="check" class="w-4 h-4 text-brand-400"></i>' : '<div class="w-4 h-4"></div>'}
+                                            </div>
                                         </button>
                                     `;
                                 }).join('')}
                             </div>
                         </div>
 
-                        <!-- Intelligent Alerts Card -->
-                        <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-5">
-                            <div class="flex items-center gap-2.5 mb-4">
-                                <div class="p-2 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
-                                    <i data-lucide="bell" class="w-4 h-4"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-cardTitle font-space">Alerts</h3>
-                            </div>
-                            <div class="space-y-4">
+                        <!-- Alerts Group -->
+                        <div>
+                            <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Notifications</h3>
+                            <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col">
                                 ${[
-                                    { id: 'chk-billing-alerts', pref: 'billingAlerts', label: 'Billing Renewal Warnings', sub: '5-day threshold' },
-                                    { id: 'chk-sms-alerts', pref: 'smsAlerts', label: 'SMS Match Pulse', sub: 'Real-time notifications' },
-                                    { id: 'chk-monthly-reports', pref: 'monthlyReports', label: 'Monthly Analytics Brief', sub: 'Spend &amp; trend digest' }
-                                ].map(a => `
-                                    <label class="flex items-center justify-between cursor-pointer select-none group/toggle">
-                                        <div class="flex-1 mr-4">
-                                            <div class="text-xs font-semibold text-cardTitle font-space group-hover/toggle:text-white transition-colors">${a.label}</div>
-                                            <div class="text-[10px] text-textMuted font-sans">${a.sub}</div>
+                                    { id: 'chk-billing-alerts', pref: 'billingAlerts', label: 'Billing Warnings', icon: 'alert-circle', color: 'bg-orange-500' },
+                                    { id: 'chk-sms-alerts', pref: 'smsAlerts', label: 'SMS Notifications', icon: 'message-square', color: 'bg-green-500' },
+                                    { id: 'chk-monthly-reports', pref: 'monthlyReports', label: 'Monthly Report', icon: 'file-text', color: 'bg-blue-500' }
+                                ].map((a, i, arr) => `
+                                    <label class="flex items-center justify-between cursor-pointer select-none p-4 ${i !== arr.length - 1 ? 'border-b border-white/[0.06]' : ''} hover:bg-white/[0.02] transition-colors">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-7 h-7 rounded-lg ${a.color} flex items-center justify-center text-white shadow-sm">
+                                                <i data-lucide="${a.icon}" class="w-4 h-4"></i>
+                                            </div>
+                                            <div class="text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${a.label}</div>
                                         </div>
                                         <div class="relative flex-shrink-0">
                                             <input type="checkbox" id="${a.id}" ${state.preferences[a.pref] ? 'checked' : ''} class="sr-only peer">
-                                            <div class="w-11 h-6 bg-[#1a1723] border border-glassBorder rounded-full transition-all duration-300 peer-checked:bg-gradient-to-r peer-checked:from-brand-500 peer-checked:to-purple-500 peer-checked:border-transparent peer-checked:shadow-[0_0_14px_rgba(236,72,153,0.4)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-slate-300 after:rounded-full after:h-5 after:w-5 after:transition-all after:duration-300 peer-checked:after:translate-x-5 peer-checked:after:border-white"></div>
+                                            <div class="w-12 h-7 bg-white/20 rounded-full transition-colors duration-300 peer-checked:bg-emerald-500 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all after:duration-300 peer-checked:after:translate-x-5 shadow-inner border border-white/10 peer-checked:border-emerald-400/50"></div>
                                         </div>
                                     </label>
                                 `).join('')}
@@ -2311,218 +2276,163 @@ function renderAccountTab() {
                 </div>
 
                 <!-- SOURCES TAB -->
-                <div id="acct-panel-sources" class="acct-panel hidden space-y-4">
-                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-6">
-                        <div class="flex items-center gap-3 mb-5">
-                            <div class="p-2.5 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
-                                <i data-lucide="link" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-bold text-cardTitle font-space">Connected Sources</h3>
-                                <p class="text-[11px] text-textMuted font-sans">Link email addresses and phone numbers to scan for billing activity</p>
-                            </div>
+                <div id="acct-panel-sources" class="acct-panel hidden space-y-6">
+                    
+                    <div>
+                        <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Linked Accounts</h3>
+                        <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] p-4 mb-4">
+                            <form id="connect-scan-directory-form" class="flex flex-col sm:flex-row gap-3">
+                                <div class="relative flex-1">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-white/40 pointer-events-none">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                    </span>
+                                    <input type="text" id="scan-directory-input-field" required
+                                        placeholder="Email or Phone Number"
+                                        class="w-full bg-black/20 border border-white/10 rounded-[14px] py-3 pl-10 pr-4 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors placeholder-white/30 shadow-inner"
+                                        style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                                </div>
+                                <button type="submit" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-400 text-white font-medium text-[15px] px-5 py-3 sm:py-0 rounded-[14px] transition-colors shadow-sm whitespace-nowrap" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                                    Link Account
+                                </button>
+                            </form>
                         </div>
 
-                        <form id="connect-scan-directory-form" class="flex flex-col sm:flex-row gap-3 mb-5">
-                            <div class="relative flex-1">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-textMuted pointer-events-none">
-                                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                                </span>
-                                <input type="text" id="scan-directory-input-field" required
-                                    placeholder="Email address or 10-digit mobile"
-                                    class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 pl-10 pr-4 text-sm text-cardTitle focus:outline-none transition-all font-sans placeholder-slate-600">
-                            </div>
-                            <button type="submit" class="w-full sm:w-auto justify-center bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs px-5 py-3 sm:py-0 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.2)] font-space whitespace-nowrap flex items-center gap-1.5">
-                                <i data-lucide="zap" class="w-3.5 h-3.5"></i> Link &amp; Scan
-                            </button>
-                        </form>
-
-                        <div class="space-y-2.5 max-h-[250px] overflow-y-auto scrollbar-thin pr-1">
-                            ${state.currentUser.linkedCredentials.length > 0 ? state.currentUser.linkedCredentials.map((cred, idx) => {
+                        ${state.currentUser.linkedCredentials.length > 0 ? `
+                        <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm">
+                            ${state.currentUser.linkedCredentials.map((cred, idx, arr) => {
                                 const isEmail = cred.type === 'Email';
                                 return `
-                                    <div class="flex items-center justify-between p-4 bg-[#13111a] border border-glassBorder rounded-2xl group hover:border-brand-500/25 transition-all">
-                                        <div class="flex items-center gap-3.5">
-                                            <div class="w-10 h-10 rounded-xl ${isEmail ? 'bg-sky-500/10 border-sky-500/20 text-sky-400' : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'} border flex items-center justify-center flex-shrink-0">
-                                                <i data-lucide="${isEmail ? 'mail' : 'smartphone'}" class="w-4.5 h-4.5"></i>
+                                    <div class="flex items-center justify-between p-4 ${idx !== arr.length - 1 ? 'border-b border-white/[0.06]' : ''}">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-9 h-9 rounded-[10px] ${isEmail ? 'bg-blue-500' : 'bg-green-500'} flex items-center justify-center flex-shrink-0 text-white shadow-sm">
+                                                <i data-lucide="${isEmail ? 'mail' : 'smartphone'}" class="w-5 h-5"></i>
                                             </div>
                                             <div>
-                                                <div class="font-semibold text-sm text-cardTitle font-space">${cred.value}</div>
-                                                <div class="text-[10px] text-textMuted font-sans">Linked ${cred.dateAdded}</div>
+                                                <div class="font-medium text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${cred.value}</div>
+                                                <div class="text-[13px] text-white/50" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Linked ${cred.dateAdded}</div>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded-full font-space uppercase tracking-widest">Active</span>
-                                            <button class="btn-delete-credential w-8 h-8 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 rounded-xl flex items-center justify-center transition-all" data-index="${idx}">
-                                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                        <div class="flex items-center gap-3">
+                                            <span class="text-[13px] text-white/50">Active</span>
+                                            <button class="btn-delete-credential w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-full flex items-center justify-center transition-colors" data-index="${idx}">
+                                                <i data-lucide="minus-circle" class="w-5 h-5"></i>
                                             </button>
                                         </div>
                                     </div>
                                 `;
-                            }).join('') : `
-                                <div class="py-10 text-center border border-dashed border-glassBorder rounded-2xl">
-                                    <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-[#1a1723] border border-glassBorder flex items-center justify-center text-textMuted">
-                                        <i data-lucide="unlink" class="w-5 h-5"></i>
-                                    </div>
-                                    <p class="text-sm font-semibold text-cardTitle font-space mb-1">No sources linked</p>
-                                    <p class="text-xs text-textMuted font-sans">Add an email or phone above to begin scanning</p>
-                                </div>
-                            `}
+                            }).join('')}
                         </div>
+                        ` : `
+                        <div class="py-12 text-center border-2 border-dashed border-white/10 rounded-[24px]">
+                            <p class="text-[15px] font-medium text-white mb-1" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">No linked accounts</p>
+                            <p class="text-[13px] text-white/50" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Add an email or phone number above</p>
+                        </div>
+                        `}
                     </div>
                 </div>
 
                 <!-- APPEARANCE TAB -->
-                <div id="acct-panel-appearance" class="acct-panel hidden space-y-5">
-                    <!-- Theme swatches -->
-                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-6">
-                        <div class="flex items-center gap-3 mb-5">
-                            <div class="p-2.5 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
-                                <i data-lucide="palette" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-bold text-cardTitle font-space">Neural Color Scheme</h3>
-                                <p class="text-[11px] text-textMuted font-sans">Choose your interface's signature aesthetic vibe</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-3">
-                            ${Object.keys(THEMES).map(themeName => {
-                                const isSelected = state.preferences.theme === themeName;
-                                const colors = THEMES[themeName];
-                                const displayName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
-                                
-                                const borderStyle = isSelected 
-                                    ? `border-color: ${colors.brandHex}80; background: ${colors.brandHex}08; box-shadow: 0 0 24px ${colors.brandHex}20, inset 0 0 12px ${colors.brandHex}10;` 
-                                    : `border-color: rgba(255, 255, 255, 0.05); background: rgba(19, 17, 26, 0.6);`;
+                <div id="acct-panel-appearance" class="acct-panel hidden space-y-6">
+                    <div>
+                        <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">App Theme</h3>
+                        <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm p-4">
+                            <div class="grid grid-cols-3 gap-4">
+                                ${Object.keys(THEMES).map(themeName => {
+                                    const isSelected = state.preferences.theme === themeName;
+                                    const colors = THEMES[themeName];
+                                    const displayName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
                                     
-                                return `
-                                    <button class="theme-select-btn group relative flex flex-col items-center gap-3.5 p-5 rounded-2xl border transition-all duration-300 focus:outline-none overflow-hidden hover:border-white/15" data-theme="${themeName}" style="${borderStyle}">
-                                        <!-- Glowing gradient sphere -->
-                                        <div class="relative w-16 h-16 rounded-full flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}, ${colors.brandHex}); box-shadow: 0 0 15px ${colors.brandHex}40;">
-                                            <div class="absolute inset-[4px] rounded-full bg-[#0a0910]/95 backdrop-blur-sm"></div>
-                                            ${isSelected ? `<div class="absolute inset-0 rounded-full flex items-center justify-center"><span class="w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,1)] z-10"></span></div>` : ''}
-                                        </div>
-                                        <div class="text-center z-10">
-                                            <div class="flex gap-2 justify-center mb-2">
-                                                <div class="w-5 h-2 rounded-full transition-all" style="background:${colors.brandHex}; box-shadow: 0 0 10px ${colors.brandHex};"></div>
-                                                <div class="w-5 h-2 rounded-full transition-all" style="background:${colors.cosmicHex}; box-shadow: 0 0 10px ${colors.cosmicHex};"></div>
+                                    return `
+                                        <button class="theme-select-btn flex flex-col items-center gap-3 p-4 rounded-[16px] transition-all focus:outline-none ${isSelected ? 'bg-white/10 ring-2 ring-brand-500 shadow-md' : 'hover:bg-white/5'}" data-theme="${themeName}">
+                                            <div class="w-14 h-14 rounded-full flex items-center justify-center relative shadow-lg" style="background: conic-gradient(from 135deg, ${colors.brandHex}, ${colors.cosmicHex}, ${colors.brandHex});">
+                                                <div class="absolute inset-[3px] rounded-full bg-[#1c1c1e]"></div>
+                                                ${isSelected ? `<div class="absolute inset-0 flex items-center justify-center"><div class="w-4 h-4 rounded-full bg-white shadow-[0_0_10px_white]"></div></div>` : ''}
                                             </div>
-                                            <span class="text-xs font-bold ${isSelected ? 'text-white' : 'text-textMuted group-hover:text-slate-350'} font-space transition-colors">${displayName}</span>
-                                        </div>
-                                        <!-- Ambient background card glow -->
-                                        <div class="absolute -bottom-12 -right-12 w-24 h-24 rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity pointer-events-none" style="background: ${colors.brandHex};"></div>
-                                    </button>
-                                `;
-                            }).join('')}
+                                            <span class="text-[13px] font-medium ${isSelected ? 'text-white' : 'text-white/60'}" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${displayName}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- DIAGNOSTICS TAB -->
-                <div id="acct-panel-diagnostics" class="acct-panel hidden space-y-5">
-                    <!-- Holographic Console Terminal -->
-                    <div class="bg-[#0b0a10] border border-glassBorder/70 rounded-[24px] p-6 shadow-inner relative overflow-hidden group">
-                        <div class="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-emerald-500 to-teal-500 opacity-60"></div>
-                        
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-450">
-                                    <i data-lucide="terminal" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-bold text-cardTitle font-space">Security Diagnostics Console</h3>
-                                    <p class="text-[11px] text-textMuted font-sans">Live system logs &amp; mailbox scraper monitoring</p>
-                                </div>
+                <div id="acct-panel-diagnostics" class="acct-panel hidden space-y-6">
+                    <div>
+                        <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">System Logs</h3>
+                        <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm p-4">
+                            <div id="diagnostic-console" class="w-full h-48 bg-black/40 rounded-[14px] p-4 overflow-y-auto scrollbar-thin text-left flex flex-col gap-1.5 font-mono select-text shadow-inner border border-white/5">
+                                ${logHtml}
                             </div>
-                            <div class="flex items-center gap-1.5 text-[9px] font-bold text-emerald-450 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full font-space animate-pulse">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online
-                            </div>
-                        </div>
-
-                        <div id="diagnostic-console" class="w-full h-48 bg-[#040308] border border-[#1a1725] rounded-xl p-4 overflow-y-auto scrollbar-thin text-left flex flex-col gap-1.5 font-mono select-text shadow-inner">
-                            ${logHtml}
                         </div>
                     </div>
 
-                    <!-- System Info & Backup -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-5 space-y-4.5">
-                            <div class="flex items-center gap-2.5 mb-2">
-                                <div class="p-2 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
-                                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">System Info</h3>
+                            <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm">
+                                <div class="flex justify-between items-center p-4 border-b border-white/[0.06]">
+                                    <span class="text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Sync Status</span>
+                                    <span class="text-[15px] text-white/50">Complete</span>
                                 </div>
-                                <h3 class="text-sm font-bold text-cardTitle font-space">Telemetry Metrics</h3>
-                            </div>
-                            <div class="space-y-3 font-sans text-xs">
-                                <div class="flex justify-between items-center py-2 border-b border-[#181622]">
-                                    <span class="text-textMuted">Database Sync</span>
-                                    <span class="text-emerald-400 font-bold font-space text-[11px]">Sync Complete</span>
+                                <div class="flex justify-between items-center p-4 border-b border-white/[0.06]">
+                                    <span class="text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Encryption</span>
+                                    <span class="text-[15px] text-white/50">AES-256 GCM</span>
                                 </div>
-                                <div class="flex justify-between items-center py-2 border-b border-[#181622]">
-                                    <span class="text-textMuted">Encryption Layer</span>
-                                    <span class="text-brand-400 font-bold font-space text-[11px]">AES-256 GCM</span>
+                                <div class="flex justify-between items-center p-4 border-b border-white/[0.06]">
+                                    <span class="text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Scans</span>
+                                    <span class="text-[15px] text-white/50" id="diag-scans-run">${state.diagnostics.scansRun || 0}</span>
                                 </div>
-                                <div class="flex justify-between items-center py-2 border-b border-[#181622]">
-                                    <span class="text-textMuted">API Scans Executed</span>
-                                    <span class="text-cardTitle font-bold font-space text-[11px]" id="diag-scans-run">${state.diagnostics.scansRun || 0}</span>
-                                </div>
-                                <div class="flex justify-between items-center py-2">
-                                    <span class="text-textMuted">Connected Directory Gateways</span>
-                                    <span class="text-cardTitle font-bold font-space text-[11px]" id="diag-api-connected">${state.diagnostics.apiConnected || 0} / 8</span>
+                                <div class="flex justify-between items-center p-4">
+                                    <span class="text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Gateways</span>
+                                    <span class="text-[15px] text-white/50" id="diag-api-connected">${state.diagnostics.apiConnected || 0} / 8</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-[#0f0e13] border border-glassBorder rounded-[24px] p-5 space-y-4">
-                            <div class="flex items-center gap-2.5 mb-2">
-                                <div class="p-2 bg-brand-500/10 border border-brand-500/20 rounded-xl text-brand-400">
-                                    <i data-lucide="database" class="w-4 h-4"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-cardTitle font-space">Backup &amp; Restore</h3>
-                            </div>
-                            <p class="text-[11px] text-textMuted font-sans">Download a backup configuration or restore system states from a saved JSON file.</p>
-                            
-                            <div class="flex gap-2.5">
-                                <button id="btn-export-backup" class="flex-1 bg-[#13111a] hover:bg-[#1a1723] text-cardTitle border border-[#222] hover:border-white/10 font-bold text-xs py-3 rounded-xl transition-all font-space flex items-center justify-center gap-1.5">
-                                    <i data-lucide="download" class="w-3.5 h-3.5"></i> Export State
+                        <div>
+                            <h3 class="text-[13px] font-semibold text-white/50 uppercase tracking-wide px-4 mb-2" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Backup</h3>
+                            <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm">
+                                <button id="btn-export-backup" class="w-full flex items-center justify-between p-4 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors">
+                                    <span class="text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Export Data</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-white/30"></i>
                                 </button>
-                                <button id="btn-trigger-import" type="button" onclick="document.getElementById('backup-import-file').click()" class="flex-1 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-[0_4px_12px_rgba(236,72,153,0.15)] font-space flex items-center justify-center gap-1.5">
-                                    <i data-lucide="upload" class="w-3.5 h-3.5"></i> Import State
+                                <button id="btn-trigger-import" type="button" onclick="document.getElementById('backup-import-file').click()" class="w-full flex items-center justify-between p-4 hover:bg-white/[0.02] transition-colors text-brand-400">
+                                    <span class="text-[15px]" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Import Data...</span>
                                 </button>
+                                <input type="file" id="backup-import-file" class="hidden" accept=".json" onchange="handleBackupImport(event)">
                             </div>
-                            <input type="file" id="backup-import-file" class="hidden" accept=".json" onchange="handleBackupImport(event)">
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            <!-- Mobile Action buttons (Hidden on desktop, styled like iOS destructive actions at bottom) -->
+            <div class="lg:hidden w-full order-3 mt-6">
+                <div class="bg-white/[0.04] border border-white/[0.08] rounded-[20px] overflow-hidden shadow-sm">
+                    <button onclick="document.getElementById('btn-open-avatar-modal').click()" class="w-full flex items-center justify-center p-4 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors active:bg-white/10">
+                        <span class="text-[15px] text-white" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Edit Picture</span>
+                    </button>
+                    <button onclick="triggerAccountReset()" class="w-full flex items-center justify-center p-4 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors active:bg-white/10">
+                        <span class="text-[15px] text-red-500" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Log Out</span>
+                    </button>
+                    <button onclick="triggerDeleteAccount()" class="w-full flex items-center justify-center p-4 hover:bg-white/[0.02] transition-colors active:bg-white/10">
+                        <span class="text-[15px] text-red-500 font-semibold" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">Delete Account</span>
+                    </button>
+                </div>
+            </div>
+            
         </div>
     `;
 
     container.innerHTML = html;
     bindAccountEventListeners();
 
-    const saveBtn = document.getElementById('btn-save-profile');
-    if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
-            const name = document.getElementById('profile-input-name').value.trim();
-            const phone = document.getElementById('profile-input-phone').value.trim();
-            const email = document.getElementById('profile-input-email').value.trim();
-            if (name) state.currentUser.name = name;
-            if (phone !== undefined) state.currentUser.phone = phone;
-            if (email !== undefined) state.currentUser.email = email;
-            saveStateToStorage();
-            syncAvatarUI();
-            // Show save indicator
-            const ind = document.getElementById('account-save-indicator');
-            if (ind) {
-                ind.classList.remove('hidden');
-                ind.classList.add('flex');
-                gsap.fromTo(ind, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.3, ease: 'back.out(2)' });
-                setTimeout(() => {
-                    gsap.to(ind, { opacity: 0, y: -8, duration: 0.25, onComplete: () => {
-                        ind.classList.add('hidden');
-                        ind.classList.remove('flex');
-                    }});
-                }, 2200);
-            }
+    const editInfoBtn = document.getElementById('btn-edit-profile-modal');
+    if (editInfoBtn) {
+        editInfoBtn.addEventListener('click', () => {
+            if(window.openProfileEditModal) window.openProfileEditModal();
         });
     }
 
@@ -2543,16 +2453,137 @@ function renderAccountTab() {
 
 window.switchAccountTab = function(tabId) {
     document.querySelectorAll('.acct-panel').forEach(p => p.classList.add('hidden'));
+    
     document.querySelectorAll('.acct-tab-btn').forEach(b => {
         const active = b.getAttribute('data-acct-tab') === tabId;
-        b.className = `acct-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-semibold transition-all font-space ${active ? 'bg-brand-500/25 text-brand-300 border border-brand-500/40' : 'text-textMuted hover:text-cardTitle'}`;
+        
+        // Remove active styles
+        b.classList.remove('bg-white/10');
+        b.classList.add('hover:bg-white/5');
+        
+        const span = b.querySelector('span');
+        if (span) {
+            span.classList.remove('font-medium', 'text-white');
+            span.classList.add('text-slate-300', 'group-hover:text-white');
+        }
+        
+        if (active) {
+            b.classList.add('bg-white/10');
+            b.classList.remove('hover:bg-white/5');
+            if (span) {
+                span.classList.add('font-medium', 'text-white');
+                span.classList.remove('text-slate-300', 'group-hover:text-white');
+            }
+        }
     });
+
     const panel = document.getElementById(`acct-panel-${tabId}`);
     if (panel) {
         panel.classList.remove('hidden');
         gsap.fromTo(panel.children, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power3.out', stagger: 0.07 });
     }
+    
+    // Update mobile dropdown text
+    const mobileTxt = document.getElementById('mobile-account-current-tab');
+    if (mobileTxt) {
+        const labels = { identity: 'Profile', sources: 'Linked Accounts', appearance: 'Appearance', diagnostics: 'Advanced' };
+        mobileTxt.textContent = labels[tabId] || 'Profile';
+    }
+    
     lucide.createIcons();
+};
+
+window.openProfileEditModal = function() {
+    const existing = document.getElementById('profile-edit-modal');
+    if (existing) existing.remove();
+
+    const html = `
+        <div id="profile-edit-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-5">
+            <div class="absolute inset-0 bg-[#02010a]/80 backdrop-blur-md" id="profile-edit-backdrop"></div>
+            <div class="relative z-10 w-full max-w-[400px] bg-[#1c1c1e] rounded-[24px] shadow-2xl flex flex-col overflow-hidden border border-white/10" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                <div class="flex items-center justify-between p-5 border-b border-white/[0.08]">
+                    <h2 class="text-[17px] font-semibold text-white">Edit Profile</h2>
+                    <button id="btn-close-profile-modal" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <label class="block text-[13px] text-white/50 uppercase tracking-wide font-semibold mb-2">Name</label>
+                        <input type="text" id="modal-input-name" value="${state.currentUser.name || ''}"
+                            class="w-full bg-white/[0.05] border border-white/10 rounded-[12px] px-4 py-3 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors"
+                            placeholder="Your name">
+                    </div>
+                    <div>
+                        <label class="block text-[13px] text-white/50 uppercase tracking-wide font-semibold mb-2">Phone</label>
+                        <input type="tel" id="modal-input-phone" value="${state.currentUser.phone || ''}"
+                            class="w-full bg-white/[0.05] border border-white/10 rounded-[12px] px-4 py-3 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors"
+                            placeholder="Phone number">
+                    </div>
+                    <div>
+                        <label class="block text-[13px] text-white/50 uppercase tracking-wide font-semibold mb-2">Email</label>
+                        <input type="email" id="modal-input-email" value="${state.currentUser.email || ''}"
+                            class="w-full bg-white/[0.05] border border-white/10 rounded-[12px] px-4 py-3 text-[15px] text-white focus:outline-none focus:border-brand-500 transition-colors"
+                            placeholder="Email address">
+                    </div>
+                </div>
+                <div class="p-5 pt-0 mt-2">
+                    <button id="btn-save-modal-profile" class="w-full bg-brand-500 hover:bg-brand-400 text-white font-semibold text-[15px] py-3 rounded-[12px] transition-colors shadow-sm">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', html);
+    lucide.createIcons();
+
+    const modal = document.getElementById('profile-edit-modal');
+    const content = modal.querySelector('.relative.z-10');
+    
+    gsap.fromTo(modal.querySelector('.absolute'), { opacity: 0 }, { opacity: 1, duration: 0.3 });
+    gsap.fromTo(content, { opacity: 0, scale: 0.95, y: 10 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.5)' });
+
+    const closeModal = () => {
+        gsap.to(modal.querySelector('.absolute'), { opacity: 0, duration: 0.25 });
+        gsap.to(content, { opacity: 0, scale: 0.95, y: 10, duration: 0.25, ease: 'power2.in', onComplete: () => modal.remove() });
+    };
+
+    document.getElementById('btn-close-profile-modal').addEventListener('click', closeModal);
+    document.getElementById('profile-edit-backdrop').addEventListener('click', closeModal);
+
+    document.getElementById('btn-save-modal-profile').addEventListener('click', () => {
+        const name = document.getElementById('modal-input-name').value.trim();
+        const phone = document.getElementById('modal-input-phone').value.trim();
+        const email = document.getElementById('modal-input-email').value.trim();
+        
+        if (name) state.currentUser.name = name;
+        state.currentUser.phone = phone;
+        state.currentUser.email = email;
+        
+        saveStateToStorage();
+        syncAvatarUI();
+        closeModal();
+        
+        // Re-render account tab to show changes, and ensure we stay on identity tab
+        renderAccountTab();
+        switchAccountTab('identity');
+        
+        // Show indicator
+        const ind = document.getElementById('account-save-indicator');
+        if (ind) {
+            ind.classList.remove('hidden');
+            ind.classList.add('flex');
+            gsap.fromTo(ind, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.3, ease: 'back.out(2)' });
+            setTimeout(() => {
+                gsap.to(ind, { opacity: 0, y: -8, duration: 0.25, onComplete: () => {
+                    ind.classList.add('hidden');
+                    ind.classList.remove('flex');
+                }});
+            }, 2200);
+        }
+    });
 };
 
     let pendingVibe = state.currentUser.avatar || 'nebula';
@@ -2570,117 +2601,103 @@ window.switchAccountTab = function(tabId) {
 
         const vibeCards = Object.entries(AVATAR_VIBES).map(([id, v]) => {
             const active = pendingVibe === id;
-            const borderClass = active ? 'border-pink-400/60' : 'border-white/5';
-            const bgClass = active ? 'bg-pink-500/10' : 'bg-white/5 hover:bg-white/10';
-            const shadowClass = active ? 'shadow-[0_0_28px_rgba(236,72,153,0.22),inset_0_0_30px_rgba(236,72,153,0.04)]' : 'shadow-none';
-            const dot = active ? '<div class="absolute top-2 right-2 w-1.5 h-1.5 sm:w-[7px] sm:h-[7px] rounded-full bg-pink-400 shadow-[0_0_8px_#f472b6,0_0_20px_rgba(244,114,182,0.6)]"></div>' : '';
-            const nameColor = active ? 'text-pink-400 font-bold' : 'text-slate-400 font-medium';
-            return '<button class="modal-vibe-btn relative flex flex-col items-center gap-0 p-0 rounded-[14px] sm:rounded-2xl border ' + borderClass + ' ' + bgClass + ' cursor-pointer overflow-hidden transition-all duration-300 ' + shadowClass + '" data-vibe="' + id + '">' +
-                '<div class="w-full h-14 sm:h-[76px] bg-gradient-to-br from-white/5 to-black/30 flex items-center justify-center relative overflow-hidden">' +
-                    '<div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-gradient-to-tr ' + v.gradient + ' flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.5)] z-10 transition-transform duration-300 ' + (active ? 'scale-110' : 'scale-100') + '">' +
-                        '<i data-lucide="' + v.icon + '" class="w-4 h-4 sm:w-5 sm:h-5 text-white"></i>' +
-                    '</div>' +
-                    dot +
-                '</div>' +
-                '<div class="py-1.5 sm:py-2.5 px-2 text-center w-full border-t border-white/5">' +
-                    '<span class="text-[9px] sm:text-[11px] font-space ' + nameColor + '">' + v.name + '</span>' +
-                '</div>' +
-            '</button>';
+            const borderClass = active ? 'border-brand-500 bg-brand-500/10' : 'border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08]';
+            const shadowClass = active ? 'shadow-sm shadow-brand-500/20' : 'shadow-none';
+            return `<button class="modal-vibe-btn flex flex-col items-center p-4 rounded-[20px] border ${borderClass} transition-all duration-300 ${shadowClass}" data-vibe="${id}" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                <div class="w-14 h-14 rounded-full bg-gradient-to-tr ${v.gradient} flex items-center justify-center shadow-md mb-3 ${active ? 'scale-110' : 'scale-100'} transition-transform">
+                    <i data-lucide="${v.icon}" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="text-[13px] font-semibold ${active ? 'text-brand-400' : 'text-white/70'}">${v.name}</span>
+            </button>`;
         }).join('');
 
         const iconGrid = iconCategories.map(category => {
             const btns = AVATAR_ICONS[category].map(opt => {
                 const isActive = pendingIcon === opt.id;
-                const borderClass = isActive ? 'border-pink-400/60' : 'border-white/5';
-                const bgClass = isActive ? 'bg-gradient-to-br from-pink-500/20 to-purple-500/10' : 'bg-white/5 hover:bg-white/10';
-                const shadowClass = isActive ? 'shadow-[0_0_14px_rgba(236,72,153,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]' : 'shadow-none';
-                const transformClass = isActive ? 'scale-[1.06]' : 'scale-100';
-                const colorClass = isActive ? 'text-pink-400 font-bold' : 'text-slate-500 font-medium';
-                return '<button class="modal-icon-btn flex flex-col items-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border ' + borderClass + ' ' + bgClass + ' ' + shadowClass + ' cursor-pointer transition-all duration-200 ' + transformClass + '" data-icon="' + opt.id + '">' +
-                    '<i data-lucide="' + opt.icon + '" class="w-4 h-4 sm:w-5 sm:h-5 ' + (isActive ? 'text-pink-400' : 'text-slate-400') + '"></i>' +
-                    '<span class="text-[7px] sm:text-[8px] leading-none text-center font-space ' + colorClass + '">' + opt.label + '</span>' +
-                '</button>';
+                const borderClass = isActive ? 'border-brand-500 bg-brand-500/10' : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06]';
+                const shadowClass = isActive ? 'shadow-sm shadow-brand-500/10' : 'shadow-none';
+                return `<button class="modal-icon-btn flex flex-col items-center p-3 rounded-[16px] border ${borderClass} transition-all duration-200 ${shadowClass}" data-icon="${opt.id}" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                    <i data-lucide="${opt.icon}" class="w-5 h-5 ${isActive ? 'text-brand-400' : 'text-white/50'} mb-1.5"></i>
+                    <span class="text-[11px] font-medium ${isActive ? 'text-brand-400' : 'text-white/40'}">${opt.label}</span>
+                </button>`;
             }).join('');
-            return '<div class="mb-4 sm:mb-5">' +
-                '<div class="flex items-center gap-2 mb-2 sm:mb-3">' +
-                    '<div class="h-px w-4 bg-gradient-to-r from-pink-400/50 to-transparent"></div>' +
-                    '<p class="text-[8px] font-bold text-pink-400/50 uppercase tracking-widest m-0">' + category + '</p>' +
-                    '<div class="h-px flex-1 bg-gradient-to-r from-pink-400/10 to-transparent"></div>' +
-                '</div>' +
-                '<div class="grid grid-cols-4 sm:grid-cols-5 gap-1.5 sm:gap-2">' + btns + '</div>' +
-            '</div>';
+            return `<div class="mb-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <h4 class="text-[12px] font-semibold text-white/40 uppercase tracking-widest" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">${category}</h4>
+                    <div class="h-px flex-1 bg-white/[0.06]"></div>
+                </div>
+                <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 sm:gap-3">${btns}</div>
+            </div>`;
         }).join('');
 
         const previewInner = pendingCustomImage
             ? `<img src="${pendingCustomImage}" class="w-full h-full object-cover rounded-full">`
             : (pendingIcon
-                ? '<i data-lucide="' + pendingIcon + '" class="w-11 h-11"></i>'
-                : '<span style="font-size:36px;font-weight:900;font-family:Space Grotesk,sans-serif;">' + firstChar + '</span>');
+                ? `<i data-lucide="${pendingIcon}" class="w-12 h-12"></i>`
+                : `<span style="font-size:42px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">${firstChar}</span>`);
 
         return `
-        <div id="avatar-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-5 font-space">
-            <div id="avatar-modal-backdrop" class="absolute inset-0 bg-[#02010a]/95 backdrop-blur-2xl"></div>
-            <div class="relative z-10 w-full max-w-[780px] bg-gradient-to-br from-[#0e0c1a] via-[#0b0917] to-[#0d0b1c] rounded-3xl shadow-[0_40px_100px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.07),inset_0_1px_0_rgba(255,255,255,0.07)] flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden">
-                <div class="h-[2px] shrink-0 bg-gradient-to-r from-transparent via-pink-500/70 via-purple-500/90 via-blue-500/70 to-transparent"></div>
-                <div class="flex items-start sm:items-center justify-between p-5 sm:p-6 sm:px-7 shrink-0 gap-3">
-                    <div class="flex items-center gap-3 sm:gap-4">
-                        <div class="hidden sm:flex w-11 h-11 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 items-center justify-center shadow-[0_0_20px_rgba(236,72,153,0.2),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                            <i data-lucide="sparkles" class="w-5 h-5 text-pink-400"></i>
-                        </div>
-                        <div>
-                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                                <h3 class="text-base sm:text-lg font-extrabold text-white m-0 tracking-tight">Customise Profile</h3>
-                                <span class="text-[9px] font-bold text-pink-400 bg-pink-500/15 border border-pink-500/30 px-2 py-0.5 rounded-full tracking-widest uppercase w-max">LIVE</span>
-                            </div>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400 m-0 mt-1 sm:mt-0.5">Shape your avatar with a colour vibe and personal icon</p>
-                        </div>
+        <div id="avatar-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-5">
+            <div id="avatar-modal-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+            <div id="avatar-modal-card" class="relative z-10 w-full max-w-[800px] bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl rounded-[32px] border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] flex flex-col sm:flex-row max-h-[90vh] overflow-hidden" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;">
+                <!-- Left Sidebar (Live Preview) -->
+                <div class="w-full sm:w-[280px] bg-white/[0.03] border-b sm:border-b-0 sm:border-r border-white/20 p-5 sm:p-6 flex flex-col relative shrink-0">
+                    
+                    <!-- Header Row with Close Button (Mobile Only) -->
+                    <div class="flex sm:hidden justify-between items-center mb-6">
+                        <h3 class="text-[20px] font-semibold text-white tracking-tight m-0">Edit Avatar</h3>
+                        <button class="avatar-modal-close-btn w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 transition-colors z-20 shadow-sm border border-white/10 shrink-0">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
                     </div>
-                    <button id="avatar-modal-close" class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 cursor-pointer hover:bg-white/10 transition-colors">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
-                </div>
-                <div class="h-[1px] shrink-0 mx-5 sm:mx-7 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-                <div class="flex flex-col sm:flex-row flex-1 overflow-hidden min-h-0">
-                    <!-- Preview column -->
-                    <div class="w-full sm:w-[210px] shrink-0 flex sm:flex-col items-center justify-start sm:justify-center gap-4 sm:gap-4 p-5 sm:p-7 border-b sm:border-b-0 sm:border-r border-white/5 bg-[#04030e]/60 relative">
-                        <div class="absolute inset-0 opacity-50 sm:opacity-100 pointer-events-none" style="background-image:radial-gradient(rgba(255,255,255,0.02) 1px,transparent 1px);background-size:22px 22px;"></div>
-                        <div class="hidden sm:block text-[8px] text-slate-500 uppercase tracking-widest font-bold relative">Live Preview</div>
-                        <div class="relative shrink-0">
-                            <div class="absolute -inset-1.5 rounded-full bg-[conic-gradient(from_0deg,rgba(236,72,153,0.35),rgba(139,92,246,0.35),rgba(59,130,246,0.35),rgba(236,72,153,0.35))] blur-md opacity-70"></div>
-                            <div id="modal-avatar-ring" class="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr ${av.gradient} flex items-center justify-center text-white border-2 border-white/10 relative shadow-[0_0_40px_rgba(236,72,153,0.2)]">
+                    
+                    <h3 class="hidden sm:block text-[20px] font-semibold text-white tracking-tight mb-8">Edit Avatar</h3>
+                    
+                    <div class="flex-1 flex flex-col items-center justify-center">
+                        <div class="relative mb-5 sm:mb-6">
+                            <div id="modal-avatar-ring" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-tr ${av.gradient} flex items-center justify-center text-white shadow-xl relative z-10">
                                 ${previewInner}
                             </div>
                         </div>
-                        <div class="text-left sm:text-center relative flex-1 sm:flex-none">
-                            <p class="text-sm sm:text-sm font-extrabold text-white m-0">${state.currentUser.name || 'User'}</p>
-                            <p id="modal-preview-vibe" class="text-[9px] font-bold text-pink-400 uppercase tracking-widest mt-1.5 bg-pink-500/10 border border-pink-500/20 px-2.5 py-1 rounded-full inline-block m-0">${av.name}</p>
+                        <h4 class="text-[17px] font-semibold text-white tracking-tight mb-1">${state.currentUser.name || 'User'}</h4>
+                        <span id="modal-preview-vibe" class="text-[11px] font-semibold text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full uppercase tracking-wider">${av.name}</span>
+                    </div>
+
+                    <div class="mt-6 sm:mt-8 flex flex-col gap-3">
+                        <div class="flex gap-2">
+                            <button id="avatar-modal-upload-btn" onclick="document.getElementById('avatar-modal-upload').click()" class="flex-1 bg-white/[0.06] hover:bg-white/[0.1] text-white/80 text-[13px] font-semibold py-2.5 rounded-[12px] transition-colors flex justify-center items-center gap-1.5"><i data-lucide="image" class="w-4 h-4"></i> Upload</button>
+                            <button id="avatar-modal-clear" class="flex-1 bg-white/[0.06] hover:bg-white/[0.1] text-white/80 text-[13px] font-semibold py-2.5 rounded-[12px] transition-colors flex justify-center items-center gap-1.5"><i data-lucide="x" class="w-4 h-4"></i> Clear</button>
                         </div>
-                        <div class="flex flex-col gap-2 shrink-0 relative z-10 w-28 sm:w-full">
-                            <button id="avatar-modal-apply" class="w-full bg-gradient-to-br from-pink-700 to-purple-600 text-white font-extrabold text-[10px] sm:text-xs py-2 sm:py-3 rounded-xl border-none cursor-pointer shadow-[0_6px_24px_rgba(190,24,93,0.4),inset_0_1px_0_rgba(255,255,255,0.15)] tracking-wide">✦ Apply</button>
-                            <div class="flex gap-1.5 w-full">
-                                <button id="avatar-modal-upload-btn" onclick="document.getElementById('avatar-modal-upload').click()" class="flex-1 bg-white/5 border border-dashed border-white/10 text-slate-400 hover:text-white text-[9px] sm:text-[10px] py-1.5 sm:py-2.5 rounded-xl cursor-pointer transition-colors flex items-center justify-center gap-1"><i data-lucide="image" class="w-3 h-3"></i> Upload</button>
-                                <button id="avatar-modal-clear" class="flex-1 bg-white/5 border border-dashed border-white/10 text-slate-400 hover:text-white text-[9px] sm:text-[10px] py-1.5 sm:py-2.5 rounded-xl cursor-pointer transition-colors flex items-center justify-center gap-1"><i data-lucide="x" class="w-3 h-3"></i> Clear</button>
-                            </div>
-                            <input type="file" id="avatar-modal-upload" accept="image/*" class="hidden">
+                        <button id="avatar-modal-apply" class="w-full bg-brand-500 hover:bg-brand-400 text-white font-semibold text-[15px] py-3 rounded-[12px] transition-colors shadow-sm">Save Changes</button>
+                        <input type="file" id="avatar-modal-upload" accept="image/*" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Right Content Area -->
+                <div class="flex-1 flex flex-col min-w-0 bg-transparent relative">
+                    <!-- Close Button (Absolute to right area, hidden on mobile) -->
+                    <button class="avatar-modal-close-btn hidden sm:flex absolute top-5 right-5 w-8 h-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 transition-colors z-20 shadow-sm border border-white/10 shrink-0">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+
+                    <div class="p-5 sm:p-6 sm:pt-16 pb-2">
+                        <!-- iOS Segmented Control -->
+                        <div class="flex bg-white/5 p-1 rounded-[14px] border border-white/[0.06]">
+                            <button id="modal-tab-vibe" class="flex-1 py-2 rounded-[10px] bg-white/10 text-white text-[13px] font-semibold shadow-sm border border-white/[0.08] transition-all">Colour Vibe</button>
+                            <button id="modal-tab-icon" class="flex-1 py-2 rounded-[10px] bg-transparent text-white/50 hover:text-white/80 text-[13px] font-semibold transition-all">Avatar Icon</button>
                         </div>
                     </div>
-                    <!-- Options panel -->
-                    <div class="flex-1 overflow-y-auto min-w-0 scrollbar-thin relative">
-                        <div class="sticky top-0 z-10 px-5 sm:px-6 pt-4 sm:pt-4 pb-3 bg-gradient-to-b from-[#0e0c1a] to-transparent backdrop-blur-md">
-                            <div class="grid grid-cols-2 gap-1 bg-white/5 border border-white/10 rounded-2xl p-1">
-                                <button id="modal-tab-vibe" class="py-2.5 px-3 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 text-pink-400 border border-pink-500/30 cursor-pointer text-[10px] sm:text-[11px] font-bold tracking-wide transition-all">🎨 Colour Vibe</button>
-                                <button id="modal-tab-icon" class="py-2.5 px-3 rounded-xl bg-transparent text-slate-400 border border-transparent cursor-pointer text-[10px] sm:text-[11px] font-semibold transition-all hover:bg-white/5">🪄 Avatar Icon</button>
-                            </div>
-                        </div>
-                        <div id="modal-panel-vibe" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 px-5 sm:px-6 pb-6">
+                    
+                    <div class="flex-1 overflow-y-auto px-6 pb-8 scrollbar-thin">
+                        <div id="modal-panel-vibe" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             ${vibeCards}
                         </div>
-                        <div id="modal-panel-icon" class="px-5 sm:px-6 pb-6 hidden">
+                        <div id="modal-panel-icon" class="hidden">
                             ${iconGrid}
                         </div>
                     </div>
                 </div>
-                <div class="h-[1px] shrink-0 bg-gradient-to-r from-transparent via-purple-500/20 to-transparent"></div>
+
             </div>
         </div>`;
     };
@@ -2704,7 +2721,7 @@ window.switchAccountTab = function(tabId) {
 
         // --- Open animation ---
         const backdrop = modalEl.querySelector('#avatar-modal-backdrop');
-        const card = modalEl.querySelector('[style*="max-width:780px"]') || modalEl.children[1];
+        const card = modalEl.querySelector('#avatar-modal-card');
 
         // Start states
         gsap.set(modalEl, { opacity: 0 });
@@ -2721,7 +2738,7 @@ window.switchAccountTab = function(tabId) {
         const modalEl = document.getElementById('avatar-modal');
         if (!modalEl) return;
         const backdrop = modalEl.querySelector('#avatar-modal-backdrop');
-        const card = modalEl.querySelector('[style*="max-width:780px"]') || modalEl.children[1];
+        const card = modalEl.querySelector('#avatar-modal-card');
 
         // --- Close animation ---
         const tl = gsap.timeline({
@@ -2742,7 +2759,10 @@ window.switchAccountTab = function(tabId) {
     });
 
     function bindModalEvents() {
-        const closeBtn = document.getElementById('avatar-modal-close');
+        // Bind Close buttons
+        document.querySelectorAll('.avatar-modal-close-btn').forEach(btn => {
+            btn.addEventListener('click', closeModal);
+        });
         const backdrop = document.getElementById('avatar-modal-backdrop');
         const applyBtn = document.getElementById('avatar-modal-apply');
         const clearBtn = document.getElementById('avatar-modal-clear');
@@ -2751,7 +2771,7 @@ window.switchAccountTab = function(tabId) {
         const modalPanelVibe = document.getElementById('modal-panel-vibe');
         const modalPanelIcon = document.getElementById('modal-panel-icon');
 
-        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
         if (backdrop) backdrop.addEventListener('click', closeModal);
 
         // Tab switching
@@ -2759,14 +2779,14 @@ window.switchAccountTab = function(tabId) {
             modalTabVibe.addEventListener('click', () => {
                 modalPanelVibe.style.display = 'grid';
                 modalPanelIcon.style.display = 'none';
-                modalTabVibe.className = 'py-2.5 px-3 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 text-pink-400 border border-pink-500/30 cursor-pointer text-[10px] sm:text-[11px] font-bold tracking-wide transition-all';
-                modalTabIcon.className = 'py-2.5 px-3 rounded-xl bg-transparent text-slate-400 border border-transparent cursor-pointer text-[10px] sm:text-[11px] font-semibold transition-all hover:bg-white/5';
+                modalTabVibe.className = 'flex-1 py-2 rounded-[10px] bg-white/10 text-white text-[13px] font-semibold shadow-sm border border-white/[0.08] transition-all';
+                modalTabIcon.className = 'flex-1 py-2 rounded-[10px] bg-transparent text-white/50 hover:text-white/80 text-[13px] font-semibold transition-all';
             });
             modalTabIcon.addEventListener('click', () => {
                 modalPanelVibe.style.display = 'none';
                 modalPanelIcon.style.display = 'block';
-                modalTabIcon.className = 'py-2.5 px-3 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 text-pink-400 border border-pink-500/30 cursor-pointer text-[10px] sm:text-[11px] font-bold tracking-wide transition-all';
-                modalTabVibe.className = 'py-2.5 px-3 rounded-xl bg-transparent text-slate-400 border border-transparent cursor-pointer text-[10px] sm:text-[11px] font-semibold transition-all hover:bg-white/5';
+                modalTabIcon.className = 'flex-1 py-2 rounded-[10px] bg-white/10 text-white text-[13px] font-semibold shadow-sm border border-white/[0.08] transition-all';
+                modalTabVibe.className = 'flex-1 py-2 rounded-[10px] bg-transparent text-white/50 hover:text-white/80 text-[13px] font-semibold transition-all';
             });
         }
 
@@ -2797,19 +2817,17 @@ window.switchAccountTab = function(tabId) {
                 updatePreview();
                 document.querySelectorAll('.modal-vibe-btn').forEach(b => {
                     const isNow = b.getAttribute('data-vibe') === pendingVibe;
-                    const shadowClass = isNow ? 'shadow-[0_0_28px_rgba(236,72,153,0.22),inset_0_0_30px_rgba(236,72,153,0.04)]' : 'shadow-none';
-                    b.className = 'modal-vibe-btn relative flex flex-col items-center gap-0 p-0 rounded-[14px] sm:rounded-2xl border cursor-pointer overflow-hidden transition-all duration-300 ' + 
-                        (isNow ? 'border-pink-400/60 bg-pink-500/10 ' + shadowClass : 'border-white/5 bg-white/5 hover:bg-white/10 shadow-none');
-                    const innerWrapper = b.querySelector('.w-full.h-14');
-                    const dot = innerWrapper ? innerWrapper.querySelector('.absolute.top-2') : null;
-                    if (isNow && !dot && innerWrapper) {
-                        innerWrapper.insertAdjacentHTML('beforeend', '<div class="absolute top-2 right-2 w-1.5 h-1.5 sm:w-[7px] sm:h-[7px] rounded-full bg-pink-400 shadow-[0_0_8px_#f472b6,0_0_20px_rgba(244,114,182,0.6)]"></div>');
-                    }
-                    if (!isNow && dot) dot.remove();
+                    
+                    const borderClass = isNow ? 'border-brand-500 bg-brand-500/10' : 'border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08]';
+                    const shadowClass = isNow ? 'shadow-sm shadow-brand-500/20' : 'shadow-none';
+                    
+                    b.className = `modal-vibe-btn flex flex-col items-center p-4 rounded-[20px] border ${borderClass} transition-all duration-300 ${shadowClass}`;
+                    b.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif";
+                    
                     const ring = b.querySelector('.rounded-full.bg-gradient-to-tr');
                     if (ring) ring.className = ring.className.replace(/scale-\d+/, isNow ? 'scale-110' : 'scale-100');
                     const text = b.querySelector('span');
-                    if (text) text.className = 'text-[9px] sm:text-[11px] font-space ' + (isNow ? 'text-pink-400 font-bold' : 'text-slate-400 font-medium');
+                    if (text) text.className = `text-[13px] font-semibold ${isNow ? 'text-brand-400' : 'text-white/70'}`;
                 });
             });
         });
@@ -2821,12 +2839,17 @@ window.switchAccountTab = function(tabId) {
                 updatePreview();
                 document.querySelectorAll('.modal-icon-btn').forEach(b => {
                     const isNow = b.getAttribute('data-icon') === pendingIcon;
-                    b.className = 'modal-icon-btn flex flex-col items-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border cursor-pointer transition-all duration-200 ' + 
-                        (isNow ? 'border-pink-400/60 bg-gradient-to-br from-pink-500/20 to-purple-500/10 shadow-[0_0_14px_rgba(236,72,153,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] scale-[1.06]' : 'border-white/5 bg-white/5 hover:bg-white/10 shadow-none scale-100');
+                    
+                    const borderClass = isNow ? 'border-brand-500 bg-brand-500/10' : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06]';
+                    const shadowClass = isNow ? 'shadow-sm shadow-brand-500/10' : 'shadow-none';
+
+                    b.className = `modal-icon-btn flex flex-col items-center p-3 rounded-[16px] border ${borderClass} transition-all duration-200 ${shadowClass}`;
+                    b.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif";
+                    
                     const iconEl = b.querySelector('svg') || b.querySelector('i');
-                    if (iconEl) iconEl.className = 'w-4 h-4 sm:w-5 sm:h-5 ' + (isNow ? 'text-pink-400' : 'text-slate-400');
+                    if (iconEl) iconEl.className = `w-5 h-5 ${isNow ? 'text-brand-400' : 'text-white/50'} mb-1.5`;
                     const labelEl = b.querySelector('span');
-                    if (labelEl) labelEl.className = 'text-[7px] sm:text-[8px] leading-none text-center font-space ' + (isNow ? 'text-pink-400 font-bold' : 'text-slate-500 font-medium');
+                    if (labelEl) labelEl.className = `text-[11px] font-medium ${isNow ? 'text-brand-400' : 'text-white/40'}`;
                 });
             });
         });
@@ -2838,11 +2861,11 @@ window.switchAccountTab = function(tabId) {
                 pendingCustomImage = null;
                 updatePreview();
                 document.querySelectorAll('.modal-icon-btn').forEach(b => {
-                    b.className = 'modal-icon-btn flex flex-col items-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 shadow-none scale-100 cursor-pointer transition-all duration-200';
+                    b.className = 'modal-icon-btn flex flex-col items-center p-3 rounded-[16px] border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06] shadow-none transition-all duration-200';
                     const iconEl = b.querySelector('svg') || b.querySelector('i');
-                    if (iconEl) iconEl.className = 'w-4 h-4 sm:w-5 sm:h-5 text-slate-400';
+                    if (iconEl) iconEl.className = 'w-5 h-5 text-white/50 mb-1.5';
                     const labelEl = b.querySelector('span');
-                    if (labelEl) labelEl.className = 'text-[7px] sm:text-[8px] leading-none text-center font-space text-slate-500 font-medium';
+                    if (labelEl) labelEl.className = 'text-[11px] font-medium text-white/40';
                 });
             });
         }
