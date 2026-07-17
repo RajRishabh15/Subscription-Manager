@@ -683,3 +683,37 @@ input::placeholder {
                 radial-gradient(circle at 20% 30%, rgba(0, 219, 231, 0.05) 0%, transparent 50%),
                 radial-gradient(circle at 80% 70%, rgba(255, 5, 65, 0.05) 0%, transparent 50%);
         }
+
+/* GLOBAL SCROLLBAR & PROGRESS BAR FIX */
+::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0px !important;
+    background: transparent !important;
+    display: none !important;
+}
+html, body {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    scroll-behavior: smooth;
+}
+
+#global-scroll-progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    z-index: 9999999;
+    background: transparent;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#global-scroll-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, var(--brand-500, #20d2eb), #cf7bfe, var(--cosmic-400, #8b80f9));
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}

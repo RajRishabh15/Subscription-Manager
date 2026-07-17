@@ -3126,9 +3126,43 @@ function bindAccountEventListeners() {
             applyTheme(themeChoice);
             saveStateToStorage();
             
-            // Full clean re-render to update the glowing borders/shadows perfectly
-            renderAccountTab();
-            switchAccountTab('appearance');
+            // Sudden choose implementation - NO full re-render!
+            document.querySelectorAll('.theme-select-btn').forEach(b => {
+                const bTheme = b.getAttribute('data-theme');
+                const isNow = bTheme === themeChoice;
+                
+                // Update container classes
+                if (isNow) {
+                    b.classList.add('bg-white/10', 'ring-2', 'ring-brand-500', 'shadow-md');
+                    b.classList.remove('hover:bg-white/5');
+                } else {
+                    b.classList.remove('bg-white/10', 'ring-2', 'ring-brand-500', 'shadow-md');
+                    b.classList.add('hover:bg-white/5');
+                }
+                
+                // Update inner circle indicator
+                const circleContainer = b.querySelector('.w-14.h-14');
+                if (circleContainer) {
+                    const existingIndicator = circleContainer.querySelector('.absolute.inset-0');
+                    if (isNow && !existingIndicator) {
+                        circleContainer.insertAdjacentHTML('beforeend', `<div class="absolute inset-0 flex items-center justify-center"><div class="w-4 h-4 rounded-full bg-white shadow-[0_0_10px_white]"></div></div>`);
+                    } else if (!isNow && existingIndicator) {
+                        existingIndicator.remove();
+                    }
+                }
+                
+                // Update text color
+                const textEl = b.querySelector('span');
+                if (textEl) {
+                    if (isNow) {
+                        textEl.classList.add('text-white');
+                        textEl.classList.remove('text-white/60');
+                    } else {
+                        textEl.classList.remove('text-white');
+                        textEl.classList.add('text-white/60');
+                    }
+                }
+            });
         });
     });
 
@@ -3141,13 +3175,27 @@ function bindAccountEventListeners() {
                 state.preferences.currency = newCur;
                 saveStateToStorage();
                 
-                // Re-render UI to update currency symbols across app
-                if(state.activeTab === 'home') renderHomeTab();
-                else if(state.activeTab === 'manage') renderManageTab();
-                else if(state.activeTab === 'account') {
-                    renderAccountTab();
-                    bindAccountEventListeners();
-                }
+                // Sudden choose implementation - NO full re-render!
+                // Just update the buttons directly for zero latency and no layout bounce
+                currencyBtns.forEach(b => {
+                    const c = b.getAttribute('data-currency');
+                    const isNow = c === newCur;
+                    
+                    if (isNow) {
+                        b.classList.add('bg-white/5');
+                        b.classList.remove('hover:bg-white/[0.02]');
+                    } else {
+                        b.classList.remove('bg-white/5');
+                        b.classList.add('hover:bg-white/[0.02]');
+                    }
+                    
+                    const rightArea = b.querySelector('.flex.items-center.gap-3');
+                    if (rightArea) {
+                        rightArea.innerHTML = isNow 
+                            ? `<span class="text-[15px] text-white/50">${c}</span><i data-lucide="check" class="w-4 h-4 text-brand-400"></i>`
+                            : `<span class="text-[15px] text-white/50">${c}</span><div class="w-4 h-4"></div>`;
+                    }
+                });
                 
                 lucide.createIcons();
             }
@@ -3985,5 +4033,37 @@ function setupEventListeners() {
             alert(`Successfully added ${finalName} plan!`);
         });
     }
+
+    // Initialize Global Scroll Progressive Bar
+    const globalScrollContainer = document.createElement('div');
+    globalScrollContainer.id = 'global-scroll-progress-container';
+    const globalProgressBar = document.createElement('div');
+    globalProgressBar.id = 'global-scroll-progress-bar';
+    globalScrollContainer.appendChild(globalProgressBar);
+    document.body.appendChild(globalScrollContainer);
+
+    const updateGlobalScroll = () => {
+        // Calculate scroll progress for the whole window
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        
+        if (scrollHeight > 0) {
+            const scrollPercentage = (scrollTop / scrollHeight) * 100;
+            globalProgressBar.style.width = `${scrollPercentage}%`;
+            globalScrollContainer.style.opacity = '1';
+        } else {
+            globalScrollContainer.style.opacity = '0';
+            globalProgressBar.style.width = '0%';
+        }
+    };
+
+    window.addEventListener('scroll', updateGlobalScroll, { passive: true });
+    window.addEventListener('resize', updateGlobalScroll, { passive: true });
+    // Initial check
+    setTimeout(updateGlobalScroll, 100);
+
+    // Make sure it updates when switching tabs or changing content
+    const observer = new MutationObserver(() => updateGlobalScroll());
+    observer.observe(document.body, { childList: true, subtree: true });
 }
 
