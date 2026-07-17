@@ -294,6 +294,9 @@ function loadStateFromStorage() {
 // Save state to local storage + trigger cloud sync
 function saveStateToStorage() {
     sessionStorage.setItem('subsentry_state', JSON.stringify(state));
+    // Immediately show "Syncing..." if on home tab
+    if (typeof showSyncIndicator === 'function') showSyncIndicator(false, true);
+    
     // Debounced cloud sync: waits 1.5s after last change before uploading
     clearTimeout(window._cloudSyncDebounce);
     window._cloudSyncDebounce = setTimeout(() => {
@@ -508,11 +511,11 @@ function switchTab(tabName) {
     // Update mobile bottom nav pill highlighting
     document.querySelectorAll('.tab-btn-mobile').forEach(btn => {
         if (btn.getAttribute('data-tab') === tabName) {
-            btn.classList.add('active-pill-mobile');
-            btn.classList.remove('text-textMuted');
+            btn.classList.add('active-pill-mobile', 'text-white');
+            btn.classList.remove('text-slate-400', 'text-textMuted');
         } else {
-            btn.classList.remove('active-pill-mobile');
-            btn.classList.add('text-textMuted');
+            btn.classList.remove('active-pill-mobile', 'text-white');
+            btn.classList.add('text-slate-400');
         }
     });
 
@@ -903,6 +906,24 @@ function renderHomeTab() {
                 <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                 <span>Scan now</span>
             </button>
+            
+            <!-- Permanent Cloud Sync Indicator -->
+            ${window._lastSyncStatus === 'syncing' ? `
+            <div id="home-sync-status" class="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-[11px] font-bold tracking-wide transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.2)] animate-pulse">
+                <i data-lucide="cloud-upload" class="w-4 h-4"></i>
+                <span>Syncing...</span>
+            </div>
+            ` : window._lastSyncStatus === 'error' ? `
+            <div id="home-sync-status" class="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[11px] font-bold tracking-wide transition-all duration-500">
+                <i data-lucide="cloud-off" class="w-4 h-4"></i>
+                <span>Sync Offline</span>
+            </div>
+            ` : `
+            <div id="home-sync-status" class="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-[11px] font-bold tracking-wide shadow-[0_0_15px_rgba(var(--brand-rgb),0.3)] transition-all duration-500">
+                <i data-lucide="cloud-check" class="w-4 h-4"></i>
+                <span>Synced to Cloud</span>
+            </div>
+            `}
         </div>
 
         <!-- 4 Summary Cards Grid -->
@@ -1129,19 +1150,26 @@ function renderManageTab() {
             }).join('')}
         </div>
         
-        <!-- Mobile Filter Button -->
-        <div class="md:hidden w-full mb-4">
-            <button onclick="openMobileFilterModal()" class="w-full flex items-center justify-between bg-[#13111a] border border-glassBorder px-4 py-3 rounded-2xl text-textMuted text-sm font-sans active:bg-[#1a1723] transition-colors">
+        <!-- Mobile Filter Buttons (Category + Status) - mobile only -->
+        <div class="md:hidden w-full mb-4 flex gap-2">
+            <button onclick="openMobileFilterModal()" class="flex-1 flex items-center justify-between bg-[#13111a] border border-glassBorder px-4 py-3 rounded-2xl text-textMuted text-sm font-sans active:bg-[#1a1723] transition-colors">
                 <div class="flex items-center gap-2">
-                    <i data-lucide="filter" class="w-4 h-4 text-brand-400"></i>
-                    <span>Category: <strong class="text-cardTitle font-semibold">${manageCategoryFilter}</strong></span>
+                    <i data-lucide="tag" class="w-4 h-4 text-brand-400"></i>
+                    <span class="text-xs">Category: <strong class="text-cardTitle font-semibold">${manageCategoryFilter === 'All' ? 'All' : manageCategoryFilter}</strong></span>
+                </div>
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </button>
+            <button onclick="openMobileStatusFilter()" class="flex-1 flex items-center justify-between bg-[#13111a] border border-glassBorder px-4 py-3 rounded-2xl text-textMuted text-sm font-sans active:bg-[#1a1723] transition-colors">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="circle-dot" class="w-4 h-4 text-brand-400"></i>
+                    <span class="text-xs">Status: <strong class="text-cardTitle font-semibold">${window.manageStatusFilter || 'All'}</strong></span>
                 </div>
                 <i data-lucide="chevron-down" class="w-4 h-4"></i>
             </button>
         </div>
 
-        <!-- Status Filter Tabs -->
-        <div class="flex items-center space-x-1 mb-8 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-fit">
+        <!-- Status Filter Tabs (desktop only) -->
+        <div class="hidden md:flex items-center space-x-1 mb-8 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-fit">
             ${statusTabs.map(s => {
                 const isActive = s === window.manageStatusFilter;
                 const countForTab = s === 'All' ? state.subscriptions.length
@@ -1329,6 +1357,156 @@ window.closeMobileFilterModal = function() {
 window.selectMobileCategory = function(cat) {
     setManageCategory(cat);
     closeMobileFilterModal();
+};
+
+// ── Mobile Status Filter Modal ────────────────────────────────────────────────
+
+const STATUS_META = {
+    All:       { icon: 'layers',        color: 'text-slate-300',  dot: 'bg-slate-400',    label: 'All Subscriptions' },
+    Active:    { icon: 'check-circle',  color: 'text-emerald-400', dot: 'bg-emerald-400', label: 'Active' },
+    Paused:    { icon: 'pause-circle',  color: 'text-amber-400',  dot: 'bg-amber-400',    label: 'Paused' },
+    Trial:     { icon: 'clock',         color: 'text-sky-400',    dot: 'bg-sky-400',      label: 'Trial' },
+    Cancelled: { icon: 'x-circle',      color: 'text-red-400',    dot: 'bg-red-400',      label: 'Cancelled' }
+};
+
+window.openMobileStatusFilter = function() {
+    const modal    = document.getElementById('mobile-status-modal');
+    const backdrop = document.getElementById('mobile-status-backdrop');
+    const content  = document.getElementById('mobile-status-content');
+    const list     = document.getElementById('mobile-status-list');
+    if (!modal || !list) return;
+
+    const statuses = ['All', 'Active', 'Paused', 'Trial', 'Cancelled'];
+
+    list.innerHTML = statuses.map(s => {
+        const meta      = STATUS_META[s];
+        const isSelected = s === (window.manageStatusFilter || 'All');
+        const count = s === 'All'
+            ? state.subscriptions.length
+            : state.subscriptions.filter(sub => (sub.status || 'active') === s.toLowerCase()).length;
+
+        return `
+            <button onclick="selectMobileStatus('${s}')"
+                class="flex items-center justify-between w-full p-4 rounded-2xl border transition-all duration-200 cursor-pointer
+                    ${isSelected ? 'bg-gradient-to-r from-brand-500/20 to-transparent border-brand-500/40' : 'bg-white/5 border-white/5 active:bg-white/10'}">
+                <div class="flex items-center gap-3">
+                    <div class="w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'border-brand-400' : 'border-slate-600'}">
+                        ${isSelected ? '<div class="w-2 h-2 bg-brand-400 rounded-full shadow-[0_0_8px_rgba(20,184,166,0.8)]"></div>' : ''}
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full ${meta.dot} ${s === 'All' ? 'hidden' : ''}"></div>
+                        <span class="font-sans text-sm font-semibold ${isSelected ? 'text-white' : 'text-slate-300'}">${meta.label}</span>
+                    </div>
+                </div>
+                <div class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold text-slate-300">
+                    ${count}
+                </div>
+            </button>`;
+    }).join('');
+
+    lucide.createIcons({ nodes: [list] });
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        content.classList.remove('translate-y-full');
+        content.classList.add('translate-y-0');
+    }, 10);
+};
+
+window.closeMobileStatusFilter = function() {
+    const modal    = document.getElementById('mobile-status-modal');
+    const backdrop = document.getElementById('mobile-status-backdrop');
+    const content  = document.getElementById('mobile-status-content');
+    if (!modal) return;
+
+    backdrop.classList.remove('opacity-100');
+    backdrop.classList.add('opacity-0');
+    content.classList.remove('translate-y-0');
+    content.classList.add('translate-y-full');
+
+    setTimeout(() => modal.classList.add('hidden'), 300);
+};
+
+window.selectMobileStatus = function(status) {
+    window.setManageStatus(status);
+    closeMobileStatusFilter();
+};
+
+// ── Mobile Account Filter Modal ────────────────────────────────────────────────
+
+const ACCOUNT_TABS_META = [
+    { id: 'identity',    icon: 'user',     label: 'Identity & Prefs', desc: 'Profile name, contact' },
+    { id: 'sources',     icon: 'link',     label: 'Sources',          desc: 'Connected scan methods' },
+    { id: 'appearance',  icon: 'palette',  label: 'Aesthetics',       desc: 'Themes & UI' },
+    { id: 'diagnostics', icon: 'terminal', label: 'Diagnostics',      desc: 'System health' }
+];
+
+window.openMobileAccountFilter = function() {
+    const modal    = document.getElementById('mobile-account-modal');
+    const backdrop = document.getElementById('mobile-account-backdrop');
+    const content  = document.getElementById('mobile-account-content');
+    const list     = document.getElementById('mobile-account-list');
+    if (!modal || !list) return;
+
+    // Get current active tab (default to identity)
+    const currentTabId = document.querySelector('.acct-tab-btn.bg-brand-500\\/25')?.getAttribute('data-acct-tab') || 'identity';
+
+    list.innerHTML = ACCOUNT_TABS_META.map(tab => {
+        const isSelected = tab.id === currentTabId;
+        return `
+            <button onclick="selectMobileAccountTab('${tab.id}', '${tab.label}')"
+                class="flex items-center justify-between w-full p-4 rounded-2xl border transition-all duration-200 cursor-pointer
+                    ${isSelected ? 'bg-gradient-to-r from-brand-500/20 to-transparent border-brand-500/40' : 'bg-white/5 border-white/5 active:bg-white/10'}">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-[14px] bg-[#1a1723] flex items-center justify-center flex-shrink-0 shadow-inner ${isSelected ? 'text-brand-400' : 'text-slate-400'}">
+                        <i data-lucide="${tab.icon}" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-left">
+                        <div class="font-sans text-sm font-semibold ${isSelected ? 'text-white' : 'text-slate-300'}">${tab.label}</div>
+                        <div class="text-[10px] text-textMuted">${tab.desc}</div>
+                    </div>
+                </div>
+                <div class="w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? 'border-brand-400' : 'border-slate-600'}">
+                    ${isSelected ? '<div class="w-2 h-2 bg-brand-400 rounded-full shadow-[0_0_8px_rgba(20,184,166,0.8)]"></div>' : ''}
+                </div>
+            </button>`;
+    }).join('');
+
+    lucide.createIcons({ nodes: [list] });
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        content.classList.remove('translate-y-full');
+        content.classList.add('translate-y-0');
+    }, 10);
+};
+
+window.closeMobileAccountFilter = function() {
+    const modal    = document.getElementById('mobile-account-modal');
+    const backdrop = document.getElementById('mobile-account-backdrop');
+    const content  = document.getElementById('mobile-account-content');
+    if (!modal) return;
+
+    backdrop.classList.remove('opacity-100');
+    backdrop.classList.add('opacity-0');
+    content.classList.remove('translate-y-0');
+    content.classList.add('translate-y-full');
+
+    setTimeout(() => modal.classList.add('hidden'), 300);
+};
+
+window.selectMobileAccountTab = function(tabId, tabLabel) {
+    switchAccountTab(tabId);
+    
+    // Update the label on the button
+    const labelSpan = document.getElementById('mobile-account-current-tab');
+    if (labelSpan) labelSpan.textContent = tabLabel;
+    
+    closeMobileAccountFilter();
 };
 
 window.toggleManageSortMenu = function() {
@@ -2010,7 +2188,20 @@ function renderAccountTab() {
             <div class="lg:col-span-8 space-y-5">
 
                 <!-- Tab switcher -->
-                <div class="flex items-center gap-1 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-full max-w-full overflow-x-auto scrollbar-hide" id="account-tab-bar">
+                
+                <!-- Mobile Account Tab Button -->
+                <div class="md:hidden w-full mb-4">
+                    <button onclick="openMobileAccountFilter()" class="w-full flex items-center justify-between bg-[#13111a] border border-glassBorder px-4 py-3 rounded-2xl text-textMuted text-sm font-sans active:bg-[#1a1723] transition-colors">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="layout-dashboard" class="w-4 h-4 text-brand-400"></i>
+                            <span class="text-xs">Section: <strong id="mobile-account-current-tab" class="text-cardTitle font-semibold">Identity & Prefs</strong></span>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Desktop Account Tabs -->
+                <div class="hidden md:flex items-center gap-1 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-full max-w-full overflow-x-auto scrollbar-hide" id="account-tab-bar">
                     ${[
                         { id: 'identity', icon: 'user', label: 'Identity & Prefs' },
                         { id: 'sources',  icon: 'link', label: 'Sources' },
@@ -3323,31 +3514,40 @@ function getCloudSyncPayload() {
     };
 }
 
-// Show a subtle floating sync indicator
-function showSyncIndicator(success = true) {
-    let indicator = document.getElementById('cloud-sync-indicator');
-    if (!indicator) {
-        indicator = document.createElement('div');
-        indicator.id = 'cloud-sync-indicator';
-        indicator.style.cssText = 'position:fixed;z-index:9000;bottom:84px;right:12px;font-size:10px;font-family:Space Grotesk,sans-serif;font-weight:700;padding:5px 10px;border-radius:999px;pointer-events:none;transition:opacity 0.5s ease;';
-        document.body.appendChild(indicator);
-    }
-    indicator.style.opacity = '1';
-    if (success) {
-        indicator.textContent = '☁ Synced';
-        indicator.style.background = 'rgba(20,184,166,0.15)';
-        indicator.style.color = '#2dd4bf';
-        indicator.style.border = '1px solid rgba(20,184,166,0.3)';
+// Show a permanent sync indicator on Home tab
+function showSyncIndicator(success = true, isSyncing = false) {
+    // Keep track of the last status so renderHomeTab can render it correctly on tab switch
+    window._lastSyncStatus = isSyncing ? 'syncing' : (success ? 'success' : 'error');
+    
+    const badge = document.getElementById('home-sync-status');
+    
+    // Clean up old toast if it exists (for backward compatibility during session)
+    const oldToast = document.getElementById('cloud-sync-indicator');
+    if (oldToast) oldToast.remove();
+    
+    if (!badge) return; // Only updates if the user is currently looking at the Home tab
+    
+    if (isSyncing) {
+        badge.innerHTML = `
+            <i data-lucide="cloud-upload" class="w-4 h-4"></i>
+            <span>Syncing...</span>
+        `;
+        badge.className = 'mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-[11px] font-bold tracking-wide transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.2)] animate-pulse';
+    } else if (success) {
+        badge.innerHTML = `
+            <i data-lucide="cloud-check" class="w-4 h-4"></i>
+            <span>Synced to Cloud</span>
+        `;
+        badge.className = 'mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-[11px] font-bold tracking-wide shadow-[0_0_15px_rgba(var(--brand-rgb),0.3)] transition-all duration-500';
     } else {
-        indicator.textContent = '⚠ Sync offline';
-        indicator.style.background = 'rgba(239,68,68,0.15)';
-        indicator.style.color = '#f87171';
-        indicator.style.border = '1px solid rgba(239,68,68,0.3)';
+        badge.innerHTML = `
+            <i data-lucide="cloud-off" class="w-4 h-4"></i>
+            <span>Sync Offline</span>
+        `;
+        badge.className = 'mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[11px] font-bold tracking-wide transition-all duration-500';
     }
-    clearTimeout(window._syncIndicatorTimeout);
-    window._syncIndicatorTimeout = setTimeout(() => {
-        indicator.style.opacity = '0';
-    }, 2800);
+    
+    lucide.createIcons({ nodes: [badge] });
 }
 
 // Push current state to Supabase cloud

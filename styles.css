@@ -152,9 +152,10 @@ canvas#starfield-canvas {
 
 /* Mobile active tab design */
 .tab-btn-mobile.active-pill-mobile {
-    color: var(--brand-500); /* Baby pink active text */
-    background: rgba(var(--brand-rgb), 0.06);
-    box-shadow: inset 0 0 10px rgba(var(--brand-rgb), 0.04);
+    color: #ffffff;
+    background: rgba(var(--brand-rgb), 0.15);
+    box-shadow: 0 4px 12px rgba(var(--brand-rgb), 0.15), inset 0 1px 1px rgba(255,255,255,0.1);
+    border: 1px solid rgba(var(--brand-rgb), 0.3);
 }
 
 /* Scrollbar customizations overriding custom scrollbars locally */
