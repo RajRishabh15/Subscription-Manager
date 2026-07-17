@@ -291,9 +291,14 @@ function loadStateFromStorage() {
     }
 }
 
-// Save state to local storage
+// Save state to local storage + trigger cloud sync
 function saveStateToStorage() {
     sessionStorage.setItem('subsentry_state', JSON.stringify(state));
+    // Debounced cloud sync: waits 1.5s after last change before uploading
+    clearTimeout(window._cloudSyncDebounce);
+    window._cloudSyncDebounce = setTimeout(() => {
+        syncToCloud();
+    }, 1500);
 }
 
 // Initialize layout views based on login state
@@ -585,8 +590,9 @@ function startScanning(phone, email) {
     function runNextStep() {
         if (currentStep >= scanSteps.length) {
             if (progressView.telemetryInterval) clearInterval(progressView.telemetryInterval);
-            setTimeout(() => {
-                state.subscriptions = [
+            setTimeout(async () => {
+                // Default mock subscriptions (only used if no cloud data exists)
+                const mockSubscriptions = [
                     {
                         id: 'sub-' + Date.now() + '-1',
                         name: 'Netflix',
@@ -635,6 +641,16 @@ function startScanning(phone, email) {
                 
                 state.isLoggedIn = true;
                 state.activeTab = 'home';
+
+                // Attempt to load existing cloud data for this user
+                const userEmail = state.currentUser.email;
+                const cloudData = await loadFromCloud(userEmail);
+
+                // Only use mock subscriptions if user has no cloud-saved data
+                if (!cloudData || !cloudData.subscriptions || cloudData.subscriptions.length === 0) {
+                    state.subscriptions = mockSubscriptions;
+                }
+                
                 saveStateToStorage();
                 
                 // Dramatic reveal transition
@@ -3283,6 +3299,122 @@ if (SUPABASE_URL && SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL' && SUPABASE_ANO
     }
 } else {
     console.log("ℹ️ Supabase URL/AnonKey not configured. Running in simulated Developer Mock Mode.");
+}
+
+// ==========================================
+// CLOUD SYNC FUNCTIONS (Supabase user_profiles)
+// ==========================================
+
+// Build a lean payload of state for cloud storage
+function getCloudSyncPayload() {
+    const userCopy = { ...state.currentUser };
+    // Skip very large base64 images (>150KB) to stay within Supabase row limits
+    if (userCopy.avatarBase64 && userCopy.avatarBase64.length > 150000) {
+        userCopy.avatarBase64 = null;
+    }
+    return {
+        currentUser: userCopy,
+        subscriptions: state.subscriptions,
+        preferences: state.preferences,
+        billingCard: state.billingCard,
+        diagnostics: state.diagnostics,
+        activeTab: state.activeTab,
+        syncedAt: new Date().toISOString()
+    };
+}
+
+// Show a subtle floating sync indicator
+function showSyncIndicator(success = true) {
+    let indicator = document.getElementById('cloud-sync-indicator');
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'cloud-sync-indicator';
+        indicator.style.cssText = 'position:fixed;z-index:9000;bottom:84px;right:12px;font-size:10px;font-family:Space Grotesk,sans-serif;font-weight:700;padding:5px 10px;border-radius:999px;pointer-events:none;transition:opacity 0.5s ease;';
+        document.body.appendChild(indicator);
+    }
+    indicator.style.opacity = '1';
+    if (success) {
+        indicator.textContent = '☁ Synced';
+        indicator.style.background = 'rgba(20,184,166,0.15)';
+        indicator.style.color = '#2dd4bf';
+        indicator.style.border = '1px solid rgba(20,184,166,0.3)';
+    } else {
+        indicator.textContent = '⚠ Sync offline';
+        indicator.style.background = 'rgba(239,68,68,0.15)';
+        indicator.style.color = '#f87171';
+        indicator.style.border = '1px solid rgba(239,68,68,0.3)';
+    }
+    clearTimeout(window._syncIndicatorTimeout);
+    window._syncIndicatorTimeout = setTimeout(() => {
+        indicator.style.opacity = '0';
+    }, 2800);
+}
+
+// Push current state to Supabase cloud
+async function syncToCloud() {
+    if (!isSupabaseConfigured || !state.isLoggedIn || !state.currentUser.email) return;
+    try {
+        const payload = getCloudSyncPayload();
+        const { error } = await supabaseClient
+            .from('user_profiles')
+            .upsert(
+                { email: state.currentUser.email, profile_data: payload, updated_at: new Date().toISOString() },
+                { onConflict: 'email' }
+            );
+        if (error) {
+            console.warn('⚠ Cloud sync failed:', error.message);
+            showSyncIndicator(false);
+        } else {
+            console.log('✅ Synced to cloud');
+            showSyncIndicator(true);
+        }
+    } catch (e) {
+        console.warn('⚠ Cloud sync exception:', e);
+        showSyncIndicator(false);
+    }
+}
+
+// Fetch saved state from Supabase cloud for this email
+async function loadFromCloud(email) {
+    if (!isSupabaseConfigured || !email) return null;
+    try {
+        const { data, error } = await supabaseClient
+            .from('user_profiles')
+            .select('profile_data')
+            .eq('email', email)
+            .maybeSingle();
+
+        if (error || !data || !data.profile_data) {
+            console.log('ℹ️ No cloud profile found for:', email);
+            return null;
+        }
+
+        const cloud = data.profile_data;
+
+        // Merge cloud data into live state
+        if (cloud.subscriptions) state.subscriptions = cloud.subscriptions;
+        if (cloud.preferences)   state.preferences   = { ...state.preferences,   ...cloud.preferences };
+        if (cloud.billingCard)   state.billingCard   = { ...state.billingCard,   ...cloud.billingCard };
+        if (cloud.diagnostics)   state.diagnostics   = { ...state.diagnostics,   ...cloud.diagnostics };
+        if (cloud.currentUser) {
+            state.currentUser = {
+                ...state.currentUser,
+                ...cloud.currentUser,
+                // Always keep freshly-entered email/phone from this login
+                email: state.currentUser.email || cloud.currentUser.email,
+                phone: state.currentUser.phone || cloud.currentUser.phone,
+                linkedCredentials: state.currentUser.linkedCredentials.length
+                    ? state.currentUser.linkedCredentials
+                    : (cloud.currentUser.linkedCredentials || [])
+            };
+        }
+
+        console.log('✅ Loaded cloud profile for:', email);
+        return cloud;
+    } catch (e) {
+        console.warn('⚠ loadFromCloud exception:', e);
+        return null;
+    }
 }
 
 // ==========================================
