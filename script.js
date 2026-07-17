@@ -1112,15 +1112,16 @@ function renderManageTab() {
             </div>
             <!-- Sort Dropdown -->
             <div class="relative">
-                <button id="manage-sort-btn" onclick="toggleManageSortMenu()" class="bg-[#13111a] border border-glassBorder text-textMuted px-4 py-2 rounded-xl text-xs flex items-center space-x-2 font-sans hover:bg-[#1a1723] hover:border-brand-500/40 transition-all">
-                    <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+                <button id="manage-sort-btn" onclick="toggleManageSortMenu()" class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 text-white/80 px-5 py-3 rounded-[20px] text-[13px] font-medium flex items-center space-x-2 font-sans hover:-translate-y-0.5 hover:scale-[1.02] active:scale-95 shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.1)] hover:border-white/40 transition-all duration-300 ease-out">
+                    <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
                     <span id="manage-sort-label">${sortOptions.find(o=>o.val===window.manageSortBy)?.label || 'Name A–Z'}</span>
-                    <i data-lucide="chevron-down" class="w-3 h-3 ml-1 transition-transform" id="manage-sort-chevron"></i>
+                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 ml-1 transition-transform duration-300" id="manage-sort-chevron"></i>
                 </button>
-                <div id="manage-sort-menu" class="hidden absolute right-0 top-full mt-2 w-48 bg-[#0f0e13] border border-[#222] rounded-2xl shadow-2xl z-50 overflow-hidden py-1">
+                <div id="manage-sort-menu" class="hidden absolute right-0 top-full mt-3 w-52 bg-gradient-to-br from-[#1a1a24]/95 to-[#0a0a0f]/95 backdrop-blur-3xl border border-white/15 rounded-[24px] shadow-[0_30px_60px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.1)] z-50 overflow-hidden py-2 scale-95 opacity-0 transition-all duration-300 ease-out" style="transform-origin: top right;">
                     ${sortOptions.map(o => `
-                        <button onclick="setManageSort('${o.val}')" class="w-full text-left px-4 py-2.5 text-xs font-medium transition-colors ${window.manageSortBy===o.val ? 'text-brand-400 bg-brand-500/10' : 'text-textMuted hover:text-cardTitle hover:bg-[#1a1723]'} font-sans">
-                            ${window.manageSortBy===o.val ? '✓ ' : ''}${o.label}
+                        <button onclick="setManageSort('${o.val}')" class="w-full text-left px-5 py-3 text-[13px] font-medium transition-colors ${window.manageSortBy===o.val ? 'text-brand-400 bg-brand-500/10' : 'text-white/60 hover:text-white hover:bg-white/5'} font-sans flex items-center gap-2">
+                            ${window.manageSortBy===o.val ? '<i data-lucide="check" class="w-4 h-4"></i> ' : '<div class="w-4 h-4"></div>'}
+                            ${o.label}
                         </button>
                     `).join('')}
                 </div>
@@ -1128,48 +1129,58 @@ function renderManageTab() {
         </div>
 
         <!-- Add Subscription Button -->
-        <button onclick="openAddSubModal()" class="w-full mb-6 flex items-center justify-center space-x-2 border border-dashed border-brand-500/40 hover:border-brand-500 bg-brand-500/5 hover:bg-brand-500/10 text-brand-400 font-semibold text-sm py-3.5 rounded-2xl transition-all group font-space">
-            <i data-lucide="plus-circle" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+        <button onclick="openAddSubModal()" class="w-full mb-6 flex items-center justify-center space-x-2 bg-brand-500/10 border border-brand-500/20 hover:border-brand-500/40 text-brand-400 font-bold text-[15px] py-4 rounded-[24px] hover:bg-brand-500/15 active:scale-95 hover:scale-[1.01] hover:-translate-y-1 shadow-lg transition-all duration-300 ease-out group font-space">
+            <i data-lucide="plus-circle" class="w-5 h-5 group-hover:scale-110 transition-transform duration-300"></i>
             <span>Add New Subscription</span>
         </button>
 
         <!-- Search bar -->
-        <div class="relative w-full mb-5">
-            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-textMuted">
-                <i data-lucide="search" class="w-4 h-4"></i>
+        <div class="relative w-full mb-6 group hover:scale-[1.01] hover:-translate-y-0.5 focus-within:scale-[1.02] focus-within:-translate-y-1 transition-all duration-300 ease-out">
+            <span class="absolute inset-y-0 left-0 pl-5 flex items-center text-white/40 group-focus-within:text-brand-400 transition-colors duration-300 z-10">
+                <i data-lucide="search" class="w-5 h-5"></i>
             </span>
             <input type="text" id="manage-search" placeholder="Search subscriptions..." value="${manageSearchQuery}"
-                class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-2xl py-3.5 pl-11 pr-4 text-sm text-cardTitle focus:outline-none placeholder-slate-500 font-sans shadow-inner">
+                class="w-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 focus:border-brand-500/60 rounded-[28px] py-4 pl-12 pr-5 text-[15px] text-white focus:outline-none placeholder-white/40 font-sans shadow-[0_10px_30px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.1)] focus:shadow-[0_15px_40px_rgba(20,184,166,0.2),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all duration-300 ease-out relative">
         </div>
 
         <!-- Category Pills (Desktop) -->
-        <div class="hidden md:flex items-center space-x-2 overflow-x-auto w-full scrollbar-none mb-4 pb-1">
+        <div class="hidden md:flex items-center space-x-2.5 overflow-x-auto w-full scrollbar-none mb-6 pt-1 pb-3 px-1">
             ${categoriesList.map(cat => {
                 const isSelected = cat === manageCategoryFilter;
-                return `<button onclick="setManageCategory('${cat}')" class="px-5 py-2 rounded-full text-[11px] font-medium whitespace-nowrap transition-all border font-sans ${isSelected ? 'bg-brand-500/20 border-brand-500 text-cardTitle' : 'bg-[#13111a] border-glassBorder text-textMuted hover:text-cardTitle hover:bg-[#1a1723]'}">${cat}</button>`;
+                return `<button onclick="setManageCategory('${cat}')" class="px-5 py-2.5 rounded-[16px] text-[12px] font-bold whitespace-nowrap transition-all duration-300 ease-out font-sans active:scale-95 hover:-translate-y-0.5 ${isSelected ? 'bg-gradient-to-r from-brand-500 to-indigo-500 text-white shadow-lg shadow-brand-500/30' : 'bg-white/5 ring-1 ring-inset ring-white/10 text-white/60 hover:text-white hover:ring-white/30 hover:bg-white/10'}">${cat}</button>`;
             }).join('')}
         </div>
         
         <!-- Mobile Filter Buttons (Category + Status) - mobile only -->
-        <div class="md:hidden w-full mb-4 flex gap-2">
-            <button onclick="openMobileFilterModal()" class="flex-1 flex items-center justify-between bg-[#13111a] border border-glassBorder px-4 py-3 rounded-2xl text-textMuted text-sm font-sans active:bg-[#1a1723] transition-colors">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="tag" class="w-4 h-4 text-brand-400"></i>
-                    <span class="text-xs">Category: <strong class="text-cardTitle font-semibold">${manageCategoryFilter === 'All' ? 'All' : manageCategoryFilter}</strong></span>
+        <div class="md:hidden w-full mb-6 flex gap-3 px-1">
+            <button onclick="openMobileFilterModal()" class="flex-1 flex items-center justify-between bg-white/5 backdrop-blur-2xl ring-1 ring-inset ring-white/10 px-3 py-3 rounded-[24px] text-white/80 text-[13px] font-sans active:scale-95 shadow-lg transition-all duration-300 ease-out">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-[14px] bg-white/10 flex items-center justify-center shadow-inner border border-white/5 flex-shrink-0">
+                        <i data-lucide="tag" class="w-4 h-4 text-brand-400"></i>
+                    </div>
+                    <div class="flex flex-col items-start justify-center gap-0.5">
+                        <span class="text-[9px] text-white/40 uppercase font-bold tracking-widest leading-none">Category</span>
+                        <span class="text-[13px] font-extrabold text-white leading-none overflow-hidden text-ellipsis whitespace-nowrap max-w-[70px]">${manageCategoryFilter === 'All' ? 'All' : manageCategoryFilter}</span>
+                    </div>
                 </div>
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-white/30 mr-1 flex-shrink-0"></i>
             </button>
-            <button onclick="openMobileStatusFilter()" class="flex-1 flex items-center justify-between bg-[#13111a] border border-glassBorder px-4 py-3 rounded-2xl text-textMuted text-sm font-sans active:bg-[#1a1723] transition-colors">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="circle-dot" class="w-4 h-4 text-brand-400"></i>
-                    <span class="text-xs">Status: <strong class="text-cardTitle font-semibold">${window.manageStatusFilter || 'All'}</strong></span>
+            <button onclick="openMobileStatusFilter()" class="flex-1 flex items-center justify-between bg-white/5 backdrop-blur-2xl ring-1 ring-inset ring-white/10 px-3 py-3 rounded-[24px] text-white/80 text-[13px] font-sans active:scale-95 shadow-lg transition-all duration-300 ease-out">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-[14px] bg-white/10 flex items-center justify-center shadow-inner border border-white/5 flex-shrink-0">
+                        <i data-lucide="circle-dot" class="w-4 h-4 text-brand-400"></i>
+                    </div>
+                    <div class="flex flex-col items-start justify-center gap-0.5">
+                        <span class="text-[9px] text-white/40 uppercase font-bold tracking-widest leading-none">Status</span>
+                        <span class="text-[13px] font-extrabold text-white leading-none overflow-hidden text-ellipsis whitespace-nowrap max-w-[70px]">${window.manageStatusFilter || 'All'}</span>
+                    </div>
                 </div>
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-white/30 mr-1 flex-shrink-0"></i>
             </button>
         </div>
 
         <!-- Status Filter Tabs (desktop only) -->
-        <div class="hidden md:flex items-center space-x-1 mb-8 bg-[#0a090f] border border-[#1a1823] rounded-2xl p-1 w-fit">
+        <div class="hidden md:flex items-center space-x-1.5 mb-8 bg-[#0a0a0f]/80 backdrop-blur-3xl ring-1 ring-inset ring-white/10 rounded-[20px] p-1.5 w-fit shadow-lg">
             ${statusTabs.map(s => {
                 const isActive = s === window.manageStatusFilter;
                 const countForTab = s === 'All' ? state.subscriptions.length
@@ -1177,8 +1188,8 @@ function renderManageTab() {
                         const st = sub.status || 'active';
                         return st === s.toLowerCase();
                     }).length;
-                return `<button onclick="setManageStatus('${s}')" class="px-4 py-1.5 rounded-xl text-[11px] font-semibold transition-all font-sans ${isActive ? 'bg-brand-500/25 text-brand-300 shadow-inner border border-brand-500/40' : 'text-textMuted hover:text-cardTitle'}">
-                    ${s} ${countForTab > 0 ? `<span class="ml-1 opacity-60 text-[9px]">${countForTab}</span>` : ''}
+                return `<button onclick="setManageStatus('${s}')" class="px-5 py-2.5 rounded-[16px] text-[12px] font-bold transition-all duration-300 ease-out font-sans ${isActive ? 'bg-white/10 text-white ring-1 ring-inset ring-white/10 shadow-sm' : 'text-white/50 hover:text-white hover:bg-white/5 active:scale-95'}">
+                    ${s} ${countForTab > 0 ? `<span class="ml-1.5 opacity-60 text-[10px] bg-black/40 px-1.5 py-0.5 rounded-full">${countForTab}</span>` : ''}
                 </button>`;
             }).join('')}
         </div>
@@ -1200,70 +1211,73 @@ function renderManageTab() {
                 const urgentRenewal = daysUntil >= 0 && daysUntil <= 7;
 
                 return `
-                    <div class="bg-[#0f0e13] border border-glassBorder rounded-[20px] p-5 relative group hover:border-brand-500/30 hover:bg-[#13111a] transition-all cursor-pointer flex flex-col justify-between overflow-hidden min-h-[200px] manage-card"
+                    <div class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[28px] p-6 relative group hover:scale-[1.03] hover:-translate-y-1.5 active:scale-[0.98] transition-all duration-400 ease-out cursor-pointer flex flex-col justify-between overflow-hidden min-h-[200px] manage-card shadow-[0_15px_40px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] hover:border-white/40"
                         onclick="openSubscriptionDetails('${sub.id}')">
                         
                         <!-- Top Row -->
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="w-10 h-10 rounded-[14px] bg-[#1a1723] flex items-center justify-center flex-shrink-0 shadow-inner">
-                                <i data-lucide="${template.lucideIcon}" class="w-5 h-5 text-brand-400"></i>
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="w-12 h-12 rounded-[18px] bg-white/10 border border-white/10 flex items-center justify-center flex-shrink-0 shadow-[0_4px_15px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                                <i data-lucide="${template.lucideIcon}" class="w-6 h-6 text-brand-400"></i>
                             </div>
-                            <span class="px-3 py-1 rounded-full text-[9px] font-bold tracking-widest uppercase border ${st.pill} font-sans">${st.text}</span>
+                            <span class="px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase border ${st.pill} font-sans shadow-sm">${st.text}</span>
                         </div>
 
                         <!-- Name & Category -->
-                        <div class="mb-4 flex-1">
-                            <h4 class="font-bold text-cardTitle text-base font-sans tracking-tight mb-0.5">${sub.name}</h4>
-                            <p class="text-[11px] text-slate-500 font-sans">${sub.category}</p>
+                        <div class="mb-5 flex-1">
+                            <h4 class="font-extrabold text-white text-[17px] font-sans tracking-tight mb-1">${sub.name}</h4>
+                            <p class="text-[12px] text-white/50 font-sans font-medium">${sub.category}</p>
                         </div>
 
                         <!-- Price & Renewal -->
-                        <div class="flex items-end justify-between mb-5">
+                        <div class="flex items-end justify-between">
                             <div>
-                                <div class="text-xl font-bold text-cardTitle font-sans tracking-tight leading-none">${formatCurrency(sub.cost)}</div>
-                                <div class="text-[10px] text-slate-500 font-sans">/ ${sub.cycle}</div>
+                                <div class="text-[22px] font-bold text-white font-sans tracking-tight leading-none">${formatCurrency(sub.cost)}</div>
+                                <div class="text-[11px] text-white/50 font-sans mt-0.5">/ ${sub.cycle}</div>
                             </div>
                             <div class="text-right">
-                                <div class="text-[10px] ${urgentRenewal ? 'text-amber-400 font-bold' : 'text-slate-500'} font-sans mb-0.5">
+                                <div class="text-[11px] ${urgentRenewal ? 'text-amber-400 font-bold drop-shadow-md' : 'text-white/60'} font-sans mb-1">
                                     ${urgentRenewal ? `⚠ ${daysUntil}d left` : `renews ${new Date(sub.nextRenewal).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
                                 </div>
-                                <div class="text-[10px] text-slate-500 font-sans">${sub.payment.toLowerCase().includes('card') ? 'via card' : 'via email'}</div>
+                                <div class="text-[11px] text-white/40 font-sans">${sub.payment.toLowerCase().includes('card') ? 'via card' : 'via email'}</div>
                             </div>
                         </div>
 
-                        <!-- Action Buttons - visible on hover -->
-                        <div class="absolute inset-x-0 bottom-0 flex opacity-0 group-hover:opacity-100 transition-all duration-200 rounded-b-[20px] overflow-hidden" onclick="event.stopPropagation()">
+                        <!-- Action Buttons - In-flow pill, visible on hover -->
+                        <div class="mt-5 flex opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300 ease-out translate-y-2 group-hover:translate-y-0 rounded-[16px] overflow-hidden backdrop-blur-xl shadow-lg border border-white/15 bg-white/5" onclick="event.stopPropagation()">
                             ${status !== 'cancelled' ? `
-                                <button onclick="editSubscription('${sub.id}')" title="Edit" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-brand-500/20 text-textMuted hover:text-brand-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-[#222]">
-                                    <i data-lucide="pencil" class="w-3 h-3"></i> Edit
+                                <button onclick="editSubscription('${sub.id}')" title="Edit" class="flex-1 py-2.5 hover:bg-white/10 text-white/80 hover:text-white transition-colors text-[12px] font-bold font-sans flex items-center justify-center gap-1.5">
+                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit
                                 </button>
-                                <button onclick="toggleSubPause('${sub.id}')" title="${status === 'paused' ? 'Resume' : 'Pause'}" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-amber-500/20 text-textMuted hover:text-amber-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-l border-[#222]">
-                                    <i data-lucide="${status === 'paused' ? 'play' : 'pause'}" class="w-3 h-3"></i> ${status === 'paused' ? 'Resume' : 'Pause'}
+                                <div class="w-px bg-white/15"></div>
+                                <button onclick="toggleSubPause('${sub.id}')" title="${status === 'paused' ? 'Resume' : 'Pause'}" class="flex-1 py-2.5 hover:bg-amber-500/20 text-white/80 hover:text-amber-300 transition-colors text-[12px] font-bold font-sans flex items-center justify-center gap-1.5">
+                                    <i data-lucide="${status === 'paused' ? 'play' : 'pause'}" class="w-3.5 h-3.5"></i> ${status === 'paused' ? 'Resume' : 'Pause'}
                                 </button>
-                                <button onclick="cancelSubscription('${sub.id}')" title="Cancel" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-red-500/20 text-textMuted hover:text-red-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-l border-[#222]">
-                                    <i data-lucide="x-circle" class="w-3 h-3"></i> Cancel
+                                <div class="w-px bg-white/15"></div>
+                                <button onclick="cancelSubscription('${sub.id}')" title="Cancel" class="flex-1 py-2.5 hover:bg-red-500/20 text-white/80 hover:text-red-300 transition-colors text-[12px] font-bold font-sans flex items-center justify-center gap-1.5">
+                                    <i data-lucide="x-circle" class="w-3.5 h-3.5"></i> Cancel
                                 </button>
                             ` : `
-                                <button onclick="reactivateSubscription('${sub.id}')" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-emerald-500/20 text-textMuted hover:text-emerald-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-[#222]">
-                                    <i data-lucide="refresh-cw" class="w-3 h-3"></i> Reactivate
+                                <button onclick="reactivateSubscription('${sub.id}')" class="flex-1 py-2.5 hover:bg-emerald-500/20 text-white/80 hover:text-emerald-300 transition-colors text-[12px] font-bold font-sans flex items-center justify-center gap-1.5">
+                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Reactivate
                                 </button>
-                                <button onclick="deleteSubscription('${sub.id}')" class="flex-1 py-2.5 bg-[#1a1723] hover:bg-red-500/20 text-textMuted hover:text-red-400 transition-colors text-xs font-semibold font-space flex items-center justify-center gap-1.5 border-t border-l border-[#222]">
-                                    <i data-lucide="trash-2" class="w-3 h-3"></i> Delete
+                                <div class="w-px bg-white/15"></div>
+                                <button onclick="deleteSubscription('${sub.id}')" class="flex-1 py-2.5 hover:bg-red-500/20 text-white/80 hover:text-red-300 transition-colors text-[12px] font-bold font-sans flex items-center justify-center gap-1.5">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete
                                 </button>
                             `}
                         </div>
 
                         <!-- Bottom Gradient Line -->
-                        <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r ${st.line} opacity-40 group-hover:opacity-80 transition-opacity"></div>
+                        <div class="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r ${st.line} opacity-50 group-hover:opacity-100 transition-opacity duration-300 z-10 rounded-b-[28px]"></div>
                     </div>
                 `;
             }).join('') : `
-                <div class="col-span-full bg-[#13111a] border border-dashed border-glassBorder rounded-3xl p-12 text-center">
-                    <div class="p-4 bg-[#1a1723] border border-glassBorder text-textMuted rounded-full w-14 h-14 mx-auto mb-4 flex items-center justify-center">
-                        <i data-lucide="search-x" class="w-6 h-6"></i>
+                <div class="col-span-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/20 rounded-[28px] p-12 text-center shadow-[0_15px_40px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                    <div class="p-5 bg-white/10 border border-white/10 text-white/60 rounded-[20px] w-16 h-16 mx-auto mb-5 flex items-center justify-center shadow-inner">
+                        <i data-lucide="search-x" class="w-7 h-7"></i>
                     </div>
-                    <h4 class="text-cardTitle font-bold text-base font-space">No Subscriptions Found</h4>
-                    <p class="text-textMuted text-xs mt-1 mb-6 font-sans">Try adjusting your filters or search query.</p>
+                    <h4 class="text-white font-extrabold text-[17px] font-sans tracking-tight">No Subscriptions Found</h4>
+                    <p class="text-white/50 text-[13px] mt-1.5 mb-2 font-sans font-medium">Try adjusting your filters or search query.</p>
                 </div>
             `}
         </div>
@@ -1513,9 +1527,21 @@ window.toggleManageSortMenu = function() {
     const menu = document.getElementById('manage-sort-menu');
     const chevron = document.getElementById('manage-sort-chevron');
     if (menu) {
-        const isOpen = !menu.classList.contains('hidden');
-        menu.classList.toggle('hidden');
-        if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+        const isOpen = menu.classList.contains('opacity-100');
+        
+        if (isOpen) {
+            menu.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+            menu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+            setTimeout(() => { if (!menu.classList.contains('opacity-100')) menu.classList.add('hidden') }, 300);
+            if (chevron) chevron.style.transform = '';
+        } else {
+            menu.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                menu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                menu.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            });
+        }
     }
 };
 

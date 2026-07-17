@@ -76,7 +76,7 @@
     <link rel="stylesheet" href="styles.css?v=2">
 
     <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -225,7 +225,7 @@
                             <div class="relative flex flex-col gap-4">
                                 <div
                                     class="w-12 h-12 rounded-[18px] bg-brand-500/15 border border-brand-500/30 text-brand-400 flex items-center justify-center shadow-[inset_0_0_20px_rgba(20,184,166,0.1)] group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
-                                    <i data-lucide="scan-line" class="w-6 h-6"></i>
+                                    <i class="ph-fill ph-scan w-6 h-6"></i>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-white font-sans tracking-wide mb-1.5">Smart
@@ -249,7 +249,7 @@
                             <div class="relative flex flex-col gap-4">
                                 <div
                                     class="w-12 h-12 rounded-[18px] bg-cosmicBlue-500/15 border border-cosmicBlue-500/30 text-cosmicBlue-400 flex items-center justify-center shadow-[inset_0_0_20px_rgba(14,165,233,0.1)] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-                                    <i data-lucide="zap" class="w-6 h-6"></i>
+                                    <i class="ph-fill ph-lightning w-6 h-6"></i>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-white font-sans tracking-wide mb-1.5">Instant
@@ -273,7 +273,7 @@
                             <div class="relative flex flex-col gap-4">
                                 <div
                                     class="w-12 h-12 rounded-[18px] bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shadow-[inset_0_0_20px_rgba(168,85,247,0.1)] group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
-                                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                                    <i class="ph-fill ph-chart-bar w-6 h-6"></i>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-white font-sans tracking-wide mb-1.5">Spend
@@ -297,7 +297,7 @@
                             <div class="relative flex flex-col gap-4">
                                 <div
                                     class="w-12 h-12 rounded-[18px] bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shadow-[inset_0_0_20px_rgba(16,185,129,0.1)] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-                                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                                    <i class="ph-fill ph-shield-check w-6 h-6"></i>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-white font-sans tracking-wide mb-1.5">Always
@@ -403,7 +403,7 @@
                                 <!-- Security badge -->
                                 <div
                                     class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-500/[0.08] border border-emerald-500/20">
-                                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                    <i class="ph-fill ph-shield-check w-3.5 h-3.5 text-emerald-400"></i>
                                     <span class="text-[11px] text-emerald-300/90 font-sans">Bank-grade encryption · We
                                         never store credentials</span>
                                 </div>
@@ -423,8 +423,7 @@
                                 <!-- Back Button -->
                                 <button id="btn-register-back"
                                     class="flex items-center gap-2 text-xs text-slate-500 hover:text-white transition-colors font-space group">
-                                    <i data-lucide="arrow-left"
-                                        class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
+                                    <i class="ph-fill ph-arrow-left w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i>
                                     <span>Back to Authentication</span>
                                 </button>
 
@@ -456,8 +455,7 @@
                                             </div>
                                             <button id="btn-open-register-avatar-modal" type="button"
                                                 class="flex-1 bg-brand-500/10 border border-brand-500/30 hover:border-brand-500/60 hover:bg-brand-500/20 text-brand-400 font-semibold text-xs py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 font-space group">
-                                                <i data-lucide="palette"
-                                                    class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
+                                                <i class="ph-fill ph-palette w-4 h-4 group-hover:rotate-12 transition-transform"></i>
                                                 <span>Customise Avatar</span>
                                             </button>
                                         </div>
@@ -479,8 +477,7 @@
                                         class="absolute inset-0 rounded-2xl shadow-[0_0_30px_rgba(236,72,153,0.3)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     </div>
                                     <span class="relative">Complete Registration</span>
-                                    <i data-lucide="check"
-                                        class="relative w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                                    <i class="ph-fill ph-check relative w-5 h-5 group-hover:scale-110 transition-transform"></i>
                                 </button>
                             </div>
                         </div>
@@ -692,12 +689,12 @@
                 <nav class="bg-[#0f0e13]/75 border border-white/10 backdrop-blur-2xl p-1.5 rounded-[28px] flex items-center shadow-[0_12px_40px_rgba(0,0,0,0.7)] ring-1 ring-white/5">
                     <button data-tab="home" onclick="switchTab('home')"
                         class="tab-btn-mobile flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white px-8 py-2.5 rounded-3xl transition-all duration-300">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                        <i class="ph-fill ph-squares-four w-4 h-4"></i>
                         <span class="text-[10px] font-bold font-space tracking-wider uppercase">Home</span>
                     </button>
                     <button data-tab="manage" onclick="switchTab('manage')"
                         class="tab-btn-mobile flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-white px-8 py-2.5 rounded-3xl transition-all duration-300">
-                        <i data-lucide="credit-card" class="w-4 h-4"></i>
+                        <i class="ph-fill ph-credit-card w-4 h-4"></i>
                         <span class="text-[10px] font-bold font-space tracking-wider uppercase">Manage</span>
                     </button>
                 </nav>
@@ -717,13 +714,13 @@
             <div class="flex items-center justify-between pb-4 border-b border-glassBorder mb-6">
                 <div class="flex items-center space-x-3">
                     <div class="p-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl">
-                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        <i class="ph-fill ph-plus-circle w-5 h-5"></i>
                     </div>
                     <h3 class="text-base font-bold text-cardTitle font-space">Add New Subscription</h3>
                 </div>
                 <button id="btn-close-add-modal"
                     class="p-1.5 hover:bg-glassBorder rounded-full text-textMuted hover:text-cardTitle transition-colors">
-                    <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                    <i class="ph-bold ph-x w-4.5 h-4.5"></i>
                 </button>
             </div>
 
@@ -827,7 +824,7 @@
             <!-- Close Button -->
             <button id="btn-close-cancel-modal"
                 class="absolute top-4 right-4 p-1.5 hover:bg-glassBorder rounded-full text-textMuted hover:text-cardTitle transition-colors">
-                <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                <i class="ph-bold ph-x w-4.5 h-4.5"></i>
             </button>
 
             <!-- Screen 1: Intro / Cancellation Options -->
@@ -848,7 +845,7 @@
                         class="w-full bg-inputBg border border-glassBorder hover:border-brand-500 rounded-2xl p-4 text-left flex items-start space-x-3.5 transition-all hover:bg-inputBg group">
                         <div
                             class="p-2.5 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl group-hover:bg-brand-500/20 transition-all">
-                            <i data-lucide="zap" class="w-5.5 h-5.5"></i>
+                            <i class="ph-fill ph-lightning w-5.5 h-5.5"></i>
                         </div>
                         <div class="flex-grow">
                             <div class="text-xs font-bold text-cardTitle font-space tracking-wide">One-Click Auto Cancel
@@ -862,7 +859,7 @@
                         class="w-full bg-inputBg border border-glassBorder hover:border-brand-500 rounded-2xl p-4 text-left flex items-start space-x-3.5 transition-all hover:bg-inputBg group">
                         <div
                             class="p-2.5 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-xl group-hover:bg-brand-500/20 transition-all">
-                            <i data-lucide="book-open" class="w-5.5 h-5.5"></i>
+                            <i class="ph-fill ph-book-open w-5.5 h-5.5"></i>
                         </div>
                         <div class="flex-grow">
                             <div class="text-xs font-bold text-cardTitle font-space tracking-wide">View Manual
@@ -881,7 +878,7 @@
                     <!-- Spinner circles -->
                     <div class="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-brand-500"></div>
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <i data-lucide="lock" class="w-6 h-6 text-brand-450 animate-pulse"></i>
+                        <i class="ph-fill ph-lock-key w-6 h-6 text-brand-450 animate-pulse"></i>
                     </div>
                 </div>
                 <div>
@@ -923,7 +920,7 @@
             <div id="cancel-step-success" class="hidden text-center space-y-6 py-6 mt-4">
                 <div
                     class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full mx-auto flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.15)]">
-                    <i data-lucide="check-circle" class="w-8 h-8"></i>
+                    <i class="ph-fill ph-check-circle w-8 h-8"></i>
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-cardTitle font-space">Subscription Cancelled!</h3>
@@ -954,7 +951,7 @@
             <div class="flex justify-between items-center mb-5 shrink-0">
                 <h3 class="text-2xl font-serif italic text-white tracking-wide">Filter Categories</h3>
                 <button onclick="closeMobileFilterModal()" class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                    <i class="ph-bold ph-x w-4 h-4"></i>
                 </button>
             </div>
             
@@ -972,7 +969,7 @@
             <div class="flex justify-between items-center mb-5 shrink-0">
                 <h3 class="text-2xl font-serif italic text-white tracking-wide">Filter by Status</h3>
                 <button onclick="closeMobileStatusFilter()" class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                    <i class="ph-bold ph-x w-4 h-4"></i>
                 </button>
             </div>
             <div id="mobile-status-list" class="flex flex-col gap-2 overflow-y-auto scrollbar-none flex-1 pb-4">
@@ -989,7 +986,7 @@
             <div class="flex justify-between items-center mb-5 shrink-0">
                 <h3 class="text-2xl font-serif italic text-white tracking-wide">Account Section</h3>
                 <button onclick="closeMobileAccountFilter()" class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+                    <i class="ph-bold ph-x w-4 h-4"></i>
                 </button>
             </div>
             <div id="mobile-account-list" class="flex flex-col gap-2 overflow-y-auto scrollbar-none flex-1 pb-4">
