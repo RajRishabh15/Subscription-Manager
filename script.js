@@ -1630,15 +1630,16 @@ window.editSubscription = function(id) {
 
     const modal = document.createElement('div');
     modal.id = 'edit-sub-modal';
-    modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md p-4';
+    modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-xl p-4';
     modal.style.opacity = '0';
     modal.innerHTML = `
-        <div id="edit-sub-card" style="transform:scale(0.9)" class="bg-[#0a0a0f] border border-[#222] rounded-[28px] w-full max-w-md shadow-[0_30px_80px_rgba(0,0,0,0.9)] relative overflow-hidden transition-all">
+        <div id="edit-sub-card" style="transform:scale(0.9)" class="bg-[#0a0a0f]/80 border border-white/10 backdrop-blur-2xl rounded-[32px] w-full max-w-md shadow-[0_30px_80px_rgba(0,0,0,0.9)] relative overflow-hidden transition-all">
+            <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
             <div class="h-[2px] bg-gradient-to-r from-brand-500 to-indigo-500"></div>
-            <div class="p-7">
+            <div class="p-7 relative z-10">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-extrabold text-cardTitle font-space">Edit Subscription</h2>
-                    <button onclick="closeEditModal()" class="p-2 text-slate-500 hover:text-cardTitle bg-[#13111a] border border-[#222] rounded-full transition-colors">
+                    <h2 class="text-xl font-extrabold text-white font-space">Edit Subscription</h2>
+                    <button onclick="closeEditModal()" class="p-2 text-slate-400 hover:text-white bg-white/5 border border-white/10 hover:bg-white/10 rounded-full transition-all">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -1646,16 +1647,16 @@ window.editSubscription = function(id) {
                 <div class="space-y-4">
                     <div>
                         <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Name</label>
-                        <input id="edit-sub-name" type="text" value="${sub.name}" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
+                        <input id="edit-sub-name" type="text" value="${sub.name}" class="w-full bg-[#050508]/50 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:border-white/20 transition-all duration-300 backdrop-blur-md shadow-inner shadow-black/20 font-sans">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Cost (₹)</label>
-                            <input id="edit-sub-cost" type="number" value="${sub.cost}" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
+                            <input id="edit-sub-cost" type="number" value="${sub.cost}" class="w-full bg-[#050508]/50 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:border-white/20 transition-all duration-300 backdrop-blur-md shadow-inner shadow-black/20 font-sans">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Billing</label>
-                            <select id="edit-sub-cycle" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
+                            <select id="edit-sub-cycle" class="w-full bg-[#050508]/50 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:border-white/20 transition-all duration-300 backdrop-blur-md shadow-inner shadow-black/20 font-sans appearance-none">
                                 <option value="monthly" ${sub.cycle==='monthly'?'selected':''}>Monthly</option>
                                 <option value="yearly" ${sub.cycle==='yearly'?'selected':''}>Yearly</option>
                             </select>
@@ -1663,17 +1664,17 @@ window.editSubscription = function(id) {
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Next Renewal</label>
-                        <input id="edit-sub-renewal" type="date" value="${sub.nextRenewal}" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
+                        <input id="edit-sub-renewal" type="date" value="${sub.nextRenewal}" class="w-full bg-[#050508]/50 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:border-white/20 transition-all duration-300 backdrop-blur-md shadow-inner shadow-black/20 font-sans">
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Category</label>
-                        <select id="edit-sub-category" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
+                        <select id="edit-sub-category" class="w-full bg-[#050508]/50 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:border-white/20 transition-all duration-300 backdrop-blur-md shadow-inner shadow-black/20 font-sans appearance-none">
                             ${['Entertainment','Telecom & Fiber','Music','Utilities','Shopping','Other'].map(c => `<option value="${c}" ${sub.category===c?'selected':''}>${c}</option>`).join('')}
                         </select>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Status</label>
-                        <select id="edit-sub-status" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
+                        <select id="edit-sub-status" class="w-full bg-[#050508]/50 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:border-white/20 transition-all duration-300 backdrop-blur-md shadow-inner shadow-black/20 font-sans appearance-none">
                             <option value="active" ${(!sub.status||sub.status==='active')?'selected':''}>Active</option>
                             <option value="paused" ${sub.status==='paused'?'selected':''}>Paused</option>
                             <option value="trial" ${sub.status==='trial'?'selected':''}>Trial</option>
@@ -1692,6 +1693,7 @@ window.editSubscription = function(id) {
 
     document.body.appendChild(modal);
     lucide.createIcons();
+    if (window.initCustomSelects) window.initCustomSelects(modal);
 
     gsap.to(modal, { opacity: 1, duration: 0.2, ease: 'power2.out' });
     gsap.to('#edit-sub-card', { scale: 1, duration: 0.35, ease: 'back.out(1.4)' });
@@ -3491,6 +3493,7 @@ function triggerDeleteAccount() {
 function openAddSubModal() {
     const modal = document.getElementById('add-sub-modal');
     modal.classList.remove('hidden');
+    if (window.initCustomSelects) window.initCustomSelects(modal);
     setTimeout(() => {
         modal.classList.remove('opacity-0');
         modal.querySelector('.transform').classList.remove('scale-95');
@@ -4100,3 +4103,119 @@ function setupEventListeners() {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
+window.initCustomSelects = function(container = document) {
+    const selects = container.querySelectorAll('select:not(.custom-select-applied)');
+    selects.forEach(select => {
+        select.classList.add('custom-select-applied');
+        select.style.display = 'none';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'relative w-full custom-select-wrapper';
+        select.parentNode.insertBefore(wrapper, select);
+        wrapper.appendChild(select);
+
+        const button = document.createElement('div');
+        const classesToKeep = select.className.replace('custom-select-applied', '').split(' ').filter(c => !c.startsWith('focus:') && !c.startsWith('hover:') && c.trim() !== '').join(' ');
+        button.className = classesToKeep + ' flex items-center justify-between cursor-pointer !bg-white/5 !border-white/10 !backdrop-blur-xl hover:!bg-white/10 transition-all duration-300';
+        button.style.display = 'flex';
+        
+        const textSpan = document.createElement('span');
+        textSpan.className = 'truncate pointer-events-none';
+        textSpan.innerText = select.options[select.selectedIndex]?.text || select.options[0]?.text || '';
+        button.appendChild(textSpan);
+
+        const iconSpan = document.createElement('i');
+        iconSpan.setAttribute('data-lucide', 'chevron-down');
+        iconSpan.className = 'w-4 h-4 text-brand-400 opacity-70 transition-transform duration-200 pointer-events-none';
+        button.appendChild(iconSpan);
+
+        const dropdown = document.createElement('div');
+        dropdown.className = 'absolute z-[9999] w-full mt-2 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] max-h-60 overflow-y-auto hidden flex-col p-1.5 transform transition-all duration-200 origin-top scale-95 opacity-0 custom-select-dropdown';
+        
+        const syncState = () => {
+             textSpan.innerText = select.options[select.selectedIndex]?.text || select.options[0]?.text || '';
+             Array.from(dropdown.children).forEach((c, i) => {
+                 if (i === select.selectedIndex) c.classList.add('bg-white/10', 'text-brand-400', 'font-bold');
+                 else c.classList.remove('bg-white/10', 'text-brand-400', 'font-bold');
+             });
+        };
+
+        Array.from(select.options).forEach((opt, index) => {
+            const item = document.createElement('div');
+            item.className = 'px-3 py-2.5 text-sm text-white/80 hover:text-white hover:bg-brand-500/20 rounded-xl cursor-pointer transition-colors mb-0.5 last:mb-0 select-none';
+            item.innerText = opt.text;
+            if (opt.selected) item.classList.add('bg-white/10', 'text-brand-400', 'font-bold');
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                select.value = opt.value;
+                select.selectedIndex = index;
+                syncState();
+                select.dispatchEvent(new Event('change'));
+                closeDropdown();
+            });
+            dropdown.appendChild(item);
+        });
+
+        wrapper.appendChild(button);
+        wrapper.appendChild(dropdown);
+
+        let isOpen = false;
+        function openDropdown() {
+            document.querySelectorAll('.custom-select-dropdown').forEach(d => {
+                if(d !== dropdown) {
+                    d.classList.replace('scale-100', 'scale-95');
+                    d.classList.replace('opacity-100', 'opacity-0');
+                    setTimeout(() => d.classList.add('hidden'), 200);
+                }
+            });
+            document.querySelectorAll('.custom-select-wrapper i').forEach(i => {
+                if (i !== iconSpan) i.style.transform = 'rotate(0deg)';
+            });
+            
+            dropdown.classList.remove('hidden');
+            // small reflow
+            void dropdown.offsetWidth;
+            dropdown.classList.replace('scale-95', 'scale-100');
+            dropdown.classList.replace('opacity-0', 'opacity-100');
+            iconSpan.style.transform = 'rotate(180deg)';
+            button.classList.add('ring-1', 'ring-brand-500/50', 'border-brand-500');
+            isOpen = true;
+        }
+
+        function closeDropdown() {
+            dropdown.classList.replace('scale-100', 'scale-95');
+            dropdown.classList.replace('opacity-100', 'opacity-0');
+            setTimeout(() => {
+                dropdown.classList.add('hidden');
+            }, 200);
+            iconSpan.style.transform = 'rotate(0deg)';
+            button.classList.remove('ring-1', 'ring-brand-500/50', 'border-brand-500');
+            isOpen = false;
+        }
+
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (isOpen) closeDropdown();
+            else openDropdown();
+        });
+
+        document.addEventListener('click', () => {
+            if (isOpen) closeDropdown();
+        });
+        
+        select.addEventListener('change', syncState);
+        const form = select.closest('form');
+        if (form) {
+            form.addEventListener('reset', () => setTimeout(syncState, 10));
+        }
+    });
+    if(window.lucide) window.lucide.createIcons();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.initCustomSelects) {
+        window.initCustomSelects();
+    }
+});
