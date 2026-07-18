@@ -1180,7 +1180,7 @@ function renderManageTab() {
         </div>
 
         <!-- Status Filter Tabs (desktop only) -->
-        <div class="hidden md:flex items-center space-x-1.5 mb-8 bg-[#0a0a0f]/80 backdrop-blur-3xl ring-1 ring-inset ring-white/10 rounded-[20px] p-1.5 w-fit shadow-lg">
+        <div class="hidden md:flex items-center space-x-2 mb-8 bg-gradient-to-br from-[#1a1a24]/80 to-[#0a0a0f]/80 backdrop-blur-3xl ring-1 ring-inset ring-white/10 rounded-[24px] p-2 w-fit shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
             ${statusTabs.map(s => {
                 const isActive = s === window.manageStatusFilter;
                 const countForTab = s === 'All' ? state.subscriptions.length
@@ -1188,8 +1188,15 @@ function renderManageTab() {
                         const st = sub.status || 'active';
                         return st === s.toLowerCase();
                     }).length;
-                return `<button onclick="setManageStatus('${s}')" class="px-5 py-2.5 rounded-[16px] text-[12px] font-bold transition-all duration-300 ease-out font-sans ${isActive ? 'bg-white/10 text-white ring-1 ring-inset ring-white/10 shadow-sm' : 'text-white/50 hover:text-white hover:bg-white/5 active:scale-95'}">
-                    ${s} ${countForTab > 0 ? `<span class="ml-1.5 opacity-60 text-[10px] bg-black/40 px-1.5 py-0.5 rounded-full">${countForTab}</span>` : ''}
+                
+                const meta = STATUS_META[s] || { icon: 'circle', color: 'text-white', dot: 'bg-white' };
+                const textColor = isActive ? (s === 'All' ? 'text-white' : meta.color) : 'text-white/50 group-hover:text-white/80';
+                
+                return `<button onclick="setManageStatus('${s}')" class="group relative px-5 py-2.5 rounded-[18px] text-[13px] font-bold transition-all duration-300 ease-out font-sans flex items-center gap-2 overflow-hidden ${isActive ? 'bg-white/10 ring-1 ring-inset ring-white/20 shadow-[0_2px_15px_rgba(0,0,0,0.2)]' : 'hover:bg-white/5 active:scale-95'}">
+                    ${isActive ? `<div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-100"></div>` : ''}
+                    <i data-lucide="${meta.icon}" class="w-4 h-4 relative z-10 ${textColor} transition-colors duration-300"></i>
+                    <span class="relative z-10 ${isActive ? 'text-white' : 'text-white/50 group-hover:text-white/80'} transition-colors duration-300 tracking-wide">${s}</span> 
+                    ${countForTab > 0 ? `<span class="relative z-10 flex items-center justify-center min-w-[20px] h-[20px] text-[10px] font-black ${isActive ? `${meta.dot} text-black/80 shadow-[0_0_12px_rgba(255,255,255,0.3)]` : 'bg-white/10 text-white/50 group-hover:bg-white/20 group-hover:text-white/80'} rounded-full px-1.5 ml-0.5 transition-all duration-300">${countForTab}</span>` : ''}
                 </button>`;
             }).join('')}
         </div>
@@ -1242,8 +1249,8 @@ function renderManageTab() {
                             </div>
                         </div>
 
-                        <!-- Action Buttons - In-flow pill, visible on hover -->
-                        <div class="mt-5 flex opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300 ease-out translate-y-2 group-hover:translate-y-0 rounded-[16px] overflow-hidden backdrop-blur-xl shadow-lg border border-white/15 bg-white/5" onclick="event.stopPropagation()">
+                        <!-- Action Buttons - In-flow pill, visible permanently on mobile, hover on desktop -->
+                        <div class="mt-5 flex opacity-100 md:opacity-0 group-hover:opacity-100 pointer-events-auto md:pointer-events-none group-hover:pointer-events-auto transition-all duration-300 ease-out translate-y-0 md:translate-y-2 group-hover:translate-y-0 rounded-[16px] overflow-hidden backdrop-blur-xl shadow-lg border border-white/15 bg-white/5" onclick="event.stopPropagation()">
                             ${status !== 'cancelled' ? `
                                 <button onclick="editSubscription('${sub.id}')" title="Edit" class="flex-1 py-2.5 hover:bg-white/10 text-white/80 hover:text-white transition-colors text-[12px] font-bold font-sans flex items-center justify-center gap-1.5">
                                     <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Edit
@@ -1638,35 +1645,35 @@ window.editSubscription = function(id) {
 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Name</label>
-                        <input id="edit-sub-name" type="text" value="${sub.name}" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                        <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Name</label>
+                        <input id="edit-sub-name" type="text" value="${sub.name}" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Cost (₹)</label>
-                            <input id="edit-sub-cost" type="number" value="${sub.cost}" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                            <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Cost (₹)</label>
+                            <input id="edit-sub-cost" type="number" value="${sub.cost}" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Billing</label>
-                            <select id="edit-sub-cycle" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                            <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Billing</label>
+                            <select id="edit-sub-cycle" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
                                 <option value="monthly" ${sub.cycle==='monthly'?'selected':''}>Monthly</option>
                                 <option value="yearly" ${sub.cycle==='yearly'?'selected':''}>Yearly</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Next Renewal</label>
-                        <input id="edit-sub-renewal" type="date" value="${sub.nextRenewal}" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                        <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Next Renewal</label>
+                        <input id="edit-sub-renewal" type="date" value="${sub.nextRenewal}" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Category</label>
-                        <select id="edit-sub-category" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                        <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Category</label>
+                        <select id="edit-sub-category" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
                             ${['Entertainment','Telecom & Fiber','Music','Utilities','Shopping','Other'].map(c => `<option value="${c}" ${sub.category===c?'selected':''}>${c}</option>`).join('')}
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5 font-space">Status</label>
-                        <select id="edit-sub-status" class="w-full bg-[#13111a] border border-glassBorder focus:border-brand-500 rounded-xl py-3 px-4 text-sm text-cardTitle focus:outline-none font-sans">
+                        <label class="block text-[10px] font-bold text-brand-400 opacity-80 uppercase tracking-widest mb-1.5 font-space">Status</label>
+                        <select id="edit-sub-status" class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 hover:bg-white/10 transition-all duration-300 backdrop-blur-xl shadow-inner shadow-black/20 font-sans">
                             <option value="active" ${(!sub.status||sub.status==='active')?'selected':''}>Active</option>
                             <option value="paused" ${sub.status==='paused'?'selected':''}>Paused</option>
                             <option value="trial" ${sub.status==='trial'?'selected':''}>Trial</option>
@@ -1752,21 +1759,21 @@ window.openSubscriptionDetails = function(subId) {
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 mb-7">
-                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222]">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1">Cost</p>
-                        <p class="text-cardTitle font-bold font-sans">${formatCurrency(sub.cost)} <span class="text-[10px] text-slate-500">/ ${sub.cycle}</span></p>
+                    <div class="bg-gradient-to-br from-white/5 to-transparent p-4 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+                        <p class="text-[10px] text-brand-400 opacity-80 uppercase tracking-widest font-space font-bold mb-1">Cost</p>
+                        <p class="text-white font-bold font-sans">${formatCurrency(sub.cost)} <span class="text-[10px] text-white/50">/ ${sub.cycle}</span></p>
                     </div>
-                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222]">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1">Billing</p>
-                        <p class="text-cardTitle font-bold font-sans text-sm capitalize">${sub.cycle}</p>
+                    <div class="bg-gradient-to-br from-white/5 to-transparent p-4 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+                        <p class="text-[10px] text-brand-400 opacity-80 uppercase tracking-widest font-space font-bold mb-1">Billing</p>
+                        <p class="text-white font-bold font-sans text-sm capitalize">${sub.cycle}</p>
                     </div>
-                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222]">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1">Next Renewal</p>
-                        <p class="text-cardTitle font-bold font-sans text-sm">${new Date(sub.nextRenewal).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                    <div class="bg-gradient-to-br from-white/5 to-transparent p-4 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+                        <p class="text-[10px] text-brand-400 opacity-80 uppercase tracking-widest font-space font-bold mb-1">Next Renewal</p>
+                        <p class="text-white font-bold font-sans text-sm">${new Date(sub.nextRenewal).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                     </div>
-                    <div class="bg-[#13111a] p-4 rounded-2xl border border-[#222]">
-                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-space font-bold mb-1">Payment</p>
-                        <p class="text-cardTitle font-bold font-sans text-sm truncate">${sub.payment}</p>
+                    <div class="bg-gradient-to-br from-white/5 to-transparent p-4 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+                        <p class="text-[10px] text-brand-400 opacity-80 uppercase tracking-widest font-space font-bold mb-1">Payment</p>
+                        <p class="text-white font-bold font-sans text-sm truncate">${sub.payment}</p>
                     </div>
                 </div>
 
